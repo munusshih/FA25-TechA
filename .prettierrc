@@ -1,12 +1,24 @@
 {
     "plugins": [
-        "prettier-plugin-astro"
+        "prettier-plugin-astro",
+        "prettier-plugin-css-order"
     ],
+    "cssDeclarationSorterOrder": "alphabetical",
+    "cssDeclarationSorterKeepOverrides": false,
     "overrides": [
         {
             "files": "*.astro",
             "options": {
                 "parser": "astro"
+            }
+        },
+        {
+            "files": [
+                "*.css",
+                "*.scss"
+            ],
+            "options": {
+                "parser": "css"
             }
         }
     ]

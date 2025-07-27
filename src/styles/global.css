@@ -1,0 +1,46 @@
+/* h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+ul,
+ol,
+li {} */
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: "Geist", sans-serif;
+  line-height: 1.25;
+}
+
+h1 {
+  font-size: 14vw;
+  font-weight: 700;
+  letter-spacing: -0.05em;
+  line-height: 0.75;
+  margin: 1rem;
+}
+
+h3 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  line-height: 1.25;
+  margin: 1rem 0.5rem;
+}
+
+h4 {
+  border: 2px solid #000;
+  border-radius: 100rem;
+  font-size: 1rem;
+  font-weight: 800;
+  line-height: 1.25;
+  margin: 1rem 1rem;
+  padding: 0.25rem 1rem;
+  width: fit-content;
+}
