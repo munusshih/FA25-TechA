@@ -1,9 +1,17 @@
 @import "tailwindcss";
+@import "./card.css";
 
 :root {
   --margin: 1rem;
   --padding: 1rem;
   --border-dotted: 2px dotted black;
+}
+
+html,
+body {
+  margin: 0;
+  width: 100%;
+  height: 100%;
 }
 
 body {
@@ -66,8 +74,17 @@ h4,
 p {
   font-size: 1rem;
   line-height: 1.5;
+  font-family: "Source Serif 4", serif;
+}
+
+ul li {
+  font-family: "Source Serif 4", serif;
 }
 
 .pill {
   @apply rounded-full bg-white px-3 py-1 text-2xl font-semibold text-gray-800;
+}
+
+details {
+  cursor: pointer;
 }

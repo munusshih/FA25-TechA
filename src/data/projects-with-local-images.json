@@ -1,0 +1,27 @@
+[
+  {
+    "Timestamp": "7/25/2025 17:23:31",
+    "Email Address": "yshih63@pratt.edu",
+    "Your Name (First + Last Name)": "Munus",
+    "Project Name": "Echo Chamber",
+    "Project Description": "Echo Chamber is an experimental art project exploring the tension between interiority and surveillance in the digital age. Through a series of layered light sculptures, sound-responsive drawings, and fragmented video loops, the work simulates the experience of being both observed and erased.\n\nConstructed from semi-transparent materials like mylar, mirrored acrylic, and glass, the sculptural forms act as both portals and barriers. Viewers trigger subtle shifts in projected light and sound as they move around the installation, implicating their presence in the system’s behavior. The generative video content, composed of archival webcam footage and AI-manipulated memories, loops in disjointed fragments — never fully coherent, always slightly familiar.\n\nThis piece investigates how memory, identity, and agency are reshaped under the influence of algorithmic systems. It invites viewers to confront the ambiguity of being seen — and the psychological space between performance and disappearance.\n\n",
+    "Image 1": "/images/yshih63_pratt_edu/echo_chamber/image_1.jpg",
+    "Image 1 description": "a person dancing",
+    "Image 2": "/images/yshih63_pratt_edu/echo_chamber/image_2.jpg",
+    "Image 2 description": "this is a collection of my beautiful crystal",
+    "Image 3": "",
+    "Image 3 description": "",
+    "p5 Editor Link": "https://editor.p5js.org/munusshih/sketches/la074A_rD"
+  },
+  {
+    "Timestamp": "7/25/2025 17:27:01",
+    "Email Address": "matt@pratt.edu",
+    "Your Name (First + Last Name)": "Matt Martin",
+    "Project Name": "We're not alone.",
+    "Project Description": "a partial tone poem about how we are never alone.",
+    "Image 1": "/images/matt_pratt_edu/we_re_not_alone_/image_1.png",
+    "Image 1 description": "This is evidence of my AI agent. I love it, today.",
+    "Image 2": "/images/matt_pratt_edu/we_re_not_alone_/image_2.png",
+    "Image 2 description": "I'm ready."
+  }
+]

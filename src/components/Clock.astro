@@ -139,13 +139,13 @@
     if (hourHand && minuteHand && secondHand) {
       // Apply rotations
       hourHand.style.transformOrigin = "60px 60px";
-      hourHand.style.transform = `rotate(${hourAngle}deg)`;
+      hourHand.style.transform = `rotate(${hourAngle + 90}deg)`;
 
       minuteHand.style.transformOrigin = "60px 60px";
-      minuteHand.style.transform = `rotate(${minuteAngle}deg)`;
+      minuteHand.style.transform = `rotate(${minuteAngle + 90}deg)`;
 
       secondHand.style.transformOrigin = "60px 60px";
-      secondHand.style.transform = `rotate(${secondAngle}deg)`;
+      secondHand.style.transform = `rotate(${secondAngle + 90}deg)`;
     }
   }
 

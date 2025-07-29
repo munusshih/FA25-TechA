@@ -1,0 +1,46 @@
+---
+// Swiper.astro
+const { images } = Astro.props;
+import Swiper from "swiper";
+import "swiper/css";
+---
+
+<div class="swiper">
+  <div class="swiper-wrapper my-4">
+    <slot />
+  </div>
+
+  <script>
+    import Swiper from "swiper";
+    import { Autoplay } from "swiper/modules";
+    import "swiper/css";
+    import { init } from "astro/virtual-modules/prefetch.js";
+
+    function initSwiper() {
+      const swiper = new Swiper(".swiper", {
+        modules: [Autoplay],
+        slidesPerView: "auto",
+        spaceBetween: 10,
+        grabCursor: true,
+        autoplay: {
+          delay: 10000,
+          disableOnInteraction: true,
+        },
+      });
+    }
+
+    initSwiper();
+
+    document.addEventListener("astro:page-load", () => {
+      initSwiper();
+    });
+  </script>
+
+  <style>
+    .swiper-slide {
+      display: flex;
+      justify-content: flex-start;
+      height: min-content;
+    }
+  </style>
+</div>
