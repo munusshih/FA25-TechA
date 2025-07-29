@@ -1,4 +1,6 @@
 import Layout from "../layouts/Layout.astro";
+import Nav from "../components/nav.astro";
+import Info from "../components/info.astro";
 import Description from "../doc/description.mdx";
 import Module1 from "../doc/module-1.mdx";
 import Module2 from "../doc/module-2.mdx";
@@ -6,26 +8,14 @@ import Module3 from "../doc/module-3.mdx";
 import Grading from "../doc/grading.mdx";
 import Policies from "../doc/policies.mdx";
 import Resources from "../doc/resources.mdx";
+import Sketch from "../components/Sketch.astro";
 import "../styles/global.css";
 
 <Layout>
+<Nav />
+<Info />
 
-#### DES 720A
-
-# Graduate Studio: Technology A
-
-- Semester: Fall 2025
-- Meeting Dates & Times: 5:00pm -7:50pm, Every Tuesday
-- Credits: 3
-
-## Instructors
-
-- Instructor 1: Name, Email
-- Instructor 2: Name, Email
-- Instructor 3: Name, Email
-- Instructor 4: Name, Email
-- Instructor 5: Name, Email
-
+<main>
 <Description />
 
 ## Course Modules
@@ -37,5 +27,5 @@ import "../styles/global.css";
 <Grading />
 <Policies />
 <Resources />
-
+</main>
 </Layout>

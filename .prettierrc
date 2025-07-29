@@ -1,9 +1,10 @@
 {
     "plugins": [
         "prettier-plugin-astro",
-        "prettier-plugin-css-order"
+        "prettier-plugin-css-order",
+        "prettier-plugin-tailwindcss"
     ],
-    "cssDeclarationSorterOrder": "alphabetical",
+    "cssDeclarationSorterOrder": "concentric-css",
     "cssDeclarationSorterKeepOverrides": false,
     "overrides": [
         {

@@ -1,0 +1,64 @@
+---
+import Layout from "../layouts/Layout.astro";
+import projects from "../data/projects-with-local-images.json";
+---
+
+<Layout>
+  <main>
+    <h1>Projects</h1>
+    {
+      projects.map((project) => (
+        <article style="border:1px solid #ccc; margin-bottom:1rem; padding:1rem;">
+          <h2>{project["Project Name"]}</h2>
+          <p>
+            <strong>By:</strong> {project["Your Name (First + Last Name)"]}
+          </p>
+          <p>
+            {project["Project Description"].split("\n").map((line) => (
+              <>
+                {line}
+                <br />
+              </>
+            ))}
+          </p>
+
+          {/* Images */}
+          {project["Image 1"] && (
+            <figure>
+              <img
+                src={project["Image 1"]}
+                alt={project["Image 1 description"] ?? "Image 1"}
+                style="max-width:300px;"
+              />
+              <figcaption>{project["Image 1 description"]}</figcaption>
+            </figure>
+          )}
+
+          {project["Image 2"] && (
+            <figure>
+              <img
+                src={project["Image 2"]}
+                alt={project["Image 2 description"] ?? "Image 2"}
+                style="max-width:300px;"
+              />
+              <figcaption>{project["Image 2 description"]}</figcaption>
+            </figure>
+          )}
+
+          {/* Optional p5 link */}
+          {project["p5 Editor Link"] && (
+            <p>
+              <a
+                href={project["p5 Editor Link"]}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                Open p5 Editor
+              </a>
+            </p>
+          )}
+        </article>
+      ))
+    }
+  </main>
+</Layout>

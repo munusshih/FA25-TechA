@@ -1,0 +1,167 @@
+---
+// No props needed for this clock component
+---
+
+<div class="clock-container">
+  <svg
+    id="clock"
+    width="80"
+    height="80"
+    viewBox="0 0 120 120"
+    class="rounded-full border border-black"
+  >
+    <!-- Clock face circle -->
+    <circle cx="60" cy="60" r="58" fill="none" stroke="black" stroke-width="2"
+    ></circle>
+
+    <!-- Hour markers -->
+    <g id="hour-markers">
+      <!-- 12, 3, 6, 9 markers (thicker) -->
+      <line x1="60" y1="4" x2="60" y2="12" stroke="black" stroke-width="2"
+      ></line>
+      <line x1="116" y1="60" x2="108" y2="60" stroke="black" stroke-width="2"
+      ></line>
+      <line x1="60" y1="116" x2="60" y2="108" stroke="black" stroke-width="2"
+      ></line>
+      <line x1="4" y1="60" x2="12" y2="60" stroke="black" stroke-width="2"
+      ></line>
+
+      <!-- Other hour markers (thinner) -->
+      <line
+        x1="90.64"
+        y1="14.64"
+        x2="87.18"
+        y2="18.1"
+        stroke="black"
+        stroke-width="1"></line>
+      <line
+        x1="105.36"
+        y1="29.36"
+        x2="101.9"
+        y2="32.82"
+        stroke="black"
+        stroke-width="1"></line>
+      <line
+        x1="105.36"
+        y1="90.64"
+        x2="101.9"
+        y2="87.18"
+        stroke="black"
+        stroke-width="1"></line>
+      <line
+        x1="90.64"
+        y1="105.36"
+        x2="87.18"
+        y2="101.9"
+        stroke="black"
+        stroke-width="1"></line>
+      <line
+        x1="29.36"
+        y1="105.36"
+        x2="32.82"
+        y2="101.9"
+        stroke="black"
+        stroke-width="1"></line>
+      <line
+        x1="14.64"
+        y1="90.64"
+        x2="18.1"
+        y2="87.18"
+        stroke="black"
+        stroke-width="1"></line>
+      <line
+        x1="14.64"
+        y1="29.36"
+        x2="18.1"
+        y2="32.82"
+        stroke="black"
+        stroke-width="1"></line>
+      <line
+        x1="29.36"
+        y1="14.64"
+        x2="32.82"
+        y2="18.1"
+        stroke="black"
+        stroke-width="1"></line>
+    </g>
+
+    <!-- Clock hands -->
+    <line
+      id="hour-hand"
+      x1="60"
+      y1="60"
+      x2="60"
+      y2="35"
+      stroke="black"
+      stroke-width="3"
+      stroke-linecap="round"></line>
+    <line
+      id="minute-hand"
+      x1="60"
+      y1="60"
+      x2="60"
+      y2="20"
+      stroke="black"
+      stroke-width="2"
+      stroke-linecap="round"></line>
+    <line
+      id="second-hand"
+      x1="60"
+      y1="60"
+      x2="60"
+      y2="15"
+      stroke="black"
+      stroke-width="1"
+      stroke-linecap="round"></line>
+
+    <!-- Center dot -->
+    <circle cx="60" cy="60" r="3" fill="black"></circle>
+  </svg>
+</div>
+
+<script>
+  function updateClock() {
+    const now = new Date();
+    const hours = now.getHours() % 12;
+    const minutes = now.getMinutes();
+    const seconds = now.getSeconds();
+
+    // Calculate angles (in degrees)
+    const secondAngle = seconds * 6 - 90; // 6 degrees per second
+    const minuteAngle = minutes * 6 + seconds * 0.1 - 90; // 6 degrees per minute + smooth seconds
+    const hourAngle = hours * 30 + minutes * 0.5 - 90; // 30 degrees per hour + smooth minutes
+
+    // Get hand elements
+    const hourHand = document.getElementById("hour-hand");
+    const minuteHand = document.getElementById("minute-hand");
+    const secondHand = document.getElementById("second-hand");
+
+    if (hourHand && minuteHand && secondHand) {
+      // Apply rotations
+      hourHand.style.transformOrigin = "60px 60px";
+      hourHand.style.transform = `rotate(${hourAngle}deg)`;
+
+      minuteHand.style.transformOrigin = "60px 60px";
+      minuteHand.style.transform = `rotate(${minuteAngle}deg)`;
+
+      secondHand.style.transformOrigin = "60px 60px";
+      secondHand.style.transform = `rotate(${secondAngle}deg)`;
+    }
+  }
+
+  // Update clock immediately and then every second
+  updateClock();
+  setInterval(updateClock, 1000);
+</script>
+
+<style>
+  #clock {
+    transition: none; /* Disable transitions for smooth second hand movement */
+  }
+
+  /* Smooth transition for hour and minute hands only */
+  #hour-hand,
+  #minute-hand {
+    transition: transform 0.5s ease-in-out;
+  }
+</style>
