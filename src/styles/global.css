@@ -108,3 +108,7 @@ details {
   width: 80%;
   overflow: hidden;
 }
+
+.cutoff {
+  @apply mx-auto max-w-[1440px];
+}

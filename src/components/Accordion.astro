@@ -4,11 +4,11 @@ const { title = "Accordion Title", open = true } = Astro.props;
 
 <div class="accordion" data-open={open}>
   <button
-    class="accordion-button"
+    class="accordion-button cutoff"
     aria-expanded={open ? "true" : "false"}
     type="button"
   >
-    <h2 class="heading-1" style="margin: 0">{title}</h2>
+    <h2 class="heading-1">{title}</h2>
   </button>
   <div
     class="accordion-content"

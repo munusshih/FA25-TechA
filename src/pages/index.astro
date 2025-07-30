@@ -9,8 +9,8 @@ import Module1 from "../doc/Module1.astro";
 import Module2 from "../doc/Module2.astro";
 import Module3 from "../doc/Module3.astro";
 import Grading from "../doc/Grading.astro";
-import Policies from "../doc/policies.mdx";
-import Resources from "../doc/resources.mdx";
+import Policies from "../doc/Policies.astro";
+import Resources from "../doc/Resources.astro";
 import Sketch from "../components/Sketch.astro";
 import "../styles/global.css";
 ---
@@ -18,7 +18,7 @@ import "../styles/global.css";
 <Layout>
   <Nav />
   <Sketch />
-  <main class="mx-auto max-w-[1440px]">
+  <main class="mx-auto">
     <Info />
     <Description />
     <Community />
@@ -28,8 +28,7 @@ import "../styles/global.css";
       <Module3 />
     </Accordion>
     <Grading />
+    <Policies />
+    <Resources />
   </main>
-
-  <Policies />
-  <Resources />
 </Layout>

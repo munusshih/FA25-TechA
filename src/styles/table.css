@@ -2,7 +2,7 @@ table {
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
   border: 2px solid black;
   border-collapse: collapse;
-  width: 100%;
+  width: 90%;
   font-size: 1rem;
   font-family: sans-serif;
 }
@@ -23,13 +23,5 @@ th {
   border-bottom: 2px solid black;
   color: #333;
   font-weight: bold;
-}
-
-tbody tr:hover {
-  background-color: #fafafa;
-}
-
-td:last-child,
-th:last-child {
-  text-align: right;
+  background-color: pink;
 }
