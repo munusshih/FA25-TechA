@@ -1,0 +1,35 @@
+table {
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+  border: 2px solid black;
+  border-collapse: collapse;
+  width: 100%;
+  font-size: 1rem;
+  font-family: sans-serif;
+}
+
+thead {
+  background-color: #fff;
+}
+
+th,
+td {
+  border-bottom: 1px solid black;
+  background-color: #fff;
+  padding: 1rem;
+  text-align: left;
+}
+
+th {
+  border-bottom: 2px solid black;
+  color: #333;
+  font-weight: bold;
+}
+
+tbody tr:hover {
+  background-color: #fafafa;
+}
+
+td:last-child,
+th:last-child {
+  text-align: right;
+}

@@ -1,10 +1,10 @@
 ---
 import Card from "@/components/Card.astro";
 import Swiper from "@/components/Swiper.astro";
+import Accordion from "@/components/Accordion.astro";
 ---
 
-<details open class="mx-[var(--margin)] py-[var(--margin)]">
-  <summary class="heading-1">Community Agreement</summary>
+<Accordion title="Community Agreement" open>
   <Swiper>
     <Card class="swiper-slide">
       <h3>
@@ -90,4 +90,4 @@ import Swiper from "@/components/Swiper.astro";
       >.
     </Card>
   </Swiper>
-</details>
+</Accordion>

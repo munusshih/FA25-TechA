@@ -1,0 +1,12 @@
+.swiper-slide {
+  justify-content: flex-start;
+  height: min-content;
+}
+
+.swiper-slide:first-of-type {
+  margin-left: var(--margin) !important;
+}
+
+.swiper-slide:last-child {
+  margin-right: var(--margin);
+}

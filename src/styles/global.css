@@ -1,5 +1,9 @@
 @import "tailwindcss";
 @import "./card.css";
+@import "./accordion.css";
+@import "./swiper.css";
+@import "./weekly.css";
+@import "./table.css";
 
 :root {
   --margin: 1rem;
@@ -12,6 +16,7 @@ body {
   margin: 0;
   width: 100%;
   height: 100%;
+  overflow-x: hidden;
 }
 
 body {
@@ -75,6 +80,7 @@ p {
   font-size: 1rem;
   line-height: 1.5;
   font-family: "Source Serif 4", serif;
+  @apply max-w-prose text-pretty;
 }
 
 ul li {
@@ -87,4 +93,18 @@ ul li {
 
 details {
   cursor: pointer;
+}
+
+.ridge-border {
+  box-shadow:
+    inset 5px 5px 15px rgba(255 255 255 / 0.2),
+    inset -5px -5px 15px rgba(0 0 0 / 0.8);
+  border: 1em ridge pink;
+  border-radius: 100%;
+  background:
+    linear-gradient(black, black) padding-box,
+    repeating-conic-gradient(#222 0deg 30deg, #111 30deg 60deg) border-box;
+  aspect-ratio: 16/9;
+  width: 80%;
+  overflow: hidden;
 }

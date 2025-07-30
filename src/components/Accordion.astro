@@ -1,0 +1,58 @@
+---
+const { title = "Accordion Title", open = true } = Astro.props;
+---
+
+<div class="accordion" data-open={open}>
+  <button
+    class="accordion-button"
+    aria-expanded={open ? "true" : "false"}
+    type="button"
+  >
+    <h2 class="heading-1" style="margin: 0">{title}</h2>
+  </button>
+  <div
+    class="accordion-content"
+    role="region"
+    aria-hidden={open ? "false" : "true"}
+  >
+    <slot />
+  </div>
+</div>
+
+<script>
+  document.querySelectorAll(".accordion").forEach((accordion) => {
+    const button = accordion.querySelector(".accordion-button");
+    const content = accordion.querySelector(".accordion-content");
+
+    function setHeight(expanded) {
+      if (expanded) {
+        content.style.height = content.scrollHeight + "px";
+        content.setAttribute("aria-hidden", "false");
+        content.addEventListener(
+          "transitionend",
+          () => {
+            if (button.getAttribute("aria-expanded") === "true") {
+              content.style.height = "auto";
+            }
+          },
+          { once: true },
+        );
+      } else {
+        content.style.height = content.scrollHeight + "px";
+        requestAnimationFrame(() => {
+          content.style.height = "0";
+          content.setAttribute("aria-hidden", "true");
+        });
+      }
+    }
+
+    // Initialize accordion content height
+    setHeight(button.getAttribute("aria-expanded") === "true");
+
+    button.addEventListener("click", () => {
+      const expanded = button.getAttribute("aria-expanded") === "true";
+      button.setAttribute("aria-expanded", expanded ? "false" : "true");
+      setHeight(!expanded);
+    });
+  });
+</script>

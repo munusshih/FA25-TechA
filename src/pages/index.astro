@@ -3,11 +3,12 @@ import Layout from "../layouts/Layout.astro";
 import Nav from "../components/nav.astro";
 import Info from "../components/info.astro";
 import Description from "../doc/Description.astro";
+import Accordion from "../components/Accordion.astro";
 import Community from "../doc/Community.astro";
 import Module1 from "../doc/Module1.astro";
-import Module2 from "../doc/module-2.mdx";
-import Module3 from "../doc/module-3.mdx";
-import Grading from "../doc/grading.mdx";
+import Module2 from "../doc/Module2.astro";
+import Module3 from "../doc/Module3.astro";
+import Grading from "../doc/Grading.astro";
 import Policies from "../doc/policies.mdx";
 import Resources from "../doc/resources.mdx";
 import Sketch from "../components/Sketch.astro";
@@ -16,20 +17,19 @@ import "../styles/global.css";
 
 <Layout>
   <Nav />
-  <Info />
-
-  <main>
+  <Sketch />
+  <main class="mx-auto max-w-[1440px]">
+    <Info />
     <Description />
     <Community />
-    <details open class="mx-[var(--margin)] py-[var(--margin)]">
-      <summary class="heading-1">Class Modules</summary>
+    <Accordion title="Class Modules" open>
       <Module1 />
       <Module2 />
       <Module3 />
-    </details>
-
+    </Accordion>
     <Grading />
-    <Policies />
-    <Resources />
   </main>
+
+  <Policies />
+  <Resources />
 </Layout>
