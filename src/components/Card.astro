@@ -3,7 +3,7 @@ const { class: extraClass = "" } = Astro.props;
 ---
 
 <div
-  class={`card aspect-square !w-[400px] text-grey border bg-white p-4 ${extraClass} overflow-hidden transition-all duration-300 multiline-truncate swiper-slide`}
+  class={`card aspect-square !w-[400px] text-grey [border:var(--border-dotted)]  p-8 ${extraClass} overflow-hidden transition-all duration-300 multiline-truncate swiper-slide`}
   data-toggle-card
   data-expanded="false"
 >

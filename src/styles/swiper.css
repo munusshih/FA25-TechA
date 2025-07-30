@@ -1,5 +1,6 @@
 .swiper-slide {
   justify-content: flex-start;
+  cursor: pointer;
   height: min-content;
 }
 

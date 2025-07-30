@@ -2,12 +2,13 @@
 import Card from "@/components/Card.astro";
 import Swiper from "@/components/Swiper.astro";
 import Accordion from "@/components/Accordion.astro";
+import TwoColumn from "@/components/TwoColumn.astro";
 ---
 
-<Accordion title="Course Description" open>
-  <Swiper>
-    <Card>
-      <h3>Bullentin Description</h3>
+<Accordion title="Course Description" open="false">
+  <TwoColumn>
+    <div class="weekly">
+      <h2>Bullentin Description</h2>
       <p>
         Students will critically analyze and explore the tools, skills, and
         production methods of current and emerging technologies in design media,
@@ -17,9 +18,71 @@ import Accordion from "@/components/Accordion.astro";
         emerging technology systems. This is a two-semester studio course: 720A
         is the first semester, and 720B is the second.
       </p>
-    </Card>
-    <Card>
-      <h3>Detailed Description</h3>
+
+      <h2>Course Goals</h2>
+
+      <ul>
+        <li>
+          To gain a greater understanding of the historical context of
+          technology development and its specific relevance to design and
+          communication.
+        </li>
+        <li>
+          To explore a wide range of systems to help foster creative
+          problem-solving and ideation
+        </li>
+        <li>
+          To acquire a more advanced knowledge of the design tools used for
+          expression, collaboration and production
+        </li>
+        <li>
+          To demonstrate the ability to execute sophisticated projects bridging
+          multiple media options with professional-level workflows, formats and
+          detail constancy
+        </li>
+        <li>
+          To acquire an appreciation for the emerging concepts and language of
+          new media
+        </li>
+        <li>
+          To gain informational and aesthetic engagement with interactivity
+        </li>
+        <li>
+          To understand community engagement and user experience with digital
+          media creation
+        </li>
+      </ul>
+
+      <h2>Learning Outcomes</h2>
+
+      <ul>
+        <li>
+          Students will be able to differentiate between the different
+          technology “periods” and speak to the positive and negative
+          opportunities and limitations afforded by each period
+        </li>
+        <li>
+          Students will be able to sketch and plan formative concepts, and
+          migrate preliminary concepts into an agile, planned new media workflow
+          for further exploration and refinement
+        </li>
+        <li>
+          Students will be able to produce a conceptually valid cross-media
+          design experience bridging multiple communications media formats
+        </li>
+        <li>
+          Students will be able to produce industry-standard, file formats and
+          media encodings
+        </li>
+        <li>
+          Students will be able to define and design a rich media experience for
+          a mythical or predictive array or “mashup” of communications
+          technologies
+        </li>
+      </ul>
+    </div>
+    <div class="weekly">
+      <h2>Detailed Description</h2>
 
       <article class="flex flex-col gap-4">
         <p>
@@ -74,71 +137,6 @@ import Accordion from "@/components/Accordion.astro";
           semester).
         </p>
       </article>
-    </Card>
-
-    <Card>
-      <h3>Course Goals</h3>
-
-      <ul>
-        <li>
-          To gain a greater understanding of the historical context of
-          technology development and its specific relevance to design and
-          communication.
-        </li>
-        <li>
-          To explore a wide range of systems to help foster creative
-          problem-solving and ideation
-        </li>
-        <li>
-          To acquire a more advanced knowledge of the design tools used for
-          expression, collaboration and production
-        </li>
-        <li>
-          To demonstrate the ability to execute sophisticated projects bridging
-          multiple media options with professional-level workflows, formats and
-          detail constancy
-        </li>
-        <li>
-          To acquire an appreciation for the emerging concepts and language of
-          new media
-        </li>
-        <li>
-          To gain informational and aesthetic engagement with interactivity
-        </li>
-        <li>
-          To understand community engagement and user experience with digital
-          media creation
-        </li>
-      </ul>
-    </Card>
-    <Card>
-      <h3>Learning Outcomes</h3>
-
-      <ul>
-        <li>
-          Students will be able to differentiate between the different
-          technology “periods” and speak to the positive and negative
-          opportunities and limitations afforded by each period
-        </li>
-        <li>
-          Students will be able to sketch and plan formative concepts, and
-          migrate preliminary concepts into an agile, planned new media workflow
-          for further exploration and refinement
-        </li>
-        <li>
-          Students will be able to produce a conceptually valid cross-media
-          design experience bridging multiple communications media formats
-        </li>
-        <li>
-          Students will be able to produce industry-standard, file formats and
-          media encodings
-        </li>
-        <li>
-          Students will be able to define and design a rich media experience for
-          a mythical or predictive array or “mashup” of communications
-          technologies
-        </li>
-      </ul>
-    </Card>
-  </Swiper>
+    </div>
+  </TwoColumn>
 </Accordion>

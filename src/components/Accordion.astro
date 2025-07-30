@@ -1,19 +1,23 @@
 ---
 const { title = "Accordion Title", open = true } = Astro.props;
+
+// Convert open to a boolean — if it's a string "false", it should be false
+const isOpen =
+  typeof open === "string" ? open.toLowerCase() !== "false" : Boolean(open);
 ---
 
-<div class="accordion" data-open={open}>
+<div class="accordion" data-open={isOpen}>
   <button
-    class="accordion-button cutoff"
-    aria-expanded={open ? "true" : "false"}
+    class="accordion-button"
+    aria-expanded={isOpen ? "true" : "false"}
     type="button"
   >
-    <h2 class="heading-1">{title}</h2>
+    <h1 class="big-text">{title}</h1>
   </button>
   <div
-    class="accordion-content"
+    class="accordion-content relative"
     role="region"
-    aria-hidden={open ? "false" : "true"}
+    aria-hidden={isOpen ? "false" : "true"}
   >
     <slot />
   </div>
@@ -46,7 +50,7 @@ const { title = "Accordion Title", open = true } = Astro.props;
       }
     }
 
-    // Initialize accordion content height
+    // Initialize accordion content height based on initial aria-expanded value
     setHeight(button.getAttribute("aria-expanded") === "true");
 
     button.addEventListener("click", () => {

@@ -8,7 +8,7 @@
 :root {
   --margin: 1rem;
   --padding: 1rem;
-  --border-dotted: 2px dotted black;
+  --border-dotted: 1px solid #222;
 }
 
 html,
@@ -54,37 +54,46 @@ table {
 h1,
 .heading-1 {
   font-weight: 700;
-  font-size: 3rem;
+  font-size: clamp(2rem, 5vw, 5vw);
   line-height: 0.9;
   letter-spacing: -0.05em;
+  @apply text-balance;
+}
+
+.big-text {
+  font-size: clamp(2rem, 5vw, 5vw);
 }
 
 h2,
 .heading-2 {
-  font-size: 2rem;
+  font-size: clamp(1.5rem, 1.5vw, 1.5vw);
 }
 
 h3,
 .heading-3 {
   font-weight: 700;
-  font-size: 1.5rem;
+  font-size: clamp(1rem, 1.25vw, 1.25vw);
   line-height: 1.25;
 }
 
 h4,
 .heading-4 {
-  @apply rounded bg-black px-2 py-1 text-[1.25rem] font-semibold text-white;
+  @apply mr-2 rounded bg-black px-2 py-1 text-[1.25rem] font-semibold text-white;
+  vertical-align: middle;
+  transform: translateY(-0.3em);
 }
 
 p {
-  font-size: 1rem;
+  font-size: clamp(16px, 1vw, 18px);
   line-height: 1.5;
   font-family: "Source Serif 4", serif;
   @apply max-w-prose text-pretty;
 }
 
 ul li {
+  font-size: clamp(16px, 1vw, 18px);
   font-family: "Source Serif 4", serif;
+  @apply max-w-prose text-pretty;
 }
 
 .pill {
@@ -105,12 +114,11 @@ details {
     linear-gradient(black, black) padding-box,
     repeating-conic-gradient(#222 0deg 30deg, #111 30deg 60deg) border-box;
   aspect-ratio: 16/9;
-  width: 80%;
   overflow: hidden;
 }
 
 .cutoff {
-  @apply mx-auto max-w-[1440px];
+  @apply mx-auto max-w-[1800px];
 }
 
 a {
@@ -142,4 +150,8 @@ a:focus {
   background-size:
     0 0.1em,
     100% 0.1em;
+}
+
+.monospace {
+  font-family: "Google Sans Code", monospace;
 }
