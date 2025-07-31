@@ -8,6 +8,21 @@
   margin-left: var(--margin) !important;
 }
 
+@media screen and (max-width: 768px) {
+  .swiper-slide:first-of-type {
+    margin-right: var(--margin) !important;
+  }
+
+  .swiper-slide {
+    margin-left: var(--margin);
+    width: calc(100% - 2 * var(--margin));
+  }
+}
+
 .swiper-slide:last-child {
   margin-right: var(--margin);
+}
+
+.swiper-wrapper {
+  @apply flex flex-col md:flex-row;
 }

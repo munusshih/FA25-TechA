@@ -4,24 +4,28 @@ import "swiper/css";
 
 function initAllSwipers() {
   document.querySelectorAll(".swiper").forEach((swiperEl) => {
-    // Using the sibling selector from the parent element
     const container = swiperEl.parentNode.querySelector(
       ".swiper + .swiper-button-container",
     );
 
-    const nextEl = container.querySelector(".swiper-button-next");
-    const prevEl = container.querySelector(".swiper-button-prev");
+    const nextEl = container?.querySelector(".swiper-button-next");
+    const prevEl = container?.querySelector(".swiper-button-prev");
+
+    const isMobile = window.innerWidth < 768;
 
     new Swiper(swiperEl, {
       modules: [Autoplay, Mousewheel, Navigation],
       direction: "horizontal",
       slidesPerView: "auto",
-      spaceBetween: -2,
-      grabCursor: true,
-      mousewheel: {
-        forceToAxis: true,
-        sensitivity: 1,
-      },
+      spaceBetween: -1,
+      grabCursor: !isMobile,
+      allowTouchMove: !isMobile,
+      mousewheel: isMobile
+        ? false
+        : {
+            forceToAxis: true,
+            sensitivity: 1,
+          },
       navigation: {
         nextEl,
         prevEl,

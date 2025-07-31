@@ -4,6 +4,7 @@
 @import "./swiper.css";
 @import "./weekly.css";
 @import "./table.css";
+@import "./border.css";
 
 :root {
   --margin: 1rem;
@@ -17,6 +18,7 @@ body {
   width: 100%;
   height: 100%;
   overflow-x: hidden;
+  scroll-behavior: smooth;
 }
 
 body {
@@ -53,20 +55,30 @@ table {
 
 h1,
 .heading-1 {
+  width: 100%;
   font-weight: 700;
-  font-size: clamp(2rem, 5vw, 5vw);
+  font-size: clamp(1.8rem, 5vw, 5vw);
   line-height: 0.9;
   letter-spacing: -0.05em;
   @apply text-balance;
 }
 
 .big-text {
-  font-size: clamp(2rem, 5vw, 5vw);
+  width: calc(100% - 4 * var(--margin));
+  font-size: clamp(1.8rem, 5vw, 5vw);
 }
 
 h2,
 .heading-2 {
-  font-size: clamp(1.5rem, 1.5vw, 1.5vw);
+  font-size: clamp(1.2rem, 1.5vw, 1.5vw);
+}
+
+h2::before {
+  vertical-align: baseline;
+  margin-right: 0.3em;
+  content: "✷"; /* Try ❋ ✶ ✷ ❉ ✦ ✧ depending on your taste */
+  color: #ff69b4; /* or any color you like */
+  font-size: 1.2em;
 }
 
 h3,
@@ -78,7 +90,7 @@ h3,
 
 h4,
 .heading-4 {
-  @apply mr-2 rounded bg-black px-2 py-1 text-[1.25rem] font-semibold text-white;
+  @apply mt-2 mr-2 rounded bg-black px-2 py-1 text-[1.2rem] font-semibold text-white;
   vertical-align: middle;
   transform: translateY(-0.3em);
 }
@@ -97,24 +109,12 @@ ul li {
 }
 
 .pill {
-  @apply rounded-full bg-white px-3 py-1 text-2xl font-semibold text-gray-800;
+  @apply rounded bg-white px-6 py-2 font-semibold text-black shadow-2xl;
+  font-size: clamp(1.2rem, 1.5vw, 1.5vw);
 }
 
 details {
   cursor: pointer;
-}
-
-.ridge-border {
-  box-shadow:
-    inset 5px 5px 15px rgba(255 255 255 / 0.2),
-    inset -5px -5px 15px rgba(0 0 0 / 0.8);
-  border: 1em ridge pink;
-  border-radius: 100%;
-  background:
-    linear-gradient(black, black) padding-box,
-    repeating-conic-gradient(#222 0deg 30deg, #111 30deg 60deg) border-box;
-  aspect-ratio: 16/9;
-  overflow: hidden;
 }
 
 .cutoff {
@@ -126,16 +126,11 @@ a {
   text-decoration: none;
 }
 
-a {
+a:not(.no-underline) {
   transition: background-size 400ms;
   background:
     linear-gradient(to right, rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.2)),
-    linear-gradient(
-      to right,
-      rgba(255, 0, 0, 1),
-      rgba(255, 0, 180, 1),
-      rgba(0, 100, 200, 1)
-    );
+    linear-gradient(to right, rgba(0, 0, 0, 1));
   background-position:
     100% 100%,
     0 100%;
@@ -154,4 +149,9 @@ a:focus {
 
 .monospace {
   font-family: "Google Sans Code", monospace;
+}
+
+.menu-collapse.open {
+  padding: 1rem;
+  max-height: 500px; /* Large enough to show all content */
 }

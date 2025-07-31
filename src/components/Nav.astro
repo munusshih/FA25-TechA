@@ -1,39 +1,77 @@
-<header
-  class="items-top flex w-full flex-col justify-between gap-4 p-[var(--margin)] text-pretty lg:flex-row"
+<nav
+  class="from-[rgba(0, 0, 0,1)] fixed bottom-0 left-0 z-50 h-auto w-full p-[var(--margin)] pb-4"
 >
-  <div class="flex flex-col items-start gap-2 lg:flex-row lg:items-end">
-    <h1 class="heading-1 w-auto text-balance">
-      Graduate Studio:<br /> Technology A
-    </h1>
-    <h2 class="heading-4 m-0">DES 720A</h2>
-  </div>
-  <h3 class="heading-3">
-    <a href="https://www.pratt.edu/design/graduate-communications-design/"
-      >Pratt Grad ComD</a>
-  </h3>
-</header>
+  <div class="relative flex justify-center">
+    <!-- Toggle Button -->
+    <button
+      id="menu-toggle"
+      class="heading-2 z-50 mb-2 flex w-max items-center justify-center rounded-full bg-black px-20 py-2 text-white shadow-2xl lg:hidden"
+      aria-label="Toggle Menu"
+    >
+      <span id="menu-icon">Open Menu</span>
+    </button>
 
-<!-- <nav class="fixed bottom-0 left-0 z-50 w-full p-[var(--margin)]">
-  <ul
-    class="flex flex-col flex-wrap items-center justify-center gap-4 text-center lg:flex-row"
-  >
-    <li class="pill">
-      <a href="/">Course Description</a>
-    </li>
-    <li class="pill">
-      <a href="/work">Course Modules</a>
-    </li>
-    <li class="pill">
-      <a href="/sketch">Grading and Attendance</a>
-    </li>
-    <li class="pill">
-      <a href="/info">Policies</a>
-    </li>
-    <li class="pill">
-      <a href="/resources">Resources</a>
-    </li>
-    <li class="pill">
-      <a href="/about">Archive</a>
-    </li>
-  </ul>
-</nav> -->
+    <!-- Menu Items -->
+    <ul
+      id="menu"
+      class="menu-collapse absolute bottom-14 m-auto flex max-h-0 w-full flex-col items-center gap-4 overflow-hidden rounded-xl p-0 transition-all duration-500 ease-in-out lg:static lg:max-h-none lg:flex-row lg:justify-center lg:overflow-visible lg:bg-transparent lg:p-0"
+    >
+      <li class="pill">
+        <a class="no-underline" href="#course-description">Course Description</a
+        >
+      </li>
+      <li class="pill">
+        <a class="no-underline" href="#module-1:-from-fixed-to-variable"
+          >Course Modules</a
+        >
+      </li>
+      <li class="pill">
+        <a class="no-underline" href="#grading-and-attendance">Grading</a>
+      </li>
+      <li class="pill">
+        <a class="no-underline" href="#open-source-policies">Policies</a>
+      </li>
+      <li class="pill">
+        <a
+          class="no-underline"
+          href="#pratt-communications-design-departmental-resources"
+          >Resources</a
+        >
+      </li>
+    </ul>
+  </div>
+</nav>
+
+<script>
+  const toggleBtn = document.getElementById("menu-toggle");
+  const menu = document.getElementById("menu");
+  const icon = document.getElementById("menu-icon");
+
+  toggleBtn.addEventListener("click", () => {
+    menu.classList.toggle("open");
+    icon.textContent =
+      icon.textContent === "Open Menu" ? "Close Menu" : "Open Menu";
+  });
+
+  // Auto close menu when a pill is clicked (on mobile)
+  document.querySelectorAll(".pill a").forEach((link) => {
+    link.addEventListener("click", () => {
+      if (window.innerWidth < 1024 && menu.classList.contains("open")) {
+        menu.classList.remove("open");
+        icon.textContent = "Open Menu";
+      }
+    });
+  });
+
+  // Random rotation per pill
+  document.querySelectorAll(".pill").forEach((pill) => {
+    const angle = (Math.random() * 4 - 2).toFixed(2);
+    pill.style.transition = "transform 0.2s ease";
+    pill.addEventListener("mouseenter", () => {
+      pill.style.transform = `rotate(${angle}deg)`;
+    });
+    pill.addEventListener("mouseleave", () => {
+      pill.style.transform = "";
+    });
+  });
+</script>

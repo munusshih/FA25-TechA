@@ -1,5 +1,6 @@
 ---
 import Layout from "../layouts/Layout.astro";
+import Header from "../components/Header.astro";
 import Nav from "../components/Nav.astro";
 import Info from "../components/Info.astro";
 import Description from "../doc/Description.astro";
@@ -17,19 +18,20 @@ import "../styles/global.css";
 ---
 
 <Layout>
+  <Header />
   <Nav />
   <Sketch />
   <main class="mx-auto">
     <Info />
     <Description />
-    <!-- <Community />
+    <Community />
 
     <Module1 />
     <Module2 />
     <Module3 />
     <Grading />
     <Policies />
-    <Resources /> -->
+    <Resources />
   </main>
   <Footer />
 </Layout>

@@ -11,8 +11,8 @@
   padding: 0 var(--margin);
   width: 100%;
   font-weight: bold;
-  font-size: 1.5rem;
-  @apply flex flex-wrap;
+  font-size: clamp(0.8rem, 1.5vw, 2rem);
+  @apply flex;
 }
 
 /* Full filled triangle using CSS borders */
@@ -63,5 +63,5 @@
 }
 
 .accordion-content[aria-hidden="false"] {
-  @apply mb-20;
+  @apply md:mb-20;
 }

@@ -5,9 +5,11 @@ import Clock from "../components/Clock.astro";
 <aside
   class="m-[var(--margin)] font-bold [border-bottom:var(--border-dotted)] [border-top:var(--border-dotted)]"
 >
-  <div class="cutoff grid gap-4 py-[var(--padding)] lg:grid-cols-3">
+  <div
+    class="cutoff grid gap-4 py-[var(--padding)] sm:grid-cols-2 md:grid-cols-4"
+  >
+    <Clock />
     <div class="flex flex-col justify-start gap-4 lg:flex-row">
-      <Clock />
       <ul>
         <li>It's currently week 1</li>
         <li>2 people are viewing the site</li>
