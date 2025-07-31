@@ -11,7 +11,7 @@
 :root {
   --margin: 1rem;
   --padding: 1rem;
-  --border-dotted: 1px solid #222;
+  --border-dotted: 5px solid #222;
 }
 
 html,
@@ -24,18 +24,11 @@ body {
 }
 
 body {
-  background:
-    linear-gradient(
-      0deg,
-      rgba(196, 171, 255, 1) 0%,
-      rgba(240, 171, 255, 1) 5%,
-      rgba(242, 255, 168, 1) 10%,
-      rgba(255, 255, 255, 0.5) 30%
-    ),
-    url("data:image/svg+xml,%3Csvg viewBox='0 0 8000 8000' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
-  background-position: center;
-  background-size: cover;
-  background-repeat: no-repeat;
+  background-image: url("data:image/svg+xml,%3Csvg width='20' height='20' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' stroke='%23ccc' stroke-width='1'%3E%3Cpath d='M20 0H0V20'/%3E%3C/g%3E%3C/svg%3E");
+
+  /* background-position: center; */
+  /* background-size: cover; */
+  /* background-repeat: no-repeat; */
   background-attachment: fixed;
 }
 
@@ -118,8 +111,9 @@ ul li {
 }
 
 .pill {
-  @apply border bg-white px-6 py-2 font-semibold text-black shadow-2xl;
+  @apply border-[5px] bg-white px-6 py-2 font-semibold text-black shadow-2xl;
   font-size: clamp(1.2rem, 1.5vw, 1.5vw);
+  font-family: "Geist", sans-serif;
 }
 
 details {

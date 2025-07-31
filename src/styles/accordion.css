@@ -48,7 +48,7 @@
 
 .accordion-button[aria-expanded="false"]::after {
   border-bottom: var(--border-dotted);
-  width: calc(100% - 4 * var(--margin));
+  width: calc(100% - 2 * var(--margin));
 }
 
 .accordion-content {

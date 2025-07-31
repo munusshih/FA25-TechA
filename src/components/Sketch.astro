@@ -5,17 +5,19 @@
 <img
   src="./placeholders/computer.jpg"
   id="p5-container"
-  class="ridge-border mx-auto"
+  class="ridge-border cutoff mx-auto"
 />
 
 <style>
   #p5-container {
     position: relative;
+    margin: var(--margin) auto;
+    border-radius: 0px;
 
     background: black;
     background-clip: padding-box;
     background-color: #222;
-    width: 80%;
+    width: calc(100% - var(--margin) * 2);
   }
 
   @media (max-width: 768px) {

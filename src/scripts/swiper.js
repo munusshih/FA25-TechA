@@ -17,7 +17,7 @@ function initAllSwipers() {
       modules: [Autoplay, Mousewheel, Navigation],
       direction: "horizontal",
       slidesPerView: "auto",
-      spaceBetween: -1,
+      spaceBetween: -5,
       grabCursor: !isMobile,
       allowTouchMove: !isMobile,
       mousewheel: isMobile

@@ -2,12 +2,15 @@ document.addEventListener("mousemove", (e) => {
   if (Math.random() < 0.4) {
     const glitter = document.createElement("div");
     const colors = [
-      "#ff69b4",
-      "#ff1493",
-      "#da70d6",
-      "#ba55d3",
-      "#9932cc",
-      "#8b008b",
+      "#000000", // black
+      "#ffffff", // white
+      "#222222", // dark gray
+      "#dddddd", // light gray
+      "#cccccc", // silver
+      "#333333", // charcoal
+      "#444444", // slate gray
+      "#555555", // ash gray
+      "#666666", // medium gray
     ];
     const color = colors[Math.floor(Math.random() * colors.length)];
 
