@@ -1,5 +1,5 @@
 aside {
-  @apply m-[var(--margin)] [border-bottom:var(--border-dotted)] [border-top:var(--border-dotted)];
+  @apply m-[var(--margin)] border-y-5;
 }
 
 aside > div {

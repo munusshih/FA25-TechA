@@ -6,6 +6,7 @@
 @import "./table.css";
 @import "./border.css";
 @import "./aside.css";
+@import "./marquee.css";
 
 :root {
   --margin: 1rem;
@@ -62,6 +63,12 @@ h1,
   line-height: 0.9;
   letter-spacing: -0.05em;
   @apply text-balance;
+}
+
+h1.big-text.italic {
+  font-style: italic;
+  font-weight: 500;
+  font-family: "Source Serif 4", serif;
 }
 
 .big-text {

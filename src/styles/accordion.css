@@ -15,10 +15,9 @@
   @apply flex;
 }
 
-/* Full filled triangle using CSS borders */
 .accordion-button::before {
   display: inline-block;
-  transform: rotate(0deg); /* points right when closed */
+  transform: rotate(0deg);
   transform-origin: center;
   transition: transform 0.3s ease;
   margin-right: 0.75em;
@@ -30,7 +29,6 @@
   content: "";
 }
 
-/* Rotate triangle when open (points down) */
 .accordion-button[aria-expanded="true"]::before {
   transform: rotate(90deg);
 }
@@ -54,15 +52,14 @@
 }
 
 .accordion-content {
-  transition: height 0.3s ease;
-  height: 0;
-}
-
-.accordion-content[aria-hidden="true"] {
+  transition: max-height 0.3s ease-out;
+  padding-top: 0;
+  max-height: 0;
   overflow: hidden;
 }
 
 .accordion-content[aria-hidden="false"] {
   @apply md:mb-20;
   padding-top: 1rem;
+  max-height: 10000px; /* big enough for expected content */
 }
