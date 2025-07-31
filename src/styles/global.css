@@ -5,6 +5,7 @@
 @import "./weekly.css";
 @import "./table.css";
 @import "./border.css";
+@import "./aside.css";
 
 :root {
   --margin: 1rem;
@@ -26,9 +27,9 @@ body {
     linear-gradient(
       0deg,
       rgba(196, 171, 255, 1) 0%,
-      rgba(240, 171, 255, 1) 10%,
-      rgba(242, 255, 168, 1) 20%,
-      rgba(255, 255, 255, 0.5) 40%
+      rgba(240, 171, 255, 1) 5%,
+      rgba(242, 255, 168, 1) 10%,
+      rgba(255, 255, 255, 0.5) 30%
     ),
     url("data:image/svg+xml,%3Csvg viewBox='0 0 8000 8000' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
   background-position: center;
@@ -76,8 +77,8 @@ h2,
 h2::before {
   vertical-align: baseline;
   margin-right: 0.3em;
-  content: "✷"; /* Try ❋ ✶ ✷ ❉ ✦ ✧ depending on your taste */
-  color: #ff69b4; /* or any color you like */
+  content: "↳";
+  color: #333;
   font-size: 1.2em;
 }
 
@@ -90,9 +91,10 @@ h3,
 
 h4,
 .heading-4 {
-  @apply mt-2 mr-2 rounded bg-black px-2 py-1 text-[1.2rem] font-semibold text-white;
-  vertical-align: middle;
-  transform: translateY(-0.3em);
+  font-weight: 700;
+  font-size: clamp(1rem, 1.25vw, 1.25vw);
+  line-height: 1.25;
+  font-family: "Source Serif 4", serif;
 }
 
 p {
@@ -109,7 +111,7 @@ ul li {
 }
 
 .pill {
-  @apply rounded bg-white px-6 py-2 font-semibold text-black shadow-2xl;
+  @apply border bg-white px-6 py-2 font-semibold text-black shadow-2xl;
   font-size: clamp(1.2rem, 1.5vw, 1.5vw);
 }
 

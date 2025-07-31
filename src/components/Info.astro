@@ -2,31 +2,37 @@
 import Clock from "../components/Clock.astro";
 ---
 
-<aside
-  class="m-[var(--margin)] font-bold [border-bottom:var(--border-dotted)] [border-top:var(--border-dotted)]"
->
-  <div
-    class="cutoff grid gap-4 py-[var(--padding)] sm:grid-cols-2 md:grid-cols-4"
-  >
+<aside>
+  <div class="cutoff">
     <Clock />
-    <div class="flex flex-col justify-start gap-4 lg:flex-row">
+    <div>
+      <h3>Quick Links</h3>
       <ul>
-        <li>It's currently week 1</li>
-        <li>2 people are viewing the site</li>
+        <li><a href="https://p5js.org/reference/">p5.js Reference</a></li>
+        <li><a href="https://editor.p5js.org/">p5.js Editor</a></li>
+        <li><a href="https://openprocessing.org">OpenProcessing</a></li>
       </ul>
     </div>
-    <ul>
-      <li>Fall 2025</li>
-      <li>5:00-7:50pm, Every Tuesday</li>
-      <li>Steuben Hall, Pratt Institute</li>
-      <li>3 Credits</li>
-    </ul>
-    <ul>
-      <li>Matt Martin, matt@pratt.edu</li>
-      <li>Munus Shih, munus.shih@pratt.edu</li>
-      <li>Anna Fangan Xu, fxux4@pratt.edu</li>
-      <li>Instructor 4: Name, Email</li>
-      <li>Instructor 5: Name, Email</li>
-    </ul>
+
+    <div>
+      <h3>Course Info</h3>
+      <ul>
+        <li>Fall 2025</li>
+        <li>5:00-7:50pm, Every Tuesday</li>
+        <li>Steuben Hall, Pratt Institute</li>
+        <li>3 Credits</li>
+      </ul>
+    </div>
+
+    <div>
+      <h3>Instructors</h3>
+      <ul>
+        <li>Matt Martin</li>
+        <li>Munus Shih</li>
+        <li>Anna Fangan Xu</li>
+        <li>TBD</li>
+        <li>TBD</li>
+      </ul>
+    </div>
   </div>
 </aside>

@@ -64,4 +64,5 @@
 
 .accordion-content[aria-hidden="false"] {
   @apply md:mb-20;
+  padding-top: 1rem;
 }

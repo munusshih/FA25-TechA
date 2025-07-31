@@ -1,4 +1,4 @@
-table {
+/* table {
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
   border: 2px solid black;
   border-collapse: collapse;
@@ -24,4 +24,25 @@ th {
   background-color: pink;
   color: #333;
   font-weight: bold;
+} */
+
+table {
+  border-collapse: collapse;
+  width: 100%;
+  max-width: 550px;
+  font-size: 1rem;
+  font-family: sans-serif;
+}
+
+th,
+td {
+  border-bottom: 1px solid #000;
+  padding: 0.75rem 0;
+  text-align: left;
+}
+
+thead th {
+  border-bottom: 2px solid #000;
+  color: #000;
+  font-weight: 600;
 }
