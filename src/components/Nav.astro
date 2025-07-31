@@ -1,5 +1,6 @@
 <nav
-  class="from-[rgba(0, 0, 0,1)] fixed bottom-0 left-0 z-50 h-auto w-full p-[var(--margin)] pb-4"
+  id="nav"
+  class="fixed bottom-0 left-0 z-50 h-auto w-full bg-gradient-to-t from-[rgba(196,171,255,1)] to-transparent p-[var(--margin)] pb-4 transition-transform duration-600 ease-in-out"
 >
   <div class="relative flex justify-center">
     <!-- Toggle Button -->
@@ -73,5 +74,20 @@
     pill.addEventListener("mouseleave", () => {
       pill.style.transform = "";
     });
+  });
+
+  let lastScrollY = document.body.scrollTop;
+  const nav = document.getElementById("nav");
+
+  document.body.addEventListener("scroll", () => {
+    const currentScrollY = document.body.scrollTop;
+
+    if (currentScrollY > lastScrollY && currentScrollY > 50) {
+      nav.classList.add("translate-y-full");
+    } else {
+      nav.classList.remove("translate-y-full");
+    }
+
+    lastScrollY = currentScrollY;
   });
 </script>
