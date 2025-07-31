@@ -13,11 +13,11 @@
     "@astrojs/mdx": "^4.3.1",
     "@tailwindcss/vite": "^4.1.11",
     "astro": "^5.11.1",
+    "astro-seo": "^0.8.4",
     "gsap": "^3.13.0",
     "p5": "^2.0.3",
     "swiper": "^11.2.10",
-    "tailwindcss": "^4.1.11",
-    "three": "^0.178.0"
+    "tailwindcss": "^4.1.11"
   },
   "devDependencies": {
     "postcss": "^8.5.6",
