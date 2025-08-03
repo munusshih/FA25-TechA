@@ -1,0 +1,176 @@
+---
+const imageFiles = [
+  'Abby-Shuster-2021.png',
+  'Alegria-Ponce-2020.png',
+  'Alex-Rojo-2020.png',
+  'Amy-Middleton-2024.png',
+  'Chayse-Walker-2024.gif',
+  'Elizabeth-Harris-2020.png',
+  'Gu-Jianan-2019.png',
+  'Hailey-Walsh-2020.png',
+  'Ivy-Kurniawan-2023.png',
+  'Jade-VandenBrink-2023.png',
+  'Jingyang-Shi-2019.png',
+  'Kriti-Gupta-2021.png',
+  'Lingfei-Cao-2021.png',
+  'Mengfei-Yun-2018.png',
+  'Mengtinng-Zhu-2023b.png',
+  'Nedda-Alsaikhan-2023.jpg',
+  'Pia-Contreras-2023.jpg',
+  'Polly-Zhang-2020.png',
+  'Ruqui-Fang-2022.png',
+  'Shu-Ge-Wang-2019.png',
+  'Stella-Kuang-2023.png',
+  'Sunho-Im-2019.png',
+  'Tzu-Wei-2021.png',
+  'Tzu-Wei-2021b.png',
+  'Woojin-Lee-(Faculty)-2020-Class-Show.png',
+  'Woraphan-Jampachaisri-2021.jpg',
+  'Yan-Leng-2024.png',
+  'Yanan-Wang-2023.jpg',
+  'Yaru-Zhang-2023.png',
+  'Yeonji-Choi-2018.png',
+  'Yiran-Xu-2023.png',
+  'Yiwen-Chen-2021.png',
+  'Yu-Yijun-2022.png',
+  'Yurou-Xia-2018.png',
+  'Zhan-Yining-2019.png',
+  'Zhang-Han-2024.png',
+  'Zhihan-Qian-2021.png'
+];
+
+// Function to extract student name from filename
+function extractStudentName(filename) {
+  // Remove file extension
+  const nameWithoutExt = filename.replace(/\.[^/.]+$/, "");
+  
+  // Split by hyphens
+  const parts = nameWithoutExt.split('-');
+  
+  // Filter out year patterns (4 digits) and special markers
+  const nameParts = parts.filter(part => {
+    // Remove if it's a year (4 digits)
+    if (/^\d{4}$/.test(part)) return false;
+    // Remove if it's a year with suffix (like 2023b)
+    if (/^\d{4}[a-zA-Z]$/.test(part)) return false;
+    // Remove special markers
+    if (part === '(Faculty)' || part === 'Class' || part === 'Show') return false;
+    return true;
+  });
+  
+  // For names with 3 parts (like Shu-Ge-Wang), take first and last
+  if (nameParts.length >= 3) {
+    return `${nameParts[0]} ${nameParts[nameParts.length - 1]}`;
+  }
+  
+  // For normal 2-part names
+  if (nameParts.length === 2) {
+    return `${nameParts[0]} ${nameParts[1]}`;
+  }
+  
+  // Fallback: join all remaining parts
+  return nameParts.join(' ');
+}
+
+// Create image data with names
+const imageData = imageFiles.map(file => ({
+  url: `/assets/img/${file}`,
+  name: extractStudentName(file)
+}));
+
+const imageUrls = imageData.map(data => data.url);
+const imageNames = imageData.map(data => data.name);
+---
+
+<div class="sketch-wrapper mx-auto mt-8 mb-20">
+  <div id="p5-container" class="ridge-border"></div>
+  <div id="student-name" class="student-name"></div>
+</div>
+
+<style>
+  .sketch-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  #p5-container {
+    position: relative;
+    background: black;
+    background-image: url("/assets/img/Alex-Rojo-2020.png");
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-size: cover;
+    background-clip: padding-box;
+    background-color: #222;
+  }
+
+  .student-name {
+    font-family: "Source Serif 4", serif;
+    font-size: 1.25rem;
+    font-weight: 400;
+    color: #333;
+    text-align: center;
+    min-height: 1.5rem;
+  }
+</style>
+
+<script define:vars={{ imageUrls, imageNames }}>
+  const images = imageUrls;
+  const names = imageNames;
+  
+  // Fisher-Yates shuffle algorithm
+  function shuffleArray(array) {
+    const shuffled = [...array];
+    for (let i = shuffled.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+    }
+    return shuffled;
+  }
+  
+  // Create initial shuffled indices
+  let allIndices = Array.from({ length: images.length }, (_, i) => i);
+  let shuffledIndices = shuffleArray(allIndices);
+  let currentIndex = 0;
+  
+  function changeContent() {
+    const container = document.getElementById('p5-container');
+    const nameElement = document.getElementById('student-name');
+    
+    if (!container || !nameElement) return;
+    
+    // Get current image index from shuffled array
+    const imageIndex = shuffledIndices[currentIndex];
+    
+    // Update content immediately
+    container.style.backgroundImage = `url("${images[imageIndex]}")`;
+    nameElement.textContent = names[imageIndex];
+    
+    // Move to next index
+    currentIndex++;
+    
+    // If we've shown all images, create a new shuffled array
+    if (currentIndex >= shuffledIndices.length) {
+      shuffledIndices = shuffleArray(allIndices);
+      currentIndex = 0;
+    }
+  }
+  
+  // Set initial random content
+  document.addEventListener('DOMContentLoaded', () => {
+    const container = document.getElementById('p5-container');
+    const nameElement = document.getElementById('student-name');
+    
+    if (container && nameElement && images.length > 0) {
+      const initialIndex = shuffledIndices[currentIndex];
+      container.style.backgroundImage = `url("${images[initialIndex]}")`;
+      nameElement.textContent = names[initialIndex];
+      currentIndex++;
+    }
+  });
+  
+  // Change content every 4 seconds
+  setInterval(changeContent, 4000);
+</script>
