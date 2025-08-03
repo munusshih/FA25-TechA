@@ -18,8 +18,8 @@
 
 ### Interactive Components
 - **Swiper 11.2.10** - Modern touch slider/carousel library
-- **p5.js 2.0.3** - Creative coding library for generative graphics
-- **p5.brush.js** - Custom brush library for p5.js (minified version included)
+- **p5.js 2.0.3** - Creative coding library for generative graphics (available but not currently used)
+- **p5.brush.js** - Custom brush library for p5.js (minified version included, available for future use)
 
 ### Development Tools
 - **Vite** - Build tool and development server
@@ -72,7 +72,12 @@ FA25-TechA/
 - **Modular content structure** using component composition
 - **Course information sections**: Description, Community, Modules, Grading, Policies, Resources
 - **Interactive elements**: Accordion for modules, Swiper for course description cards
-- **p5.js integration** for creative visual elements
+- **Dynamic student work gallery** featuring:
+  - Rotating background images in the Sketch component
+  - Student name display below each work
+  - Complete coverage of all 38 student projects
+  - ~2.5 minute full cycles (38 images × 4 seconds each)
+  - Random sequencing with no repetition within each cycle
 
 #### Work Page (`/work`)
 - **Dynamic project showcase** using JSON data
@@ -97,10 +102,20 @@ FA25-TechA/
 
 ### Interactive Features
 
-#### p5.js Integration
-- **Canvas container** with styled border and background
-- **Background image integration** with CSS overlays
-- **Brush library support** for creative drawing tools
+#### Dynamic Student Gallery (Sketch Component)
+- **Styled container** with ridge-border design and background image rotation
+- **Vanilla JavaScript implementation** for dynamic content management (no p5.js used)
+- **Dynamic background image rotation** showcasing student work every 4 seconds
+- **Student name extraction and display** from filename parsing
+- **No-repetition rotation system** using Fisher-Yates shuffle algorithm
+- **Smart filename parsing** that handles various naming conventions:
+  - Standard: `FirstName-LastName-Year.ext` → "FirstName LastName"
+  - Complex: `Woojin-Lee-(Faculty)-2020-Class-Show.png` → "Woojin Lee"
+  - Three-part: `Shu-Ge-Wang-2019.png` → "Shu Wang"
+- **Fair rotation system** that displays all 38 student works exactly once before repeating
+- **Typography consistency** using Source Serif 4 font family to match site design
+- **Asset management** with images copied from `src/assets/img/` to `public/assets/img/`
+- **Immediate transitions** without fade effects for crisp, clean image changes
 
 #### Component Interactions
 - **Card expansion** on click with dynamic height calculations
@@ -168,14 +183,32 @@ public/images/
 - **Organized file structure** for efficient asset loading
 - **Progressive enhancement** approach for interactive features
 
+## Recent Implementation Highlights
+
+### Dynamic Student Work Gallery (Latest Addition)
+- **Smart filename parsing** algorithm extracts student names from various file patterns
+- **Fisher-Yates shuffle implementation** ensures fair, random rotation without repetition
+- **Asset pipeline optimization** copies 38 student images to public directory for browser access
+- **Typography integration** matches site's Source Serif 4 font family with regular weight
+- **Performance optimization** uses immediate transitions for clean, responsive user experience
+- **Comprehensive coverage** showcases every student's work exactly once per cycle
+
+### Technical Implementation Details
+- **JavaScript rotation logic** with index tracking and array reshuffling
+- **CSS styling updates** for proper name display and layout management
+- **Error handling** for missing images and DOM elements
+- **Memory efficient** approach using array indices rather than full image objects
+
 ## Future Considerations
 
 ### Potential Enhancements
 - **Image optimization pipeline** with compression and responsive formats
-- **Advanced p5.js integrations** for more complex interactive elements
+- **p5.js integration** for creative coding elements and interactive graphics
 - **Student submission system** for direct project uploads
 - **Real-time data synchronization** with Google Sheets
 - **Enhanced accessibility** with more comprehensive ARIA support
+- **Gallery controls** allowing users to pause, skip, or manually navigate student works
+- **Student work metadata** display including project titles, descriptions, and external links
 
 ### Technical Debt
 - **Minified p5.brush.js** should be replaced with source version for maintainability
@@ -186,3 +219,5 @@ public/images/
 ## Conclusion
 
 The FA25-TechA project represents a modern, well-architected web application that effectively combines educational content delivery with creative technology showcase capabilities. Its component-based architecture, modern tooling, and thoughtful design patterns make it both maintainable and extensible for future course iterations.
+
+The recent addition of the dynamic student work gallery demonstrates the project's capability to evolve and enhance user experience through intelligent data processing, fair content distribution, and seamless integration with existing design systems. The gallery now serves as an engaging centerpiece that highlights student creativity while ensuring equitable representation of all class participants.
