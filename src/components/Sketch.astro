@@ -14,7 +14,8 @@ const imageFiles = [
   'Kriti-Gupta-2021.png',
   'Lingfei-Cao-2021.png',
   'Mengfei-Yun-2018.png',
-  'Mengtinng-Zhu-2023b.png',
+  'Mengting-Zhu-2023.png',
+  'Mengting-Zhu-2023b.png',
   'Nedda-Alsaikhan-2023.jpg',
   'Pia-Contreras-2023.jpg',
   'Polly-Zhang-2020.png',
@@ -44,6 +45,11 @@ function extractStudentName(filename) {
   // Remove file extension
   const nameWithoutExt = filename.replace(/\.[^/.]+$/, "");
   
+  // Special case for Woojin-Lee-(Faculty)-2020-Class-Show.png
+  if (nameWithoutExt === 'Woojin-Lee-(Faculty)-2020-Class-Show') {
+    return 'Woojin-Lee (Faculty) 2020 Class Show';
+  }
+  
   // Split by hyphens
   const parts = nameWithoutExt.split('-');
   
@@ -53,7 +59,7 @@ function extractStudentName(filename) {
     if (/^\d{4}$/.test(part)) return false;
     // Remove if it's a year with suffix (like 2023b)
     if (/^\d{4}[a-zA-Z]$/.test(part)) return false;
-    // Remove special markers
+    // Remove special markers (except for the special case above)
     if (part === '(Faculty)' || part === 'Class' || part === 'Show') return false;
     return true;
   });
