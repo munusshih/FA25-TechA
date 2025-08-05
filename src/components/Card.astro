@@ -19,8 +19,8 @@ const { class: extraClass = "" } = Astro.props;
       if (isSquare) {
         card.classList.remove("aspect-square");
         const height = card.offsetHeight;
-   //Munus: I was playing with this because the cards with less text, but fading ends, were not functioning like the others. but i don't think my hack is the way forward.
-        const shouldExpand = height > width*.7;
+        //Munus: I was playing with this because the cards with less text, but fading ends, were not functioning like the others. but i don't think my hack is the way forward.
+        const shouldExpand = height > width * 0.7;
         card.classList.toggle("!h-max", shouldExpand);
         card.classList.toggle("aspect-square", !shouldExpand);
 

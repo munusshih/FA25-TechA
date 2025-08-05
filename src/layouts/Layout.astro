@@ -1,28 +1,34 @@
+---
+import { SEO } from "astro-seo";
+---
+
 <!doctype html>
 <html lang="en">
   <head>
+    <SEO
+      title="Technology A — Pratt Grad ComD"
+      description="Technology A is a required first-semester course for Graduate Communications Design (GradCD) students at Pratt, taken alongside Visual Language A and Transformation Design A.  The course is structured in two parts, Technology A (720A) in the first semester and Technology B (720B) in the second, each typically taught by different instructors with different curriculum."
+      openGraph={{
+        basic: {
+          title: "Technology A — Pratt Grad ComD",
+          type: "A type.",
+          image: "https://tech-a.designfuture.space/opengraph-image.png",
+        },
+      }}
+    />
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="generator" content={Astro.generator} />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Geist:wght@100..900&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Geist:wght@100..900&family=Google+Sans+Code:ital,wght@0,300..800;1,300..800&family=Source+Serif+4:ital,opsz,wght@0,8..60,200..900;1,8..60,200..900&display=swap"
       rel="stylesheet"
     />
-    <title>Astro Basics</title>
+    <link rel="icon" href="./favicon.svg" />
+    <title>Technology A — Pratt Grad ComD</title>
   </head>
   <body>
     <slot />
   </body>
 </html>
-
-<style>
-  html,
-  body {
-    margin: 0;
-    width: 100%;
-    height: 100%;
-  }
-</style>

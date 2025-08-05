@@ -1,0 +1,11 @@
+aside {
+  @apply m-[var(--margin)] border-y-5;
+}
+
+aside > div {
+  @apply grid gap-4 py-[var(--padding)] sm:grid-cols-2 md:grid-cols-4;
+}
+
+aside h3 {
+  @apply mb-2;
+}

@@ -2,27 +2,37 @@
 import Clock from "../components/Clock.astro";
 ---
 
-<aside
-  class="m-[var(--margin)] grid gap-4 py-[var(--padding)] font-bold [border-bottom:var(--border-dotted)] [border-top:var(--border-dotted)] lg:grid-cols-3"
->
-  <div class="flex flex-col justify-start gap-4 lg:flex-row">
+<aside>
+  <div class="cutoff">
     <Clock />
-    <ul>
-      <li>It's currently week 1</li>
-      <li>2 people are viewing the site</li>
-    </ul>
+    <div>
+      <h3>Quick Links</h3>
+      <ul>
+        <li><a href="https://p5js.org/reference/">p5.js Reference</a></li>
+        <li><a href="https://editor.p5js.org/">p5.js Editor</a></li>
+        <li><a href="https://openprocessing.org">OpenProcessing</a></li>
+      </ul>
+    </div>
+
+    <div>
+      <h3>Course Info</h3>
+      <ul>
+        <li>Fall 2025</li>
+        <li>5:00-7:50pm, Every Tuesday</li>
+        <li>Steuben Hall, Pratt Institute</li>
+        <li>3 Credits</li>
+      </ul>
+    </div>
+
+    <div>
+      <h3>Instructors</h3>
+      <ul>
+        <li>Matt Martin</li>
+        <li>Munus Shih</li>
+        <li>Anna Fangan Xu</li>
+        <li>TBD</li>
+        <li>TBD</li>
+      </ul>
+    </div>
   </div>
-  <ul>
-    <li>Fall 2025</li>
-    <li>5:00-7:50pm, Every Tuesday</li>
-    <li>Steuben Hall, Pratt Institute</li>
-    <li>3 Credits</li>
-  </ul>
-  <ul>
-    <li>Instructor 1: Name, Email</li>
-    <li>Instructor 2: Name, Email</li>
-    <li>Instructor 3: Name, Email</li>
-    <li>Instructor 4: Name, Email</li>
-    <li>Instructor 5: Name, Email</li>
-  </ul>
 </aside>

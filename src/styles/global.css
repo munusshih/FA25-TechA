@@ -1,9 +1,26 @@
 @import "tailwindcss";
+@import "./card.css";
+@import "./accordion.css";
+@import "./swiper.css";
+@import "./weekly.css";
+@import "./table.css";
+@import "./border.css";
+@import "./aside.css";
+@import "./marquee.css";
 
 :root {
   --margin: 1rem;
   --padding: 1rem;
-  --border-dotted: 2px dotted black;
+  --border-dotted: 1px solid #222;
+}
+
+html,
+body {
+  margin: 0;
+  width: 100%;
+  height: 100%;
+  overflow-x: hidden;
+  scroll-behavior: smooth;
 }
 
 body {
@@ -11,9 +28,9 @@ body {
     linear-gradient(
       0deg,
       rgba(196, 171, 255, 1) 0%,
-      rgba(240, 171, 255, 1) 10%,
-      rgba(242, 255, 168, 1) 20%,
-      rgba(255, 255, 255, 0.5) 40%
+      rgba(240, 171, 255, 1) 5%,
+      rgba(242, 255, 168, 1) 10%,
+      rgba(255, 255, 255, 0.5) 30%
     ),
     url("data:image/svg+xml,%3Csvg viewBox='0 0 8000 8000' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
   background-position: center;
@@ -40,34 +57,110 @@ table {
 
 h1,
 .heading-1 {
+  width: 100%;
   font-weight: 700;
-  font-size: 3rem;
+  font-size: clamp(1.8rem, 5vw, 5vw);
   line-height: 0.9;
   letter-spacing: -0.05em;
+  @apply text-balance;
+}
+
+h1.big-text.italic {
+  font-style: italic;
+  font-weight: 500;
+  font-family: "Source Serif 4", serif;
+}
+
+.big-text {
+  width: calc(100% - 4 * var(--margin));
+  font-size: clamp(1.8rem, 5vw, 5vw);
 }
 
 h2,
 .heading-2 {
-  font-size: 2rem;
+  font-size: clamp(1.2rem, 1.5vw, 1.5vw);
+}
+
+h2::before {
+  vertical-align: baseline;
+  margin-right: 0.3em;
+  content: "↳";
+  color: #333;
+  font-size: 1.2em;
 }
 
 h3,
 .heading-3 {
   font-weight: 700;
-  font-size: 1.5rem;
+  font-size: clamp(1rem, 1.25vw, 1.25vw);
   line-height: 1.25;
 }
 
 h4,
 .heading-4 {
-  @apply rounded bg-black px-2 py-1 text-[1.25rem] font-semibold text-white;
+  font-weight: 700;
+  font-size: clamp(1rem, 1.25vw, 1.25vw);
+  line-height: 1.25;
+  font-family: "Source Serif 4", serif;
 }
 
 p {
-  font-size: 1rem;
+  font-size: clamp(16px, 1vw, 18px);
   line-height: 1.5;
+  font-family: "Source Serif 4", serif;
+  @apply max-w-prose text-pretty;
+}
+
+ul li {
+  font-size: clamp(16px, 1vw, 18px);
+  font-family: "Source Serif 4", serif;
+  @apply max-w-prose text-pretty;
 }
 
 .pill {
-  @apply rounded-full bg-white px-3 py-1 text-2xl font-semibold text-gray-800;
+  @apply border bg-white px-6 py-2 font-semibold text-black shadow-2xl;
+  font-size: clamp(1.2rem, 1.5vw, 1.5vw);
+}
+
+details {
+  cursor: pointer;
+}
+
+.cutoff {
+  @apply mx-auto max-w-[1800px];
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+a:not(.no-underline) {
+  transition: background-size 400ms;
+  background:
+    linear-gradient(to right, rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.2)),
+    linear-gradient(to right, rgba(0, 0, 0, 1));
+  background-position:
+    100% 100%,
+    0 100%;
+  background-size:
+    100% 0.1em,
+    0 0.1em;
+  background-repeat: no-repeat;
+}
+
+a:hover,
+a:focus {
+  background-size:
+    0 0.1em,
+    100% 0.1em;
+}
+
+.monospace {
+  font-family: "Google Sans Code", monospace;
+}
+
+.menu-collapse.open {
+  padding: 1rem;
+  max-height: 500px; /* Large enough to show all content */
 }

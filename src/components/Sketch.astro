@@ -44,15 +44,15 @@ const imageFiles = [
 function extractStudentName(filename) {
   // Remove file extension
   const nameWithoutExt = filename.replace(/\.[^/.]+$/, "");
-  
+
   // Special case for Woojin-Lee-(Faculty)-2020-Class-Show.png
   if (nameWithoutExt === 'Woojin-Lee-(Faculty)-2020-Class-Show') {
     return 'Woojin-Lee (Faculty) 2020 Class Show';
   }
-  
+
   // Split by hyphens
   const parts = nameWithoutExt.split('-');
-  
+
   // Filter out year patterns (4 digits) and special markers
   const nameParts = parts.filter(part => {
     // Remove if it's a year (4 digits)
@@ -63,17 +63,17 @@ function extractStudentName(filename) {
     if (part === '(Faculty)' || part === 'Class' || part === 'Show') return false;
     return true;
   });
-  
+
   // For names with 3 parts (like Shu-Ge-Wang), take first and last
   if (nameParts.length >= 3) {
     return `${nameParts[0]} ${nameParts[nameParts.length - 1]}`;
   }
-  
+
   // For normal 2-part names
   if (nameParts.length === 2) {
     return `${nameParts[0]} ${nameParts[1]}`;
   }
-  
+
   // Fallback: join all remaining parts
   return nameParts.join(' ');
 }
@@ -125,7 +125,7 @@ const imageNames = imageData.map(data => data.name);
 <script define:vars={{ imageUrls, imageNames }}>
   const images = imageUrls;
   const names = imageNames;
-  
+
   // Fisher-Yates shuffle algorithm
   function shuffleArray(array) {
     const shuffled = [...array];
@@ -135,40 +135,40 @@ const imageNames = imageData.map(data => data.name);
     }
     return shuffled;
   }
-  
+
   // Create initial shuffled indices
   let allIndices = Array.from({ length: images.length }, (_, i) => i);
   let shuffledIndices = shuffleArray(allIndices);
   let currentIndex = 0;
-  
+
   function changeContent() {
     const container = document.getElementById('p5-container');
     const nameElement = document.getElementById('student-name');
-    
+
     if (!container || !nameElement) return;
-    
+
     // Get current image index from shuffled array
     const imageIndex = shuffledIndices[currentIndex];
-    
+
     // Update content immediately
     container.style.backgroundImage = `url("${images[imageIndex]}")`;
     nameElement.textContent = names[imageIndex];
-    
+
     // Move to next index
     currentIndex++;
-    
+
     // If we've shown all images, create a new shuffled array
     if (currentIndex >= shuffledIndices.length) {
       shuffledIndices = shuffleArray(allIndices);
       currentIndex = 0;
     }
   }
-  
+
   // Set initial random content
   document.addEventListener('DOMContentLoaded', () => {
     const container = document.getElementById('p5-container');
     const nameElement = document.getElementById('student-name');
-    
+
     if (container && nameElement && images.length > 0) {
       const initialIndex = shuffledIndices[currentIndex];
       container.style.backgroundImage = `url("${images[initialIndex]}")`;
@@ -176,7 +176,7 @@ const imageNames = imageData.map(data => data.name);
       currentIndex++;
     }
   });
-  
+
   // Change content every 4 seconds
   setInterval(changeContent, 4000);
 </script>

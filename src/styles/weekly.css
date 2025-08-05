@@ -1,0 +1,7 @@
+.weekly {
+  @apply flex flex-col gap-4 from-transparent from-[90%] to-white to-[100%] px-4 even:mt-8 md:bg-gradient-to-b md:p-8 md:[border:var(--border-dotted)] md:odd:ml-[var(--margin)] md:even:mt-0 md:even:mr-[var(--margin)] md:even:border-l-0;
+}
+
+.two-column:not(:first-child) {
+  margin-top: -1px;
+}

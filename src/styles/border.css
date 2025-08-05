@@ -1,0 +1,103 @@
+/* Base style — bold and iconic */
+img {
+  object-fit: cover;
+}
+
+.ridge-border,
+.ridge-border-chrome,
+.ridge-border-soft,
+.ridge-border-frosted,
+.ridge-border-warm,
+.ridge-border-dust,
+.ridge-border-smoke {
+  background:
+    linear-gradient(black, black) padding-box,
+    repeating-conic-gradient(#222 0deg 30deg, #111 30deg 60deg) border-box;
+  overflow: hidden;
+  @apply mb-8 aspect-[1/1] rounded-full shadow-2xl md:aspect-[16/9];
+}
+
+.ridge-border {
+  box-shadow:
+    inset 5px 5px 15px rgba(255 255 255 / 0.2),
+    inset -5px -5px 15px rgba(0 0 0 / 0.8);
+  border: 1.5em ridge pink;
+}
+
+.ridge-border-footer {
+  box-shadow:
+    inset 5px 5px 15px rgba(255 255 255 / 0.2),
+    inset -5px -5px 15px rgba(0 0 0 / 0.8);
+  border: 1em ridge pink;
+  width: 100%;
+  height: auto;
+}
+
+/* Muted metallic with subtle polish */
+.ridge-border-chrome {
+  box-shadow:
+    inset 3px 3px 10px rgba(255 255 255 / 0.3),
+    inset -3px -3px 10px rgba(0 0 0 / 0.7),
+    0 0 5px rgba(255 255 255 / 0.05);
+  border: 0.75em ridge #ccc;
+  border-radius: 50%;
+  background:
+    linear-gradient(black, black) padding-box,
+    repeating-conic-gradient(#444 0deg 15deg, #111 15deg 30deg) border-box;
+}
+
+/* Powdery bevel with lavender coolness */
+.ridge-border-soft {
+  box-shadow:
+    inset 8px 8px 20px rgba(255 255 255 / 0.1),
+    inset -8px -8px 20px rgba(0 0 0 / 0.6);
+  border: 1em groove #e0aaff;
+  background:
+    radial-gradient(circle at center, #2a2a2a, #0e0e0e) padding-box,
+    conic-gradient(from 0deg, #333, #111, #333) border-box;
+}
+
+/* Blurred glassy darkness */
+.ridge-border-frosted {
+  backdrop-filter: blur(6px);
+  box-shadow:
+    inset 4px 4px 12px rgba(255 255 255 / 0.15),
+    inset -4px -4px 12px rgba(0 0 0 / 0.5);
+  border: 1em ridge rgba(255, 255, 255, 0.3);
+  background:
+    linear-gradient(to bottom right, #1e1e1e, #0d0d0d) padding-box,
+    repeating-conic-gradient(#444 0deg 60deg, #222 60deg 120deg) border-box;
+}
+
+/* Earthy warmth and sepia glow */
+.ridge-border-warm {
+  box-shadow:
+    inset 6px 6px 16px rgba(255 240 230 / 0.15),
+    inset -6px -6px 16px rgba(0 0 0 / 0.6);
+  border: 1em ridge #e9b9a8;
+  background:
+    linear-gradient(#1b1a1a, #151212) padding-box,
+    repeating-conic-gradient(#2a1e1c 0deg 40deg, #1b1312 40deg 80deg) border-box;
+}
+
+/* Desaturated, dry, and paperlike */
+.ridge-border-dust {
+  box-shadow:
+    inset 5px 5px 15px rgba(255 255 255 / 0.1),
+    inset -5px -5px 15px rgba(0 0 0 / 0.5);
+  border: 1em ridge #b8b0a1;
+  background:
+    linear-gradient(#0f0f0f, #0b0b0b) padding-box,
+    repeating-conic-gradient(#2c2a28 0deg 20deg, #191817 20deg 40deg) border-box;
+}
+
+/* Smoky softness with monochrome gradients */
+.ridge-border-smoke {
+  box-shadow:
+    inset 7px 7px 20px rgba(255 255 255 / 0.1),
+    inset -7px -7px 20px rgba(0 0 0 / 0.7);
+  border: 1em ridge #aaa;
+  background:
+    linear-gradient(to bottom, #1a1a1a, #101010) padding-box,
+    repeating-conic-gradient(#333 0deg 45deg, #222 45deg 90deg) border-box;
+}

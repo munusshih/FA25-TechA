@@ -11,7 +11,7 @@
     class="rounded-full border border-black"
   >
     <!-- Clock face circle -->
-    <circle cx="60" cy="60" r="58" fill="none" stroke="black" stroke-width="2"
+    <circle cx="60" cy="60" r="58" fill="none" stroke="black" stroke-width="8"
     ></circle>
 
     <!-- Hour markers -->
@@ -93,7 +93,7 @@
       x2="60"
       y2="35"
       stroke="black"
-      stroke-width="3"
+      stroke-width="5"
       stroke-linecap="round"></line>
     <line
       id="minute-hand"
@@ -102,7 +102,7 @@
       x2="60"
       y2="20"
       stroke="black"
-      stroke-width="2"
+      stroke-width="3"
       stroke-linecap="round"></line>
     <line
       id="second-hand"
@@ -139,13 +139,13 @@
     if (hourHand && minuteHand && secondHand) {
       // Apply rotations
       hourHand.style.transformOrigin = "60px 60px";
-      hourHand.style.transform = `rotate(${hourAngle}deg)`;
+      hourHand.style.transform = `rotate(${hourAngle + 90}deg)`;
 
       minuteHand.style.transformOrigin = "60px 60px";
-      minuteHand.style.transform = `rotate(${minuteAngle}deg)`;
+      minuteHand.style.transform = `rotate(${minuteAngle + 90}deg)`;
 
       secondHand.style.transformOrigin = "60px 60px";
-      secondHand.style.transform = `rotate(${secondAngle}deg)`;
+      secondHand.style.transform = `rotate(${secondAngle + 90}deg)`;
     }
   }
 

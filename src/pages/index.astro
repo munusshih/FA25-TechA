@@ -1,0 +1,39 @@
+---
+import Layout from "../layouts/Layout.astro";
+import Header from "../components/Header.astro";
+import Nav from "../components/Nav.astro";
+import Info from "../components/Info.astro";
+import Description from "../doc/Description.astro";
+import Accordion from "../components/Accordion.astro";
+import Community from "../doc/Community.astro";
+import Module1 from "../doc/Module1.astro";
+import Module2 from "../doc/Module2.astro";
+import Module3 from "../doc/Module3.astro";
+import Grading from "../doc/Grading.astro";
+import Policies from "../doc/Policies.astro";
+import Resources from "../doc/Resources.astro";
+import Sketch from "../components/Sketch.astro";
+import Footer from "../components/Footer.astro";
+import "../styles/global.css";
+---
+
+<Layout>
+  <Header />
+  <Nav />
+  <Sketch />
+  <main class="mx-auto">
+    <Info />
+    <Description />
+    <Community />
+
+    <Module1 />
+    <Module2 />
+    <Module3 />
+    <Grading />
+    <Policies />
+    <Resources />
+  </main>
+  <Footer />
+</Layout>
+<script src="../scripts/swiper.js"></script>
+<script src="../scripts/glitter-cursor.js"></script>
