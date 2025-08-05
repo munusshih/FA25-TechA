@@ -1,0 +1,124 @@
+:root {
+  --margin: 1rem;
+}
+
+/* Nav container styles */
+.nav-container {
+  position: sticky;
+  bottom: 0;
+  left: 0;
+  z-index: 50;
+  transition: transform 0.6s ease-in-out;
+  background-image: linear-gradient(to top, transparent);
+  padding: var(--margin) 0;
+  width: 100%;
+  height: auto;
+}
+
+/* Hide nav when scrolled */
+.nav-container.translate-y-full {
+  transform: translateY(100%);
+}
+
+/* Inner flex container */
+.nav-inner {
+  display: flex;
+  position: relative;
+  justify-content: flex-start;
+}
+
+/* Toggle button */
+.menu-toggle-button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 50;
+  margin-bottom: 0.5rem;
+  box-shadow: 0 10px 15px rgba(0, 0, 0, 0.25);
+  background: black;
+  padding: 0.5rem 2rem;
+  color: white;
+  font-weight: bold;
+  font-size: 1.25rem;
+}
+
+/* Hide toggle button on large screens */
+@media (min-width: 1024px) {
+  .menu-toggle-button {
+    display: none;
+  }
+}
+
+/* Menu list (collapsed and responsive) */
+.menu-list {
+  display: flex;
+  position: absolute;
+  bottom: 3.5rem;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  transition: all 0.5s ease-in-out;
+  margin: auto;
+  border-radius: 0.75rem;
+  padding: 0;
+  width: 100%;
+  max-height: 0;
+  overflow: hidden;
+}
+
+/* Open state */
+.menu-list.open {
+  max-height: 100vh;
+}
+
+/* Large screen override */
+@media (min-width: 1024px) {
+  .menu-list {
+    position: static;
+    flex-direction: row;
+    background: transparent;
+    padding: 0;
+    max-height: none;
+    overflow: visible;
+  }
+}
+
+.pill {
+  @apply font-semibold text-black shadow-2xl;
+  font-size: clamp(1.2rem, 1.5vw, 1.5vw);
+}
+
+/* Pill link styling */
+.pill a,
+.pill-link {
+  text-decoration: none;
+}
+
+header h1.heading-1,
+.clock-container {
+  --font-scale: 1; /* default scale */
+  transform-origin: top left;
+  font-size: clamp(
+    0.8rem,
+    calc(7.5vw * var(--font-scale)),
+    calc(7.5vw * var(--font-scale))
+  );
+}
+
+header h2 {
+  --font-scale: 1;
+  font-size: clamp(
+    0.8rem,
+    calc(1.5vw * var(--font-scale)),
+    calc(1.5vw * var(--font-scale))
+  );
+}
+
+header {
+  position: fixed !important;
+  top: 0;
+  z-index: 50;
+  background:
+    linear-gradient(0deg, rgba(239, 239, 239, 1) 30%),
+    url("data:image/svg+xml,%3Csvg viewBox='0 0 8000 8000' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+}

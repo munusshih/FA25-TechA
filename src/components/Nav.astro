@@ -1,40 +1,33 @@
-<nav
-  id="nav"
-  class="fixed bottom-0 left-0 z-50 h-auto w-full bg-gradient-to-t from-[rgba(196,171,255,1)] to-transparent p-[var(--margin)] pb-4 transition-transform duration-600 ease-in-out"
->
-  <div class="relative flex justify-center">
+<nav id="nav" class="nav-container">
+  <div class="nav-inner">
     <!-- Toggle Button -->
     <button
       id="menu-toggle"
-      class="heading-2 z-50 mb-2 flex w-max items-center justify-center bg-black px-8 py-2 text-white shadow-2xl lg:hidden"
+      class="menu-toggle-button"
       aria-label="Toggle Menu"
     >
       <span id="menu-icon">Open Menu</span>
     </button>
 
     <!-- Menu Items -->
-    <ul
-      id="menu"
-      class="menu-collapse absolute bottom-14 m-auto flex max-h-0 w-full flex-col items-center gap-4 overflow-hidden rounded-xl p-0 transition-all duration-500 ease-in-out lg:static lg:max-h-none lg:flex-row lg:justify-center lg:overflow-visible lg:bg-transparent lg:p-0"
-    >
+    <ul id="menu" class="menu-list">
       <li class="pill">
-        <a class="no-underline" href="#course-description">Course Description</a
-        >
+        <a class="pill-link" href="#course-description">Course Description</a>
       </li>
       <li class="pill">
-        <a class="no-underline" href="#module-1:-from-fixed-to-variable"
+        <a class="pill-link" href="#module-1:-from-fixed-to-variable"
           >Course Modules</a
         >
       </li>
       <li class="pill">
-        <a class="no-underline" href="#grading-and-attendance">Grading</a>
+        <a class="pill-link" href="#grading-and-attendance">Grading</a>
       </li>
       <li class="pill">
-        <a class="no-underline" href="#open-source-policies">Policies</a>
+        <a class="pill-link" href="#open-source-policies">Policies</a>
       </li>
       <li class="pill">
         <a
-          class="no-underline"
+          class="pill-link"
           href="#pratt-communications-design-departmental-resources"
           >Resources</a
         >
@@ -43,7 +36,7 @@
   </div>
 </nav>
 
-<script>
+<!-- <script>
   const toggleBtn = document.getElementById("menu-toggle");
   const menu = document.getElementById("menu");
   const icon = document.getElementById("menu-icon");
@@ -90,4 +83,4 @@
 
     lastScrollY = currentScrollY;
   });
-</script>
+</script> -->

@@ -3,36 +3,9 @@ const { class: extraClass = "" } = Astro.props;
 ---
 
 <div
-  class={`card aspect-square !w-[400px] text-grey border bg-white p-4 ${extraClass} overflow-hidden transition-all duration-300 multiline-truncate swiper-slide`}
+  class={`card w-full h-auto text-grey border bg-white p-4 ${extraClass} overflow-hidden transition-all duration-300 `}
   data-toggle-card
   data-expanded="false"
 >
   <slot />
 </div>
-
-<script>
-  document.querySelectorAll("[data-toggle-card]").forEach((card) => {
-    card.addEventListener("click", () => {
-      const isSquare = card.classList.contains("aspect-square");
-      const width = card.offsetWidth;
-
-      if (isSquare) {
-        card.classList.remove("aspect-square");
-        const height = card.offsetHeight;
-        //Munus: I was playing with this because the cards with less text, but fading ends, were not functioning like the others. but i don't think my hack is the way forward.
-        const shouldExpand = height > width * 0.7;
-        card.classList.toggle("!h-max", shouldExpand);
-        card.classList.toggle("aspect-square", !shouldExpand);
-
-        // Set data-expanded accordingly
-        card.setAttribute("data-expanded", shouldExpand ? "true" : "false");
-      } else {
-        card.classList.add("aspect-square");
-        card.classList.remove("!h-max");
-
-        // Mark collapsed
-        card.setAttribute("data-expanded", "false");
-      }
-    });
-  });
-</script>

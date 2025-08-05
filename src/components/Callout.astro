@@ -2,31 +2,3 @@
   <!-- callout bracket-border my-4 ml-2 max-w-[60ch] px-4 font-bold -->
   <slot />
 </quote>
-<style>
-  .bracket-border {
-    position: relative;
-    width: max-content;
-  }
-  .bracket-border:before {
-    position: absolute;
-    top: -10px;
-    bottom: -10px;
-    left: -5px;
-    border-top: 3px solid #666;
-    border-bottom: 3px solid #666;
-    border-left: 3px solid #666;
-    padding: 5px;
-    content: " ";
-  }
-  .bracket-border:after {
-    position: absolute;
-    top: -10px;
-    right: -5px;
-    bottom: -10px;
-    border-top: 3px solid #666;
-    border-right: 3px solid #666;
-    border-bottom: 3px solid #666;
-    padding: 5px;
-    content: " ";
-  }
-</style>

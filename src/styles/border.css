@@ -14,15 +14,15 @@ img {
     linear-gradient(black, black) padding-box,
     repeating-conic-gradient(#222 0deg 30deg, #111 30deg 60deg) border-box;
   overflow: hidden;
-  @apply mb-8 aspect-[1/1] rounded-full shadow-2xl md:aspect-[16/9];
 }
 
-.ridge-border {
+/* .ridge-border {
   box-shadow:
     inset 5px 5px 15px rgba(255 255 255 / 0.2),
     inset -5px -5px 15px rgba(0 0 0 / 0.8);
-  border: 1.5em ridge pink;
-}
+  border: 1.5em ridge white;
+  max-width: 400px;
+} */
 
 .ridge-border-footer {
   box-shadow:

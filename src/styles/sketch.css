@@ -1,0 +1,41 @@
+.sketch-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  margin: 1rem;
+  margin-top: 25%;
+  aspect-ratio: 16/9;
+  width: calc(100% - 2rem);
+}
+
+.image {
+  display: block;
+  transition: opacity 1s ease;
+  width: 100%;
+  object-fit: cover;
+}
+
+.student-name {
+  transition: opacity 1s ease;
+  margin-left: var(--margin);
+  min-height: 1.5rem;
+  color: #333;
+  font-weight: 400;
+  font-size: 1.25rem;
+  font-family: "Source Serif 4", serif;
+  text-align: left;
+}
+
+.student-name::before {
+  content: "Work by ";
+  font-weight: 700;
+}
+
+.fade {
+  opacity: 1;
+}
+
+.fade-out {
+  opacity: 0;
+}

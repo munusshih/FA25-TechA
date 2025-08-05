@@ -1,32 +1,45 @@
----
-// No props needed for this clock component
----
-
 <div class="clock-container">
   <svg
     id="clock"
-    width="80"
-    height="80"
     viewBox="0 0 120 120"
-    class="rounded-full border border-black"
+    class="aspect-square h-auto w-full rounded-full border border-black"
+    preserveAspectRatio="xMidYMid meet"
   >
-    <!-- Clock face circle -->
-    <circle cx="60" cy="60" r="58" fill="none" stroke="black" stroke-width="8"
+    <!-- Clock face -->
+    <circle cx="60" cy="60" r="58" fill="none" stroke="black" stroke-width="30"
     ></circle>
 
     <!-- Hour markers -->
     <g id="hour-markers">
-      <!-- 12, 3, 6, 9 markers (thicker) -->
-      <line x1="60" y1="4" x2="60" y2="12" stroke="black" stroke-width="2"
-      ></line>
-      <line x1="116" y1="60" x2="108" y2="60" stroke="black" stroke-width="2"
-      ></line>
-      <line x1="60" y1="116" x2="60" y2="108" stroke="black" stroke-width="2"
-      ></line>
-      <line x1="4" y1="60" x2="12" y2="60" stroke="black" stroke-width="2"
+      <!-- 12, 3, 6, 9 markers -->
+      <line
+        x1="60"
+        y1="4"
+        x2="60"
+        y2="12"
+        stroke="black"
+        stroke-width="10
+      "></line>
+      <line
+        x1="116"
+        y1="60"
+        x2="108"
+        y2="60"
+        stroke="black"
+        stroke-width="10
+      "></line>
+      <line
+        x1="60"
+        y1="116"
+        x2="60"
+        y2="108"
+        stroke="black"
+        stroke-width="10
+      "></line>
+      <line x1="4" y1="60" x2="12" y2="60" stroke="black" stroke-width="10"
       ></line>
 
-      <!-- Other hour markers (thinner) -->
+      <!-- Other markers -->
       <line
         x1="90.64"
         y1="14.64"
@@ -153,15 +166,3 @@
   updateClock();
   setInterval(updateClock, 1000);
 </script>
-
-<style>
-  #clock {
-    transition: none; /* Disable transitions for smooth second hand movement */
-  }
-
-  /* Smooth transition for hour and minute hands only */
-  #hour-hand,
-  #minute-hand {
-    transition: transform 0.5s ease-in-out;
-  }
-</style>

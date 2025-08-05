@@ -1,0 +1,15 @@
+#clock {
+  transition: none; /* Disable transitions for smooth second hand movement */
+}
+
+/* Smooth transition for hour and minute hands only */
+#hour-hand,
+#minute-hand {
+  transition: transform 0.5s ease-in-out;
+}
+
+.clock-container {
+  display: inline-block;
+  display: none;
+  width: 10vw;
+}
