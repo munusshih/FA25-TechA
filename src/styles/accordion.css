@@ -32,6 +32,19 @@
   transform: rotate(90deg);
 }
 
+.accordion-button:hover {
+  transform: translate(0, -2%);
+  transition: transform 0.3s ease;
+}
+
+.accordion-button[aria-expanded="true"]:hover::before {
+  transform: rotate(80deg);
+}
+
+.accordion-button[aria-expanded="false"]:hover::before {
+  transform: rotate(10deg);
+}
+
 .accordion-button::after {
   display: inline-block;
   position: absolute;

@@ -9,7 +9,7 @@ const isItalic =
 const titleId = title.toLowerCase().replace(/\s+/g, "-");
 ---
 
-<div id={`${titleId}`} class="accordion cutoff" data-open={isOpen}>
+<section id={`${titleId}`} class="accordion cutoff" data-open={isOpen}>
   <button
     class="accordion-button"
     aria-expanded={isOpen ? "true" : "false"}
@@ -17,14 +17,10 @@ const titleId = title.toLowerCase().replace(/\s+/g, "-");
   >
     <h1>{title}</h1>
   </button>
-  <div
-    class="accordion-content relative"
-    role="region"
-    aria-hidden={isOpen ? "false" : "true"}
-  >
+  <div class="accordion-content relative">
     <slot />
   </div>
-</div>
+</section>
 
 <script>
   document.querySelectorAll(".accordion").forEach((accordion) => {
