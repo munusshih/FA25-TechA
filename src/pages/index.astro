@@ -14,8 +14,11 @@ import Sketch from "../components/Sketch.astro";
 import Footer from "../components/Footer.astro";
 import SkipToMain from "@/components/SkipToMain.astro";
 import "../styles/global.css";
+import { selfieUrl } from "astro-selfie";
+const screenshotUrl = selfieUrl(Astro);
 ---
 
+<meta property="og:image" content={screenshotUrl.href} />
 <Layout>
   <SkipToMain />
   <Header />
