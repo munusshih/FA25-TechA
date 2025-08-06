@@ -12,10 +12,12 @@ import Policies from "../doc/Policies.astro";
 import Resources from "../doc/Resources.astro";
 import Sketch from "../components/Sketch.astro";
 import Footer from "../components/Footer.astro";
+import SkipToMain from "@/components/SkipToMain.astro";
 import "../styles/global.css";
 ---
 
 <Layout>
+  <SkipToMain />
   <Header />
   <Sketch />
   <main class="mx-auto">

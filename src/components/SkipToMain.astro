@@ -1,0 +1,38 @@
+---
+// SkipToMain.astro
+---
+
+<a href="#main-content" class="skip-to-main heading-3" id="skip-to-main">
+  Skip to main content
+</a>
+
+<script>
+  // Skip to Main Button Functionality
+  (function () {
+    const skipLink = document.querySelector(".skip-to-main");
+    const mainContent = document.querySelector("main");
+
+    if (skipLink && mainContent) {
+      skipLink.addEventListener("click", function (e) {
+        e.preventDefault();
+
+        // Focus the main content
+        mainContent.focus();
+
+        // Scroll to main content smoothly
+        mainContent.scrollIntoView({
+          behavior: "smooth",
+          block: "start",
+        });
+      });
+
+      // Handle keyboard navigation
+      skipLink.addEventListener("keydown", function (e) {
+        if (e.key === "Enter" || e.key === " ") {
+          e.preventDefault();
+          skipLink.click();
+        }
+      });
+    }
+  })();
+</script>

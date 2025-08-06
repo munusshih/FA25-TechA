@@ -11,6 +11,7 @@
 @import "./clock.css";
 @import "./sketch.css";
 @import "./nav.css";
+@import "./skip-to-main.css";
 
 @theme {
   --breakpoint-xs: 30rem;
