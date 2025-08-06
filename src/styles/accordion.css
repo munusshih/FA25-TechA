@@ -70,7 +70,7 @@
   overflow: hidden;
 }
 
-.accordion-content[aria-hidden="false"] {
+.accordion-content[aria-expanded="true"] {
   @apply md:mb-20;
   padding-top: 1rem;
   max-height: 10000px; /* big enough for expected content */
