@@ -9,13 +9,13 @@ const isItalic =
 const titleId = title.toLowerCase().replace(/\s+/g, "-");
 ---
 
-<div id={`${titleId}`} class="accordion" data-open={isOpen}>
+<div id={`${titleId}`} class="accordion cutoff" data-open={isOpen}>
   <button
     class="accordion-button"
     aria-expanded={isOpen ? "true" : "false"}
     type="button"
   >
-    <h1 class={`big-text${isItalic ? " italic" : ""}`}>{title}</h1>
+    <h1>{title}</h1>
   </button>
   <div
     class="accordion-content relative"

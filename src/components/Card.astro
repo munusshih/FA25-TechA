@@ -2,10 +2,6 @@
 const { class: extraClass = "" } = Astro.props;
 ---
 
-<div
-  class={`card w-full h-auto text-grey border bg-white p-4 ${extraClass} overflow-hidden transition-all duration-300 `}
-  data-toggle-card
-  data-expanded="false"
->
+<div class={`card ${extraClass}`} data-toggle-card data-expanded="false">
   <slot />
 </div>

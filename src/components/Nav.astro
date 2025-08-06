@@ -1,86 +1,96 @@
 <nav id="nav" class="nav-container">
-  <div class="nav-inner">
-    <!-- Toggle Button -->
-    <button
-      id="menu-toggle"
-      class="menu-toggle-button"
-      aria-label="Toggle Menu"
-    >
-      <span id="menu-icon">Open Menu</span>
-    </button>
+  <!-- Toggle Button -->
+  <button
+    id="menu-toggle"
+    class="menu-toggle-button"
+    aria-label="Toggle Menu"
+    aria-expanded="false"
+  >
+    <h3>Menu</h3>
+  </button>
 
-    <!-- Menu Items -->
-    <ul id="menu" class="menu-list">
-      <li class="pill">
-        <a class="pill-link" href="#course-description">Course Description</a>
-      </li>
-      <li class="pill">
-        <a class="pill-link" href="#module-1:-from-fixed-to-variable"
-          >Course Modules</a
-        >
-      </li>
-      <li class="pill">
-        <a class="pill-link" href="#grading-and-attendance">Grading</a>
-      </li>
-      <li class="pill">
-        <a class="pill-link" href="#open-source-policies">Policies</a>
-      </li>
-      <li class="pill">
-        <a
-          class="pill-link"
-          href="#pratt-communications-design-departmental-resources"
-          >Resources</a
-        >
-      </li>
-    </ul>
-  </div>
+  <!-- Menu Items -->
+  <ul id="menu" class="menu-list md:block" tabindex="-1">
+    <li class="menu-toggle-button">
+      <button id="menu-close" aria-label="Close Menu"> <h3>Close</h3></button>
+    </li>
+    <li class="pill">
+      <a class="pill-link" href="#course-description">Course Description</a>
+    </li>
+    <li class="pill">
+      <a class="pill-link" href="#module-1:-from-fixed-to-variable"
+        >Course Modules</a
+      >
+    </li>
+    <li class="pill">
+      <a class="pill-link" href="#grading-and-attendance">Grading</a>
+    </li>
+    <li class="pill">
+      <a class="pill-link" href="#open-source-policies">Policies</a>
+    </li>
+    <li class="pill">
+      <a
+        class="pill-link"
+        href="#pratt-communications-design-departmental-resources">Resources</a
+      >
+    </li>
+  </ul>
 </nav>
 
-<!-- <script>
+<script>
   const toggleBtn = document.getElementById("menu-toggle");
   const menu = document.getElementById("menu");
-  const icon = document.getElementById("menu-icon");
+  const closeBtn = document.getElementById("menu-close");
+  const pills = document.querySelectorAll(".pill-link");
+
+  function openMenu() {
+    menu.classList.add("open");
+    toggleBtn.setAttribute("aria-expanded", "true");
+  }
+
+  function closeMenu() {
+    menu.classList.remove("open");
+    toggleBtn.setAttribute("aria-expanded", "false");
+  }
 
   toggleBtn.addEventListener("click", () => {
-    menu.classList.toggle("open");
-    icon.textContent =
-      icon.textContent === "Open Menu" ? "Close Menu" : "Open Menu";
-  });
-
-  // Auto close menu when a pill is clicked (on mobile)
-  document.querySelectorAll(".pill a").forEach((link) => {
-    link.addEventListener("click", () => {
-      if (window.innerWidth < 1024 && menu.classList.contains("open")) {
-        menu.classList.remove("open");
-        icon.textContent = "Open Menu";
-      }
-    });
-  });
-
-  // Random rotation per pill
-  document.querySelectorAll(".pill").forEach((pill) => {
-    const angle = (Math.random() * 4 - 2).toFixed(2);
-    pill.style.transition = "transform 0.2s ease";
-    pill.addEventListener("mouseenter", () => {
-      pill.style.transform = `rotate(${angle}deg)`;
-    });
-    pill.addEventListener("mouseleave", () => {
-      pill.style.transform = "";
-    });
-  });
-
-  let lastScrollY = document.body.scrollTop;
-  const nav = document.getElementById("nav");
-
-  document.body.addEventListener("scroll", () => {
-    const currentScrollY = document.body.scrollTop;
-
-    if (currentScrollY > lastScrollY && currentScrollY > 50) {
-      nav.classList.add("translate-y-full");
+    if (menu.classList.contains("open")) {
+      closeMenu();
     } else {
-      nav.classList.remove("translate-y-full");
+      openMenu();
     }
-
-    lastScrollY = currentScrollY;
   });
-</script> -->
+
+  closeBtn.addEventListener("click", closeMenu);
+
+  // Close when clicking outside
+  document.addEventListener("click", (e) => {
+    if (
+      !menu.contains(e.target) &&
+      !toggleBtn.contains(e.target) &&
+      menu.classList.contains("open")
+    ) {
+      closeMenu();
+    }
+  });
+
+  // ✅ Close menu on pill click (and let anchor scroll still happen)
+  pills.forEach((pill) => {
+    pill.addEventListener("click", () => {
+      closeMenu();
+    });
+  });
+
+  let resizeTimeout;
+  window.addEventListener("resize", () => {
+    menu.classList.add("no-transition");
+
+    // Close menu on resize
+    closeMenu();
+
+    clearTimeout(resizeTimeout);
+    resizeTimeout = setTimeout(() => {
+      menu.classList.remove("no-transition");
+    }, 250);
+  });
+</script>

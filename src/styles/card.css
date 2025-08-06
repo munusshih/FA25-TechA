@@ -11,6 +11,10 @@ details[open] {
   border-bottom: none;
 }
 
+.card {
+  @apply h-auto w-full overflow-hidden border bg-white p-4 transition-all duration-300 lg:[&:nth-child(3n)]:border-l-0 lg:[&:nth-child(3n+2)]:border-l-0 [&:nth-child(n+2)]:border-t-0 lg:[&:nth-child(n+2)]:border-t lg:[&:nth-child(n+4)]:border-t-0;
+}
+
 .card > h3 {
   @apply mb-4;
 }

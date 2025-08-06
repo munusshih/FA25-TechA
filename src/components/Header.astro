@@ -4,13 +4,25 @@ import Nav from "../components/Nav.astro";
 ---
 
 <header
-  class="items-top flex w-full flex-col justify-between gap-4 p-[var(--margin)] text-pretty lg:flex-col"
+  class="items-top flex w-full flex-col justify-between gap-4 py-[var(--margin)] text-pretty transition-transform duration-300 will-change-transform"
 >
-  <div class="flex flex-row justify-between gap-4">
-    <div class="flex flex-col items-start gap-2">
+  <div class="cutoff flex flex-row justify-between">
+    <div
+      class="flex w-full flex-row items-center justify-between gap-2 md:flex-col md:items-start"
+    >
       <h1 class="heading-1 w-auto text-balance">
         Graduate Studio: Technology A
         <Clock />
+
+        <div class="mt-4 flex flex-row gap-4 md:hidden">
+          <h2>
+            <a
+              href="https://www.pratt.edu/design/graduate-communications-design/"
+              >Pratt Grad ComD</a
+            >
+          </h2>
+          <h2>DES 720A</h2>
+        </div>
       </h1>
       <Nav />
     </div>
@@ -27,23 +39,82 @@ import Nav from "../components/Nav.astro";
 
 <script>
   import { gsap } from "gsap";
-  import { ScrollTrigger } from "gsap/ScrollTrigger";
 
-  gsap.registerPlugin(ScrollTrigger);
+  document.addEventListener("DOMContentLoaded", () => {
+    const header = document.querySelector("header");
+    const elements = document.querySelectorAll(
+      "header h1, header h2, .clock-container",
+    );
 
-  const elements = document.querySelectorAll(
-    "header h1, header h2, .clock-container",
-  );
+    let ticking = false;
+    let lastScrollY = window.scrollY || window.pageYOffset;
 
-  gsap.to(elements, {
-    // Animate CSS variable from 1 to 0.5 (scale down by half)
-    "--font-scale": 0.3,
-    ease: "none",
-    scrollTrigger: {
-      trigger: document.body,
-      start: "top top",
-      end: "20% top",
-      scrub: true,
-    },
+    function updateFontScale() {
+      const scrollY = window.scrollY || window.pageYOffset;
+      const headerTop = header.offsetTop;
+      const headerBottom = headerTop + header.offsetHeight;
+
+      let scale = 1;
+
+      if (scrollY >= headerBottom) {
+        scale = 0.3;
+      } else if (scrollY <= headerTop) {
+        scale = 1;
+      } else {
+        const progress = (scrollY - headerTop) / (headerBottom - headerTop);
+        scale = 1 - 0.7 * progress;
+      }
+
+      elements.forEach((el) => {
+        gsap.set(el, { "--font-scale": scale });
+      });
+
+      ticking = false;
+    }
+
+    function updateHeaderVisibility(scrollY, scrollDirection) {
+      const headerBottom = header.offsetTop + header.offsetHeight;
+
+      if (scrollY >= headerBottom && scrollDirection === 1) {
+        // Scrolled past header and scrolling down → hide header
+        header.classList.add("-translate-y-full");
+      } else if (scrollDirection === -1) {
+        // Scrolling up → show header
+        header.classList.remove("-translate-y-full");
+      }
+    }
+
+    function onScroll() {
+      if (!ticking) {
+        window.requestAnimationFrame(() => {
+          const scrollY = window.scrollY || window.pageYOffset;
+          const scrollDirection = scrollY > lastScrollY ? 1 : -1;
+
+          updateFontScale();
+          updateHeaderVisibility(scrollY, scrollDirection);
+
+          lastScrollY = scrollY <= 0 ? 0 : scrollY;
+
+          ticking = false;
+        });
+
+        ticking = true;
+      }
+    }
+
+    window.addEventListener("scroll", onScroll);
+    window.addEventListener("resize", updateFontScale);
+
+    // Initial check on load
+    window.addEventListener("load", () => {
+      updateFontScale();
+
+      const scrollY = window.scrollY || window.pageYOffset;
+      if (scrollY >= header.offsetTop + header.offsetHeight) {
+        header.classList.add("-translate-y-full");
+      } else {
+        header.classList.remove("-translate-y-full");
+      }
+    });
   });
 </script>

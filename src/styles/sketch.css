@@ -4,9 +4,9 @@
   align-items: center;
   gap: 1rem;
   margin: 1rem;
-  margin-top: 25%;
   aspect-ratio: 16/9;
   width: calc(100% - 2rem);
+  @apply xs:mt-[25%] mt-[35%] lg:mt-[20%];
 }
 
 .image {

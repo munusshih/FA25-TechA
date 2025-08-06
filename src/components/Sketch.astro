@@ -76,10 +76,10 @@ const imageUrls = imageData.map((data) => data.url);
 const imageNames = imageData.map((data) => data.name);
 ---
 
-<div class="sketch-wrapper ridge-border">
+<div class="sketch-wrapper ridge-border cutoff">
   <img id="image-element" class="image fade" src="" alt="" />
 </div>
-<div id="student-name" class="student-name fade"></div>
+<div id="student-name" class="student-name fade cutoff"></div>
 
 <script define:vars={{ imageUrls, imageNames }}>
   const images = imageUrls;

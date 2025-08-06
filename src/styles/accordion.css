@@ -8,11 +8,10 @@
   position: relative;
   align-items: center;
   cursor: pointer;
-  padding: 0 var(--margin);
   width: 100%;
   font-weight: bold;
   font-size: clamp(0.8rem, 1.5vw, 2rem);
-  @apply flex;
+  @apply box-border flex;
 }
 
 .accordion-button::before {
@@ -40,7 +39,7 @@
   left: 0;
   transform-origin: left;
   transition: width 0.3s ease 0.3s;
-  margin: 1rem var(--margin);
+  margin: 1rem 0;
   width: 0px;
   height: 100%;
   content: "";
@@ -48,7 +47,7 @@
 
 .accordion-button[aria-expanded="false"]::after {
   border-bottom: var(--border-dotted);
-  width: calc(100% - 4 * var(--margin));
+  width: 100%;
 }
 
 .accordion-content {
