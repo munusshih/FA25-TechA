@@ -1,0 +1,16 @@
+.skip-to-main {
+  position: absolute;
+  top: -99999px;
+  left: 6px;
+  z-index: 1000;
+  transition: top 0.3s ease;
+  color: #000;
+  font-weight: 600;
+  font-size: 14px;
+  text-decoration: none;
+}
+
+.skip-to-main:focus {
+  top: 6px;
+  outline: none;
+}

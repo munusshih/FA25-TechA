@@ -3,7 +3,6 @@ import Layout from "../layouts/Layout.astro";
 import Header from "../components/Header.astro";
 import Info from "../components/Info.astro";
 import Description from "../doc/Description.astro";
-import Accordion from "../components/Accordion.astro";
 import Community from "../doc/Community.astro";
 import Module1 from "../doc/Module1.astro";
 import Module2 from "../doc/Module2.astro";
@@ -13,10 +12,15 @@ import Policies from "../doc/Policies.astro";
 import Resources from "../doc/Resources.astro";
 import Sketch from "../components/Sketch.astro";
 import Footer from "../components/Footer.astro";
+import SkipToMain from "@/components/SkipToMain.astro";
 import "../styles/global.css";
+import { selfieUrl } from "astro-selfie";
+const screenshotUrl = selfieUrl(Astro);
 ---
 
+<meta property="og:image" content={screenshotUrl.href} />
 <Layout>
+  <SkipToMain />
   <Header />
   <Sketch />
   <main class="mx-auto">
@@ -34,3 +38,4 @@ import "../styles/global.css";
   <Footer />
 </Layout>
 <script src="../scripts/glitter-cursor.js"></script>
+<script srct="../scripts/external-links.js"></script>

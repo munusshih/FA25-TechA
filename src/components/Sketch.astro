@@ -82,8 +82,10 @@ const imageNames = imageData.map((data) => data.name);
 <div id="student-name" class="student-name fade cutoff"></div>
 
 <script define:vars={{ imageUrls, imageNames }}>
+  /* eslint-disable no-undef */
   const images = imageUrls;
   const names = imageNames;
+  /* eslint-enable no-undef */
 
   function shuffleArray(array) {
     const shuffled = [...array];

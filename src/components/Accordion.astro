@@ -1,30 +1,25 @@
 ---
-const { title = "Accordion Title", open = true, italic = false } = Astro.props;
+const { title = "Accordion Title", open = true } = Astro.props;
 const isOpen =
   typeof open === "string" ? open.toLowerCase() !== "false" : Boolean(open);
-const isItalic =
-  typeof italic === "string"
-    ? italic.toLowerCase() === "true"
-    : Boolean(italic);
 const titleId = title.toLowerCase().replace(/\s+/g, "-");
 ---
 
-<div id={`${titleId}`} class="accordion cutoff" data-open={isOpen}>
+<section id={`${titleId}`} class="accordion cutoff" data-open={isOpen}>
   <button
     class="accordion-button"
     aria-expanded={isOpen ? "true" : "false"}
     type="button"
   >
-    <h1>{title}</h1>
+    <h2 class="heading-1">{title}</h2>
   </button>
   <div
     class="accordion-content relative"
-    role="region"
-    aria-hidden={isOpen ? "false" : "true"}
+    aria-expanded={isOpen ? "true" : "false"}
   >
     <slot />
   </div>
-</div>
+</section>
 
 <script>
   document.querySelectorAll(".accordion").forEach((accordion) => {
@@ -34,7 +29,7 @@ const titleId = title.toLowerCase().replace(/\s+/g, "-");
     button.addEventListener("click", () => {
       const isExpanded = button.getAttribute("aria-expanded") === "true";
       button.setAttribute("aria-expanded", String(!isExpanded));
-      content.setAttribute("aria-hidden", String(isExpanded));
+      content.setAttribute("aria-expanded", String(!isExpanded));
     });
   });
 </script>

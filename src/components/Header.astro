@@ -46,40 +46,45 @@ import Nav from "../components/Nav.astro";
       "header h1, header h2, .clock-container",
     );
 
+    const getScrollY = () => window.scrollY || window.pageYOffset;
+    let lastScrollY = getScrollY();
     let ticking = false;
-    let lastScrollY = window.scrollY || window.pageYOffset;
+
+    function getHeaderBounds() {
+      const top = header.offsetTop;
+      const height = header.offsetHeight;
+      const bottom = top + height;
+      return { top, height, bottom };
+    }
 
     function updateFontScale() {
-      const scrollY = window.scrollY || window.pageYOffset;
-      const headerTop = header.offsetTop;
-      const headerBottom = headerTop + header.offsetHeight;
+      const scrollY = getScrollY();
+      const { top, bottom } = getHeaderBounds();
 
-      let scale = 1;
-
-      if (scrollY >= headerBottom) {
-        scale = 0.3;
-      } else if (scrollY <= headerTop) {
+      let scale;
+      if (scrollY <= top) {
         scale = 1;
+      } else if (scrollY >= bottom) {
+        scale = 0.3;
       } else {
-        const progress = (scrollY - headerTop) / (headerBottom - headerTop);
+        const progress = (scrollY - top) / (bottom - top);
         scale = 1 - 0.7 * progress;
       }
 
       elements.forEach((el) => {
         gsap.set(el, { "--font-scale": scale });
       });
-
-      ticking = false;
     }
 
-    function updateHeaderVisibility(scrollY, scrollDirection) {
-      const headerBottom = header.offsetTop + header.offsetHeight;
+    function updateHeaderVisibility(scrollY, direction) {
+      const { height, bottom } = getHeaderBounds();
 
-      if (scrollY >= headerBottom && scrollDirection === 1) {
-        // Scrolled past header and scrolling down → hide header
-        header.classList.add("-translate-y-full");
-      } else if (scrollDirection === -1) {
-        // Scrolling up → show header
+      // ↓ This is the key "line" for when the header is hidden ↓
+      const hideThreshold = bottom + height * 2;
+
+      if (scrollY >= hideThreshold && direction === 1) {
+        header.classList.add("-translate-y-full"); // typically moves header -100% up
+      } else if (direction === -1) {
         header.classList.remove("-translate-y-full");
       }
     }
@@ -87,14 +92,13 @@ import Nav from "../components/Nav.astro";
     function onScroll() {
       if (!ticking) {
         window.requestAnimationFrame(() => {
-          const scrollY = window.scrollY || window.pageYOffset;
-          const scrollDirection = scrollY > lastScrollY ? 1 : -1;
+          const scrollY = getScrollY();
+          const direction = scrollY > lastScrollY ? 1 : -1;
 
           updateFontScale();
-          updateHeaderVisibility(scrollY, scrollDirection);
+          updateHeaderVisibility(scrollY, direction);
 
-          lastScrollY = scrollY <= 0 ? 0 : scrollY;
-
+          lastScrollY = Math.max(scrollY, 0);
           ticking = false;
         });
 
@@ -105,16 +109,11 @@ import Nav from "../components/Nav.astro";
     window.addEventListener("scroll", onScroll);
     window.addEventListener("resize", updateFontScale);
 
-    // Initial check on load
     window.addEventListener("load", () => {
       updateFontScale();
-
-      const scrollY = window.scrollY || window.pageYOffset;
-      if (scrollY >= header.offsetTop + header.offsetHeight) {
-        header.classList.add("-translate-y-full");
-      } else {
-        header.classList.remove("-translate-y-full");
-      }
+      const scrollY = getScrollY();
+      const direction = 1;
+      updateHeaderVisibility(scrollY, direction);
     });
   });
 </script>
