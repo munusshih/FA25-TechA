@@ -1,11 +1,15 @@
 ---
 import Layout from "../layouts/Layout.astro";
 import projects from "../data/projects-with-local-images.json";
+import Header from "../components/Header.astro";
+import SkipToMain from "@/components/SkipToMain.astro";
 import "../styles/global.css";
 ---
 
 <Layout>
-  <main>
+  <SkipToMain />
+  <Header />
+  <main class="mx-auto mt-80 px-2">
     <h1>Projects</h1>
     {
       projects.map((project) => (
