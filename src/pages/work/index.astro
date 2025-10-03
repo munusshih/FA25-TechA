@@ -1,0 +1,82 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import Header from "../../components/Header.astro";
+import SkipToMain from "@/components/SkipToMain.astro";
+import "../../styles/global.css";
+
+import {
+  groupProjectsByModule,
+  projectsWithMeta,
+  getProjectTitle,
+  getProjectAuthor,
+  getPrimaryMediaEntry,
+} from "@/lib/projects.js";
+
+const groupedProjects = groupProjectsByModule(projectsWithMeta);
+---
+
+<Layout>
+  <SkipToMain />
+  <Header />
+  <main class="mx-auto max-w-6xl px-4 pb-24 pt-32">
+    <h1 class="text-3xl font-bold tracking-tight text-neutral-900">Projects</h1>
+    <p class="mt-3 max-w-3xl text-neutral-600">
+      Explore student work from Technology A, organized by module. Select a project to see the
+      full documentation, credits, and supporting media.
+    </p>
+
+    {groupedProjects.map(([moduleName, moduleProjects]) => (
+      <section class="mt-12" key={moduleName}>
+        <h2 class="text-2xl font-semibold text-neutral-900">{moduleName}</h2>
+        <div class="mt-6 grid gap-8 md:grid-cols-2 xl:grid-cols-3">
+          {moduleProjects.map((project) => {
+            const title = getProjectTitle(project);
+            const author = getProjectAuthor(project);
+            const primaryMedia = getPrimaryMediaEntry(project);
+
+            return (
+              <article class="flex flex-col gap-4" key={project.slug}>
+                <a
+                  href={`/work/${project.slug}`}
+                  class="group block overflow-hidden rounded border border-neutral-200"
+                >
+                  {primaryMedia ? (
+                    primaryMedia.type === "video" ? (
+                      <video
+                        src={primaryMedia.value}
+                        autoPlay
+                        muted
+                        loop
+                        playsInline
+                        preload="metadata"
+                        class="aspect-video w-full object-cover transition duration-500 group-hover:scale-105"
+                      />
+                    ) : (
+                      <img
+                        src={primaryMedia.value}
+                        alt={primaryMedia.description || title}
+                        class="aspect-video w-full object-cover transition duration-500 group-hover:scale-105"
+                      />
+                    )
+                  ) : (
+                    <div class="flex aspect-video items-center justify-center bg-neutral-100 text-neutral-500">
+                      No media provided
+                    </div>
+                  )}
+                </a>
+                <div>
+                  <h3 class="text-xl font-semibold text-neutral-900">
+                    <a class="hover:underline" href={`/work/${project.slug}`}>
+                      {title}
+                    </a>
+                  </h3>
+                  <p class="text-neutral-600">{author}</p>
+                </div>
+              </article>
+            );
+          })}
+        </div>
+      </section>
+    ))}
+  </main>
+</Layout>

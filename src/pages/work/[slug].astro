@@ -1,0 +1,174 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import Header from "../../components/Header.astro";
+import SkipToMain from "@/components/SkipToMain.astro";
+import "../../styles/global.css";
+
+import {
+  projectsWithMeta,
+  getProjectTitle,
+  getProjectAuthor,
+  buildParagraphs,
+  fileEntriesForProject,
+  buildLinkList,
+  buildFieldEntries,
+  PRIMARY_METADATA_FIELDS,
+  SECONDARY_METADATA_GROUPS,
+  P5_FIELD,
+  P5_FALLBACK_FIELD,
+  DESCRIPTION_FIELD,
+  DESCRIPTION_FALLBACK_FIELD,
+} from "@/lib/projects.js";
+
+export function getStaticPaths() {
+  return projectsWithMeta.map((project) => ({
+    params: { slug: project.slug },
+    props: { project },
+  }));
+}
+
+const { project } = Astro.props;
+
+const title = getProjectTitle(project);
+const author = getProjectAuthor(project);
+const description =
+  project[DESCRIPTION_FIELD] ?? project[DESCRIPTION_FALLBACK_FIELD] ?? "";
+const descriptionParagraphs = buildParagraphs(description);
+const files = fileEntriesForProject(project);
+const links = buildLinkList(project);
+const rawP5Url = project[P5_FIELD] || project[P5_FALLBACK_FIELD];
+const p5Url = typeof rawP5Url === "string" ? rawP5Url.trim() : "";
+const primaryEntries = buildFieldEntries(project, PRIMARY_METADATA_FIELDS);
+const secondaryGroups = SECONDARY_METADATA_GROUPS.map((group) => {
+  const entries = buildFieldEntries(project, group.fields);
+  if (entries.length === 0) return null;
+  return { ...group, entries };
+}).filter(Boolean);
+---
+
+<Layout>
+  <SkipToMain />
+  <Header />
+  <main class="mx-auto max-w-4xl px-4 pb-24 pt-32">
+    <a
+      href="/work"
+      class="text-sm font-medium uppercase tracking-wide text-neutral-500 hover:text-neutral-700"
+      >← All Projects</a
+    >
+
+    <header class="mt-6 space-y-2">
+      <p class="text-sm font-semibold uppercase text-neutral-500">{project.moduleName}</p>
+      <h1 class="text-4xl font-bold tracking-tight text-neutral-900">{title}</h1>
+      <p class="text-lg text-neutral-700">{author}</p>
+    </header>
+
+    {primaryEntries.length > 0 && (
+      <dl class="mt-8 grid gap-4 grid-cols-[repeat(auto-fit,minmax(220px,1fr))]">
+        {primaryEntries.map(({ key, label, lines }) => (
+          <div key={key}>
+            <dt class="font-semibold text-neutral-700">{label}</dt>
+            <dd class="space-y-1 text-neutral-600">
+              {lines.map((line, lineIndex) => (
+                <p key={lineIndex}>{line}</p>
+              ))}
+            </dd>
+          </div>
+        ))}
+      </dl>
+    )}
+
+    {secondaryGroups.map(({ title: sectionTitle, entries }) => (
+      <section class="mt-8" key={sectionTitle}>
+        <h2 class="text-lg font-semibold text-neutral-800">{sectionTitle}</h2>
+        <dl class="mt-3 grid gap-4 grid-cols-[repeat(auto-fit,minmax(220px,1fr))]">
+          {entries.map(({ key, label, lines }) => (
+            <div key={key}>
+              <dt class="font-semibold text-neutral-700">{label}</dt>
+              <dd class="space-y-1 text-neutral-600">
+                {lines.map((line, lineIndex) => (
+                  <p key={lineIndex}>{line}</p>
+                ))}
+              </dd>
+            </div>
+          ))}
+        </dl>
+      </section>
+    ))}
+
+    {descriptionParagraphs.length > 0 && (
+      <section class="mt-10 space-y-4">
+        <h2 class="text-lg font-semibold text-neutral-800">Project Description</h2>
+        {descriptionParagraphs.map((paragraph, index) => (
+          <p class="text-neutral-700" key={index}>
+            {paragraph}
+          </p>
+        ))}
+      </section>
+    )}
+
+    {files.length > 0 && (
+      <section class="mt-10 space-y-6">
+        <h2 class="text-lg font-semibold text-neutral-800">Files &amp; Media</h2>
+        <div class="grid gap-6">
+          {files.map(({ key: assetKey, label, value, description: fileDescription, type }) => (
+            <figure class="space-y-3" key={assetKey}>
+              {type === "video" ? (
+                <video
+                  src={value}
+                  autoPlay
+                  muted
+                  loop
+                  playsInline
+                  preload="metadata"
+                  class="w-full rounded border border-neutral-200"
+                />
+              ) : type === "image" || type === "local" ? (
+                <img
+                  src={value}
+                  alt={fileDescription || label}
+                  class="w-full rounded border border-neutral-200"
+                />
+              ) : (
+                <a
+                  href={value}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="inline-flex items-center gap-2 text-neutral-800 underline"
+                >
+                  {label}
+                </a>
+              )}
+              {(fileDescription || label) && (
+                <figcaption class="text-sm text-neutral-600">
+                  {fileDescription || label}
+                </figcaption>
+              )}
+            </figure>
+          ))}
+        </div>
+      </section>
+    )}
+
+    {(links.length > 0 || p5Url) && (
+      <section class="mt-10 space-y-3">
+        <h2 class="text-lg font-semibold text-neutral-800">Links</h2>
+        <ul class="space-y-2 text-neutral-700">
+          {p5Url && (
+            <li>
+              <a href={p5Url} target="_blank" rel="noopener noreferrer" class="underline">
+                p5 Editor
+              </a>
+            </li>
+          )}
+          {links.map((link) => (
+            <li key={link.url}>
+              <a href={link.url} target="_blank" rel="noopener noreferrer" class="underline">
+                {link.label}
+              </a>
+            </li>
+          ))}
+        </ul>
+      </section>
+    )}
+  </main>
+</Layout>
