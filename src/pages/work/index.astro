@@ -1,6 +1,6 @@
 ---
 import Layout from "../../layouts/Layout.astro";
-import Header from "../../components/Header.astro";
+//import Header from "../../components/Header.astro";
 import SkipToMain from "@/components/SkipToMain.astro";
 import "../../styles/global.css";
 
@@ -17,25 +17,30 @@ const groupedProjects = groupProjectsByModule(projectsWithMeta);
 
 <Layout>
   <SkipToMain />
-  <Header />
-  <main class="mx-auto max-w-6xl px-4 pb-24 pt-32">
-    <h1 class="text-3xl font-bold tracking-tight text-neutral-900">Projects</h1>
-    <p class="mt-3 max-w-3xl text-neutral-600">
-      Explore student work from Technology A, organized by module. Select a project to see the
-      full documentation, credits, and supporting media.
-    </p>
+  <!--<header class="mx-auto max-w-6xl px-4 pt-8"> 
+  <h1 class="text-xl font-bold tracking-tight text-neutral-900">
+    Graduate Studio: Technology A
+  </h1>
+  <h2 class="text-base text-neutral-600">Module 1 Work</h2>-->
+</Layout>
+<main class="mx-auto max-w-6xl px-4 pt-32 pb-24">
+  <h1 class="text-3xl font-bold tracking-tight text-neutral-900">Flexible Manifesto Projects</h1>
+  <br>
+  <p class="mt-3 max-w-3xl text-neutral-600">
+    Select a project to see the full documentation, credits, and supporting media.
+  </p>
 
-    {groupedProjects.map(([moduleName, moduleProjects]) => (
+  {
+    groupedProjects.map(([moduleName, moduleProjects]) => (
       <section class="mt-12" key={moduleName}>
-        <h2 class="text-2xl font-semibold text-neutral-900">{moduleName}</h2>
-        <div class="mt-6 grid gap-8 md:grid-cols-2 xl:grid-cols-3">
+        <div class="mt-6 grid gap-8 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
           {moduleProjects.map((project) => {
             const title = getProjectTitle(project);
             const author = getProjectAuthor(project);
             const primaryMedia = getPrimaryMediaEntry(project);
 
             return (
-              <article class="flex flex-col gap-4" key={project.slug}>
+              <article class="flex flex-col gap-0" key={project.slug}>
                 <a
                   href={`/work/${project.slug}`}
                   class="group block overflow-hidden rounded border border-neutral-200"
@@ -65,8 +70,11 @@ const groupedProjects = groupProjectsByModule(projectsWithMeta);
                   )}
                 </a>
                 <div>
-                  <h3 class="text-xl font-semibold text-neutral-900">
-                    <a class="hover:underline" href={`/work/${project.slug}`}>
+                  <h3 class="text-sm font-semibold text-neutral-900">
+                    <a
+                      class="hover:underline text-base"
+                      href={`/work/${project.slug}`}
+                    >
                       {title}
                     </a>
                   </h3>
@@ -77,6 +85,6 @@ const groupedProjects = groupProjectsByModule(projectsWithMeta);
           })}
         </div>
       </section>
-    ))}
-  </main>
-</Layout>
+    ))
+  }
+</main>

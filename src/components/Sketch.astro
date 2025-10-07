@@ -1,79 +1,25 @@
 ---
-const imageFiles = [
-  "Abby-Shuster-2021.png",
-  "Alegria-Ponce-2020.png",
-  "Alex-Rojo-2020.png",
-  "Amy-Middleton-2024.png",
-  "Chayse-Walker-2024.gif",
-  "Elizabeth-Harris-2020.png",
-  "Gu-Jianan-2019.png",
-  "Hailey-Walsh-2020.png",
-  "Ivy-Kurniawan-2023.png",
-  "Jade-VandenBrink-2023.png",
-  "Jingyang-Shi-2019.png",
-  "Kriti-Gupta-2021.png",
-  "Lingfei-Cao-2021.png",
-  "Mengfei-Yun-2018.png",
-  "Mengting-Zhu-2023.png",
-  "Mengting-Zhu-2023b.png",
-  "Nedda-Alsaikhan-2023.jpg",
-  "Pia-Contreras-2023.jpg",
-  "Polly-Zhang-2020.png",
-  "Ruqui-Fang-2022.png",
-  "Shu-Ge-Wang-2019.png",
-  "Stella-Kuang-2023.png",
-  "Sunho-Im-2019.png",
-  "Tzu-Wei-2021.png",
-  "Tzu-Wei-2021b.png",
-  "Woojin-Lee-(Faculty)-2020-Class-Show.png",
-  "Woraphan-Jampachaisri-2021.jpg",
-  "Yan-Leng-2024.png",
-  "Yanan-Wang-2023.jpg",
-  "Yaru-Zhang-2023.png",
-  "Yeonji-Choi-2018.png",
-  "Yiran-Xu-2023.png",
-  "Yiwen-Chen-2021.png",
-  "Yu-Yijun-2022.png",
-  "Yurou-Xia-2018.png",
-  "Zhan-Yining-2019.png",
-  "Zhang-Han-2024.png",
-  "Zhihan-Qian-2021.png",
-];
+import {
+  projectsWithMeta,
+  getProjectAuthor,
+  getPrimaryMediaEntry,
+} from "@/lib/projects.js";
 
-// Function to extract student name from filename
-function extractStudentName(filename) {
-  const nameWithoutExt = filename.replace(/\.[^/.]+$/, "");
+const allProjects = projectsWithMeta
+  .map((project) => {
+    const primaryMedia = getPrimaryMediaEntry(project);
+    if (!primaryMedia || !primaryMedia.value) return null;
+    return {
+      url: primaryMedia.value,
+      name: getProjectAuthor(project),
+    };
+  })
+  .filter(Boolean);
 
-  if (nameWithoutExt === "Woojin-Lee-(Faculty)-2020-Class-Show") {
-    return "Woojin-Lee (Faculty) 2020 Class Show";
-  }
+const shuffledProjects = allProjects.sort(() => Math.random() - 0.5);
 
-  const parts = nameWithoutExt.split("-");
-  const nameParts = parts.filter((part) => {
-    if (/^\d{4}$/.test(part)) return false;
-    if (/^\d{4}[a-zA-Z]$/.test(part)) return false;
-    if (["(Faculty)", "Class", "Show"].includes(part)) return false;
-    return true;
-  });
-
-  if (nameParts.length >= 3) {
-    return `${nameParts[0]} ${nameParts[nameParts.length - 1]}`;
-  }
-
-  if (nameParts.length === 2) {
-    return `${nameParts[0]} ${nameParts[1]}`;
-  }
-
-  return nameParts.join(" ");
-}
-
-const imageData = imageFiles.map((file) => ({
-  url: `/assets/img/${file}`,
-  name: extractStudentName(file),
-}));
-
-const imageUrls = imageData.map((data) => data.url);
-const imageNames = imageData.map((data) => data.name);
+const imageUrls = shuffledProjects.map((p) => p.url);
+const imageNames = shuffledProjects.map((p) => p.name);
 ---
 
 <div class="sketch-wrapper ridge-border cutoff">

@@ -300,6 +300,6 @@ export const buildParagraphs = (value) => {
 };
 
 export const getPrimaryMediaEntry = (project) =>
-  fileEntriesForProject(project).find((entry) => entry.type === "image" || entry.type === "video");
+  fileEntriesForProject(project).find((entry) => entry.type === "image");
 
 export const DESCRIPTION_FIELDS = [DESCRIPTION_FIELD, DESCRIPTION_FALLBACK_FIELD];
