@@ -40,11 +40,23 @@ const altNavItems = [...moduleNavItems];
 <Layout>
   <SkipToMain />
 
-  <Header courseCode="Fall 2025">
+  <Header>
     <h1 slot="title" class="heading-1" data-header-scale>
       Technology A: <span class="text-accent">Project Archive</span>
     </h1>
     <div slot="nav" class="md:flex"></div>
+    <div slot="mobile-meta" class="flex flex-row gap-4">
+      <h2 data-header-scale>
+        <a href="/">Back to Homepage</a>
+      </h2>
+      <h2 data-header-scale>2025 Fall</h2>
+    </div>
+    <div slot="desktop-meta">
+      <h2 data-header-scale>
+        <a href="/">Back to Homepage</a>
+      </h2>
+      <h2 data-header-scale>Fall 2025</h2>
+    </div>
   </Header>
 </Layout>
 <main class="mx-auto px-4 pt-[25%] pb-24 md:pt-[22%]">
