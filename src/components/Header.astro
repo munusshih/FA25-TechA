@@ -1,50 +1,106 @@
 ---
-import Clock from "../components/Clock.astro";
+import type { AstroComponentFactory } from "astro";
 import Nav from "../components/Nav.astro";
+
+export interface Props {
+  title?: string;
+  programUrl?: string;
+  programLabelMobile?: string;
+  programLabelDesktop?: string;
+  courseCode?: string;
+  navComponent?: AstroComponentFactory;
+}
+
+const {
+  title = "Graduate Studio: Technology A",
+  programUrl = "https://www.pratt.edu/design/graduate-communications-design/",
+  programLabelMobile = "Pratt Grad ComD MFA",
+  programLabelDesktop = "Pratt Grad ComD",
+  courseCode = "DES 720A",
+  navComponent,
+} = Astro.props;
+
+const NavComponent = navComponent ?? Nav;
+const hasTitleSlot = Astro.slots.has("title");
+const hasNavSlot = Astro.slots.has("nav");
+const hasMobileMetaSlot = Astro.slots.has("mobile-meta");
+const hasDesktopMetaSlot = Astro.slots.has("desktop-meta");
+const hasDefaultSlot = Astro.slots.has("default");
+const hasExtraSlot = Astro.slots.has("extra");
 ---
 
 <header
+  data-header-root
   class="items-top flex w-full flex-col justify-between gap-4 py-[var(--margin)] text-pretty transition-transform duration-300 will-change-transform"
 >
   <div class="cutoff flex flex-row justify-between">
     <div
-      class="flex w-full flex-row items-center justify-between gap-2 md:flex-col md:items-start"
+      class="flex w-max flex-row items-center justify-between gap-2 md:flex-col md:items-start"
     >
-      <h1 class="heading-1 w-auto text-balance">
-        Graduate Studio: Technology A
-        <Clock />
-
+      <div class="flex flex-col gap-4 md:gap-2">
+        {
+          hasTitleSlot ? (
+            <slot name="title" />
+          ) : (
+            <h1 class="heading-1 w-auto text-balance" data-header-scale>
+              {title}
+            </h1>
+          )
+        }
         <div class="mt-4 flex flex-row gap-4 md:hidden">
-          <h2>
-            <a
-              href="https://www.pratt.edu/design/graduate-communications-design/"
-              >Pratt Grad ComD MFA</a
-            >
-          </h2>
-          <h2>DES 720A</h2>
+          {
+            hasMobileMetaSlot ? (
+              <slot name="mobile-meta" />
+            ) : (
+              <>
+                <h2 data-header-scale>
+                  <a href={programUrl}>{programLabelMobile}</a>
+                </h2>
+                <h2 data-header-scale>{courseCode}</h2>
+              </>
+            )
+          }
         </div>
-      </h1>
-      <Nav />
+      </div>
+      <div class="flex-shrink-0">
+        {
+          hasNavSlot ? (
+            <slot name="nav" />
+          ) : hasDefaultSlot ? (
+            <slot />
+          ) : (
+            <NavComponent />
+          )
+        }
+      </div>
     </div>
     <div class="hidden md:block">
-      <h2>
-        <a href="https://www.pratt.edu/design/graduate-communications-design/"
-          >Pratt Grad ComD</a
-        >
-      </h2>
-      <h2>DES 720A</h2>
+      {
+        hasDesktopMetaSlot ? (
+          <slot name="desktop-meta" />
+        ) : (
+          <>
+            <h2 data-header-scale>
+              <a href={programUrl}>{programLabelDesktop}</a>
+            </h2>
+            <h2 data-header-scale>{courseCode}</h2>
+          </>
+        )
+      }
     </div>
   </div>
+  {hasExtraSlot ? <slot name="extra" /> : null}
 </header>
 
 <script>
   import { gsap } from "gsap";
 
-  document.addEventListener("DOMContentLoaded", () => {
-    const header = document.querySelector("header");
-    const elements = document.querySelectorAll(
-      "header h1, header h2, .clock-container",
+  const setupHeader = (header) => {
+    const elements = header.querySelectorAll(
+      "[data-header-scale], .clock-container",
     );
+
+    if (elements.length === 0) return;
 
     const getScrollY = () => window.scrollY || window.pageYOffset;
     let lastScrollY = getScrollY();
@@ -78,12 +134,10 @@ import Nav from "../components/Nav.astro";
 
     function updateHeaderVisibility(scrollY, direction) {
       const { height, bottom } = getHeaderBounds();
-
-      // ↓ This is the key "line" for when the header is hidden ↓
       const hideThreshold = bottom + height * 2;
 
       if (scrollY >= hideThreshold && direction === 1) {
-        header.classList.add("-translate-y-full"); // typically moves header -100% up
+        header.classList.add("-translate-y-full");
       } else if (direction === -1) {
         header.classList.remove("-translate-y-full");
       }
@@ -108,12 +162,16 @@ import Nav from "../components/Nav.astro";
 
     window.addEventListener("scroll", onScroll);
     window.addEventListener("resize", updateFontScale);
-
     window.addEventListener("load", () => {
       updateFontScale();
       const scrollY = getScrollY();
-      const direction = 1;
-      updateHeaderVisibility(scrollY, direction);
+      updateHeaderVisibility(scrollY, 1);
     });
+  };
+
+  document.addEventListener("DOMContentLoaded", () => {
+    document
+      .querySelectorAll("[data-header-root]")
+      .forEach((header) => setupHeader(header));
   });
 </script>

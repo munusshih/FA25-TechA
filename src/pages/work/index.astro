@@ -3,6 +3,9 @@ import Layout from "../../layouts/Layout.astro";
 //import Header from "../../components/Header.astro";
 import SkipToMain from "@/components/SkipToMain.astro";
 import "../../styles/global.css";
+import Header from "@/components/Header.astro";
+import AltNav from "@/components/AltNav.astro";
+import Footer from "@/components/Footer.astro";
 
 import {
   groupProjectsByModule,
@@ -13,78 +16,274 @@ import {
 } from "@/lib/projects.js";
 
 const groupedProjects = groupProjectsByModule(projectsWithMeta);
+const totalProjects = projectsWithMeta.length;
+const transparentPixel =
+  "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw==";
+
+const toSectionId = (value) =>
+  `module-${value}`
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/(^-|-$)/g, "")
+    .replace(/-{2,}/g, "-");
+
+const moduleNavItems = groupedProjects.map(([moduleName]) => ({
+  label: moduleName,
+  href: `#${toSectionId(moduleName)}`,
+}));
+
+const altNavItems = [...moduleNavItems];
 ---
 
 <Layout>
   <SkipToMain />
-  <!--<header class="mx-auto max-w-6xl px-4 pt-8"> 
-  <h1 class="text-xl font-bold tracking-tight text-neutral-900">
-    Graduate Studio: Technology A
-  </h1>
-  <h2 class="text-base text-neutral-600">Module 1 Work</h2>-->
+
+  <Header courseCode="Fall 2025">
+    <h1 slot="title" class="heading-1" data-header-scale>
+      Technology A: <span class="text-accent">Project Archive</span>
+    </h1>
+    <div slot="nav" class="md:flex"></div>
+  </Header>
 </Layout>
-<main class="mx-auto max-w-6xl px-4 pt-32 pb-24">
-  <h1 class="text-3xl font-bold tracking-tight text-neutral-900">Flexible Manifesto Projects</h1>
-  <br>
-  <p class="mt-3 max-w-3xl text-neutral-600">
-    Select a project to see the full documentation, credits, and supporting media.
-  </p>
-
+<main class="mx-auto px-4 pt-[25%] pb-24 md:pt-[22%]">
+  <aside class="!m-0 py-4">
+    <h3>This archive currently hosts {totalProjects} student works.</h3>
+  </aside>
+  <br />
   {
-    groupedProjects.map(([moduleName, moduleProjects]) => (
-      <section class="mt-12" key={moduleName}>
-        <div class="mt-6 grid gap-8 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-          {moduleProjects.map((project) => {
-            const title = getProjectTitle(project);
-            const author = getProjectAuthor(project);
-            const primaryMedia = getPrimaryMediaEntry(project);
-
-            return (
-              <article class="flex flex-col gap-0" key={project.slug}>
-                <a
-                  href={`/work/${project.slug}`}
-                  class="group block overflow-hidden rounded border border-neutral-200"
-                >
-                  {primaryMedia ? (
-                    primaryMedia.type === "video" ? (
-                      <video
-                        src={primaryMedia.value}
-                        autoPlay
-                        muted
-                        loop
-                        playsInline
-                        preload="metadata"
-                        class="aspect-video w-full object-cover transition duration-500 group-hover:scale-105"
-                      />
+    groupedProjects.map(([moduleName, moduleProjects]) => {
+      const sectionId = toSectionId(moduleName);
+      return (
+        <section
+          class="mt-12"
+          key={moduleName}
+          id={sectionId}
+          aria-labelledby={`${sectionId}-title`}
+        >
+          <h2 id={`${sectionId}-title`}>{moduleName}</h2>
+          <div class="mt-6 grid lg:grid-cols-3">
+            {moduleProjects.map((project) => {
+              const title = getProjectTitle(project);
+              const author = getProjectAuthor(project);
+              const primaryMedia = getPrimaryMediaEntry(project);
+              return (
+                <article class="card" key={project.slug} data-project-card>
+                  <a
+                    href={`/work/${project.slug}`}
+                    class="group block overflow-hidden"
+                  >
+                    {primaryMedia ? (
+                      primaryMedia.type === "video" ? (
+                        <video
+                          data-media-src={primaryMedia.value}
+                          muted
+                          loop
+                          playsInline
+                          preload="none"
+                          class="aspect-video w-full object-cover"
+                          data-media-type="video"
+                        />
+                      ) : (
+                        <img
+                          src={transparentPixel}
+                          data-media-src={primaryMedia.value}
+                          alt={primaryMedia.description || title}
+                          loading="lazy"
+                          decoding="async"
+                          class="aspect-video w-full object-cover"
+                          data-media-type="image"
+                        />
+                      )
                     ) : (
-                      <img
-                        src={primaryMedia.value}
-                        alt={primaryMedia.description || title}
-                        class="aspect-video w-full object-cover transition duration-500 group-hover:scale-105"
-                      />
-                    )
-                  ) : (
-                    <div class="flex aspect-video items-center justify-center bg-neutral-100 text-neutral-500">
-                      No media provided
-                    </div>
-                  )}
-                </a>
-                <div>
-                  <h3 class="text-sm font-semibold text-neutral-900">
-                    <a
-                      class="hover:underline text-base"
-                      href={`/work/${project.slug}`}
-                    >
-                      {title}
-                    </a>
-                  </h3>
-                  <p class="text-neutral-600">{author}</p>
-                </div>
-              </article>
-            );
-          })}
-        </div>
-      </section>
-    ))
+                      <div class="flex aspect-video items-center justify-center bg-neutral-100 text-neutral-500">
+                        No media provided
+                      </div>
+                    )}
+                  </a>
+                  <div>
+                    <h3 class="mt-4 mb-2">
+                      <a
+                        class="text-base hover:underline"
+                        href={`/work/${project.slug}`}
+                      >
+                        {title}
+                      </a>
+                    </h3>
+                    <p>{author}</p>
+                  </div>
+                </article>
+              );
+            })}
+          </div>
+        </section>
+      );
+    })
   }
 </main>
+<Footer />
+
+<script>
+  import { gsap } from "gsap";
+
+  const initArchiveEnhancements = () => {
+    const prefersReducedMotion = window.matchMedia(
+      "(prefers-reduced-motion: reduce)",
+    ).matches;
+
+    const lazyMediaElements = document.querySelectorAll("[data-media-src]");
+    const projectCards = document.querySelectorAll("[data-project-card]");
+
+    const loadMedia = (element) => {
+      if (element.dataset.loaded === "true") return;
+      const source = element.dataset.mediaSrc;
+      if (!source) return;
+
+      if (element.tagName === "IMG") {
+        element.src = source;
+      } else if (element.tagName === "VIDEO") {
+        element.src = source;
+        if (!element.dataset.playListenerAttached) {
+          element.addEventListener(
+            "loadeddata",
+            () => {
+              if (element.dataset.shouldPlay === "true") {
+                element.play().catch(() => {});
+              }
+            },
+            { once: true },
+          );
+          element.dataset.playListenerAttached = "true";
+        }
+        element.load();
+      }
+
+      element.dataset.loaded = "true";
+    };
+
+    const handleVideoPlayback = (element, shouldPlay) => {
+      if (element.tagName !== "VIDEO") return;
+      element.dataset.shouldPlay = shouldPlay ? "true" : "false";
+      if (prefersReducedMotion) {
+        element.pause();
+        return;
+      }
+      if (shouldPlay) {
+        element.play().catch(() => {
+          // Autoplay might be blocked; leave the video paused.
+        });
+      } else {
+        element.pause();
+      }
+    };
+
+    const hydrateMedia = () => {
+      lazyMediaElements.forEach((element) => loadMedia(element));
+    };
+
+    if ("IntersectionObserver" in window) {
+      const observer = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            const element = entry.target;
+            if (entry.isIntersecting) {
+              loadMedia(element);
+              handleVideoPlayback(element, true);
+              if (element.tagName === "IMG") {
+                observer.unobserve(element);
+              }
+            } else {
+              handleVideoPlayback(element, false);
+            }
+          });
+        },
+        { rootMargin: "200px 0px" },
+      );
+
+      lazyMediaElements.forEach((element) => {
+        observer.observe(element);
+      });
+
+      document.addEventListener(
+        "visibilitychange",
+        () => {
+          if (document.visibilityState === "hidden") {
+            lazyMediaElements.forEach((element) =>
+              handleVideoPlayback(element, false),
+            );
+          } else {
+            lazyMediaElements.forEach((element) => {
+              if (element.dataset.loaded === "true") {
+                const bounding = element.getBoundingClientRect();
+                const inView =
+                  bounding.top < window.innerHeight && bounding.bottom > 0;
+                if (inView) {
+                  handleVideoPlayback(element, true);
+                }
+              }
+            });
+          }
+        },
+        { passive: true },
+      );
+    } else {
+      hydrateMedia();
+    }
+
+    const hydrateCards = () => {
+      if (projectCards.length === 0) return;
+
+      if (prefersReducedMotion) {
+        projectCards.forEach((card) => {
+          card.style.opacity = "1";
+          card.style.transform = "none";
+        });
+        return;
+      }
+
+      projectCards.forEach((card) => {
+        gsap.set(card, {
+          opacity: 0,
+          y: 24,
+          willChange: "opacity, transform",
+        });
+      });
+
+      if ("IntersectionObserver" in window) {
+        const cardObserver = new IntersectionObserver(
+          (entries, observer) => {
+            entries.forEach((entry) => {
+              const target = entry.target;
+              if (entry.isIntersecting) {
+                gsap.to(target, {
+                  opacity: 1,
+                  y: 0,
+                  duration: 0.6,
+                  ease: "power2.out",
+                  onComplete: () => {
+                    target.style.willChange = "";
+                  },
+                });
+                observer.unobserve(target);
+              }
+            });
+          },
+          { threshold: 0.35, rootMargin: "0px 0px -10% 0px" },
+        );
+
+        projectCards.forEach((card) => cardObserver.observe(card));
+      } else {
+        gsap.to(projectCards, { opacity: 1, y: 0, duration: 0 });
+      }
+    };
+
+    hydrateCards();
+  };
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", initArchiveEnhancements);
+  } else {
+    initArchiveEnhancements();
+  }
+</script>

@@ -104,7 +104,8 @@ h4,
   font-family: "Source Serif 4", serif;
 }
 
-p {
+p,
+.paragraph {
   font-size: clamp(16px, 1vw, 18px);
   line-height: 1.5;
   font-family: "Source Serif 4", serif;

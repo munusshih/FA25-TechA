@@ -1,6 +1,7 @@
 ---
 import Layout from "../../layouts/Layout.astro";
 import Header from "../../components/Header.astro";
+import Footer from "../../components/Footer.astro";
 import SkipToMain from "@/components/SkipToMain.astro";
 import "../../styles/global.css";
 
@@ -11,9 +12,6 @@ import {
   buildParagraphs,
   fileEntriesForProject,
   buildLinkList,
-  buildFieldEntries,
-  PRIMARY_METADATA_FIELDS,
-  SECONDARY_METADATA_GROUPS,
   P5_FIELD,
   P5_FALLBACK_FIELD,
   DESCRIPTION_FIELD,
@@ -34,141 +32,237 @@ const author = getProjectAuthor(project);
 const description =
   project[DESCRIPTION_FIELD] ?? project[DESCRIPTION_FALLBACK_FIELD] ?? "";
 const descriptionParagraphs = buildParagraphs(description);
-const files = fileEntriesForProject(project);
+const mediaEntries = fileEntriesForProject(project);
 const links = buildLinkList(project);
 const rawP5Url = project[P5_FIELD] || project[P5_FALLBACK_FIELD];
 const p5Url = typeof rawP5Url === "string" ? rawP5Url.trim() : "";
-const primaryEntries = buildFieldEntries(project, PRIMARY_METADATA_FIELDS);
-const secondaryGroups = SECONDARY_METADATA_GROUPS.map((group) => {
-  const entries = buildFieldEntries(project, group.fields);
-  if (entries.length === 0) return null;
-  return { ...group, entries };
-}).filter(Boolean);
+
+const rawCredits =
+  project[
+    "Credit (List out collaborators, tutorials, libraries, references, AI agents used)"
+  ];
+const credits =
+  typeof rawCredits === "string"
+    ? rawCredits
+        .split(/\r?\n/)
+        .map((line) => line.trim())
+        .filter(Boolean)
+    : [];
+
+const countWords = (value) =>
+  typeof value === "string"
+    ? value.trim().split(/\s+/).filter(Boolean).length
+    : 0;
+
+const primaryMediaEntry =
+  mediaEntries.find((entry) => entry.type === "image") ??
+  mediaEntries.find((entry) => entry.type === "video") ??
+  mediaEntries[0] ??
+  null;
+
+const additionalMediaEntries = primaryMediaEntry
+  ? mediaEntries.filter((entry) => entry.key !== primaryMediaEntry.key)
+  : mediaEntries;
+
+const descriptionWordCount = descriptionParagraphs
+  .join(" ")
+  .split(/\s+/)
+  .filter(Boolean).length;
 ---
 
 <Layout>
   <SkipToMain />
-  <Header />
-  <main class="mx-auto max-w-4xl px-4 pb-24 pt-32">
-    <a
-      href="/work"
-      class="text-sm font-medium uppercase tracking-wide text-neutral-500 hover:text-neutral-700"
-      >← All Projects</a
-    >
+  <Header>
+    <h1 slot="title" class="heading-1 w-auto !max-w-[10ch]" data-header-scale>
+      {title}
+    </h1>
+    <div slot="nav"></div>
+    <div slot="mobile-meta" class="flex flex-row gap-4">
+      <h2 data-header-scale>
+        <a href="/work">All Projects</a>
+      </h2>
+      <h2 data-header-scale>by {author}</h2>
+    </div>
+    <div slot="desktop-meta">
+      <h2 data-header-scale>
+        <a href="/work">All Projects </a>
+      </h2>
+      <h2 data-header-scale>by {author}</h2>
+    </div>
+  </Header>
+  <main class="mx-auto pt-[10%] pb-24">
+    {
+      primaryMediaEntry && (
+        <section class="mx-auto space-y-4 px-4">
+          <figure class="space-y-3">
+            {primaryMediaEntry.type === "video" ? (
+              <video
+                src={primaryMediaEntry.value}
+                autoPlay
+                muted
+                loop
+                playsInline
+                preload="metadata"
+                class="w-full"
+              />
+            ) : primaryMediaEntry.type === "image" ||
+              primaryMediaEntry.type === "local" ? (
+              <img
+                src={primaryMediaEntry.value}
+                alt={primaryMediaEntry.description || primaryMediaEntry.label}
+                class="w-full"
+              />
+            ) : (
+              <a
+                href={primaryMediaEntry.value}
+                target="_blank"
+                rel="noopener noreferrer"
+                class="inline-flex"
+              >
+                {primaryMediaEntry.label}
+              </a>
+            )}
+            {(primaryMediaEntry.description || primaryMediaEntry.label) && (
+              <figcaption
+                class={`paragraph card w-full gap-8 !border bg-white ${
+                  countWords(
+                    primaryMediaEntry.description || primaryMediaEntry.label,
+                  ) > 200
+                    ? "lg:!max-w-none lg:columns-2"
+                    : ""
+                }`}
+              >
+                {primaryMediaEntry.description || primaryMediaEntry.label}
+              </figcaption>
+            )}
+          </figure>
+        </section>
+      )
+    }
 
-    <header class="mt-6 space-y-2">
-      <p class="text-sm font-semibold uppercase text-neutral-500">{project.moduleName}</p>
-      <h1 class="text-2xl font-bold tracking-tight text-neutral-900">{title}</h1>
-      <p class="text-lg text-neutral-700">{author}</p>
-    </header>
+    <aside class="!mt-20 grid gap-8 py-8 lg:grid-cols-3">
+      {
+        descriptionParagraphs.length > 0 && (
+          <section class="col-span-2 space-y-4">
+            <h2>Project Description</h2>
+            <p
+              class={` ${descriptionWordCount > 200 ? "lg:!max-w-none lg:columns-2" : ""}`}
+            >
+              {descriptionParagraphs.join(" ")}
+            </p>
+          </section>
+        )
+      }
 
-    {primaryEntries.length > 0 && (
-      <dl class="mt-8 grid gap-4 grid-cols-[repeat(auto-fit,minmax(220px,1fr))]">
-        {primaryEntries.map(({ key, label, lines }) => (
-          <div key={key}>
-            <dt class="font-semibold text-neutral-700">{label}</dt>
-            <dd class="space-y-1 text-neutral-600">
-              {lines.map((line, lineIndex) => (
-                <p key={lineIndex}>{line}</p>
-              ))}
-            </dd>
-          </div>
-        ))}
-      </dl>
-    )}
-
-    {secondaryGroups.map(({ title: sectionTitle, entries }) => (
-      <section class="mt-8" key={sectionTitle}>
-        <h2 class="text-lg font-semibold text-neutral-800">{sectionTitle}</h2>
-        <dl class="mt-3 grid gap-4 grid-cols-[repeat(auto-fit,minmax(220px,1fr))]">
-          {entries.map(({ key, label, lines }) => (
-            <div key={key}>
-              <dt class="font-semibold text-neutral-700">{label}</dt>
-              <dd class="space-y-1 text-neutral-600">
-                {lines.map((line, lineIndex) => (
-                  <p key={lineIndex}>{line}</p>
+      <div class="col-span-1 !flex !flex-col !py-0">
+        {
+          credits.length > 0 && (
+            <section class="space-y-3">
+              <h2>Credits</h2>
+              <ul>
+                {credits.map((line, index) => (
+                  <li key={index} class="text-neutral-700">
+                    {line}
+                  </li>
                 ))}
-              </dd>
-            </div>
-          ))}
-        </dl>
-      </section>
-    ))}
+              </ul>
+            </section>
+          )
+        }
 
-    {descriptionParagraphs.length > 0 && (
-      <section class="mt-10 space-y-4">
-        <h2 class="text-lg font-semibold text-neutral-800">Project Description</h2>
-        {descriptionParagraphs.map((paragraph, index) => (
-          <p class="text-neutral-700" key={index}>
-            {paragraph}
-          </p>
-        ))}
-      </section>
-    )}
+        {
+          (links.length > 0 || p5Url) && (
+            <section class="space-y-3">
+              <h2>Links</h2>
+              <ul>
+                {p5Url && (
+                  <li>
+                    <a
+                      href={p5Url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      class="underline"
+                    >
+                      p5 Editor
+                    </a>
+                  </li>
+                )}
+                {links.map((link) => (
+                  <li key={link.url}>
+                    <a
+                      href={link.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      class="underline"
+                    >
+                      {link.label}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </section>
+          )
+        }
+      </div>
+    </aside>
 
-    {files.length > 0 && (
-      <section class="mt-10 space-y-6">
-        <h2 class="text-lg font-semibold text-neutral-800">Files &amp; Media</h2>
-        <div class="grid gap-6">
-          {files.map(({ key: assetKey, label, value, description: fileDescription, type }) => (
-            <figure class="space-y-3" key={assetKey}>
-              {type === "video" ? (
-                <video
-                  src={value}
-                  autoPlay
-                  muted
-                  loop
-                  playsInline
-                  preload="metadata"
-                  class="w-full rounded border border-neutral-200"
-                />
-              ) : type === "image" || type === "local" ? (
-                <img
-                  src={value}
-                  alt={fileDescription || label}
-                  class="w-full rounded border border-neutral-200"
-                />
-              ) : (
-                <a
-                  href={value}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  class="inline-flex items-center gap-2 text-neutral-800 underline"
-                >
-                  {label}
-                </a>
-              )}
-              {(fileDescription || label) && (
-                <figcaption class="text-sm text-neutral-600">
-                  {fileDescription || label}
-                </figcaption>
-              )}
-            </figure>
-          ))}
-        </div>
-      </section>
-    )}
-
-    {(links.length > 0 || p5Url) && (
-      <section class="mt-10 space-y-3">
-        <h2 class="text-lg font-semibold text-neutral-800">Links</h2>
-        <ul class="space-y-2 text-neutral-700">
-          {p5Url && (
-            <li>
-              <a href={p5Url} target="_blank" rel="noopener noreferrer" class="underline">
-                p5 Editor
-              </a>
-            </li>
-          )}
-          {links.map((link) => (
-            <li key={link.url}>
-              <a href={link.url} target="_blank" rel="noopener noreferrer" class="underline">
-                {link.label}
-              </a>
-            </li>
-          ))}
-        </ul>
-      </section>
-    )}
+    {
+      additionalMediaEntries.length > 0 && (
+        <section class="mx-auto space-y-6 px-4">
+          <div class="grid gap-6">
+            {additionalMediaEntries.map(
+              ({
+                key: assetKey,
+                label,
+                value,
+                description: fileDescription,
+                type,
+              }) => (
+                <figure class="space-y-3" key={assetKey}>
+                  {type === "video" ? (
+                    <video
+                      src={value}
+                      autoPlay
+                      muted
+                      loop
+                      playsInline
+                      preload="metadata"
+                      class="w-full rounded border border-neutral-200"
+                    />
+                  ) : type === "image" || type === "local" ? (
+                    <img
+                      src={value}
+                      alt={fileDescription || label}
+                      class="w-full rounded border border-neutral-200"
+                    />
+                  ) : (
+                    <a
+                      href={value}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      class="inline-flex items-center gap-2 text-neutral-800 underline"
+                    >
+                      {label}
+                    </a>
+                  )}
+                  {(fileDescription || label) && (
+                    <figcaption
+                      class={`paragraph card gap-8 !border bg-white ${
+                        countWords(fileDescription || label) > 400
+                          ? "lg:!max-w-none lg:columns-2"
+                          : ""
+                      }`}
+                    >
+                      {fileDescription || label}
+                    </figcaption>
+                  )}
+                </figure>
+              ),
+            )}
+          </div>
+        </section>
+      )
+    }
   </main>
 </Layout>
+<Footer />

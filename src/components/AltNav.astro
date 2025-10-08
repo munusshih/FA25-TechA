@@ -1,0 +1,123 @@
+---
+type NavItem = { label: string; href: string };
+
+export interface Props {
+  items?: NavItem[];
+  menuLabel?: string;
+  closeLabel?: string;
+  idPrefix?: string;
+}
+
+const defaultItems: NavItem[] = [
+  { label: "Course Description", href: "#course-description" },
+  { label: "Course Modules", href: "#module-1:-from-fixed-to-variable" },
+  { label: "Grading", href: "#grading-and-attendance" },
+  { label: "Policies", href: "#open-source-policies" },
+  {
+    label: "Resources",
+    href: "#pratt-communications-design-departmental-resources",
+  },
+];
+
+const {
+  items,
+  menuLabel = "Menu",
+  closeLabel = "Close",
+  idPrefix = "alt-nav",
+} = Astro.props;
+
+const navItems = items?.length ? items : defaultItems;
+const uniqueId = `${idPrefix}-${Math.random().toString(36).slice(2, 8)}`;
+const navId = `${uniqueId}-nav`;
+const menuId = `${uniqueId}-menu`;
+const toggleId = `${uniqueId}-toggle`;
+const closeId = `${uniqueId}-close`;
+---
+
+<nav id={navId} class="nav-container">
+  <button
+    id={toggleId}
+    class="menu-toggle-button"
+    aria-label="Toggle Menu"
+    aria-expanded="false"
+  >
+    <h3>{menuLabel}</h3>
+  </button>
+
+  <ul id={menuId} class="menu-list md:block" tabindex="-1">
+    <li class="menu-toggle-button">
+      <button id={closeId} aria-label={`Close ${menuLabel}`}>
+        <h3>{closeLabel}</h3>
+      </button>
+    </li>
+    {
+      navItems.map(({ label, href }) => (
+        <li class="pill" role="none" key={href}>
+          <a class="pill-link" href={href} role="menuitem">
+            {label}
+          </a>
+        </li>
+      ))
+    }
+  </ul>
+</nav>
+
+<script>
+  const toggleBtn = document.getElementById("${toggleId}");
+  const menu = document.getElementById("${menuId}");
+  const closeBtn = document.getElementById("${closeId}");
+  const nav = document.getElementById("${navId}");
+
+  if (!toggleBtn || !menu || !closeBtn || !nav) {
+    console.warn("AltNav: navigation controls are missing in the DOM.");
+  } else {
+    const pills = nav.querySelectorAll(".pill-link");
+
+    function openMenu() {
+      menu.classList.add("open");
+      toggleBtn.setAttribute("aria-expanded", "true");
+    }
+
+    function closeMenu() {
+      menu.classList.remove("open");
+      toggleBtn.setAttribute("aria-expanded", "false");
+    }
+
+    toggleBtn.addEventListener("click", () => {
+      if (menu.classList.contains("open")) {
+        closeMenu();
+      } else {
+        openMenu();
+      }
+    });
+
+    closeBtn.addEventListener("click", closeMenu);
+
+    document.addEventListener("click", (e) => {
+      if (
+        !menu.contains(e.target) &&
+        !toggleBtn.contains(e.target) &&
+        menu.classList.contains("open")
+      ) {
+        closeMenu();
+      }
+    });
+
+    pills.forEach((pill) => {
+      pill.addEventListener("click", () => {
+        closeMenu();
+      });
+    });
+
+    let resizeTimeout;
+    window.addEventListener("resize", () => {
+      menu.classList.add("no-transition");
+      closeMenu();
+
+      clearTimeout(resizeTimeout);
+      resizeTimeout = setTimeout(() => {
+        menu.classList.remove("no-transition");
+      }, 250);
+    });
+  }
+</script>

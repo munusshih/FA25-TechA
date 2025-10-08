@@ -299,7 +299,17 @@ export const buildParagraphs = (value) => {
     .filter(Boolean);
 };
 
-export const getPrimaryMediaEntry = (project) =>
-  fileEntriesForProject(project).find((entry) => entry.type === "image");
+export const getPrimaryMediaEntry = (project) => {
+  const entries = fileEntriesForProject(project);
+  if (entries.length === 0) return undefined;
+
+  const imageEntry = entries.find((entry) => entry.type === "image");
+  if (imageEntry) return imageEntry;
+
+  const videoEntry = entries.find((entry) => entry.type === "video");
+  if (videoEntry) return videoEntry;
+
+  return entries[0];
+};
 
 export const DESCRIPTION_FIELDS = [DESCRIPTION_FIELD, DESCRIPTION_FALLBACK_FIELD];
