@@ -59,7 +59,7 @@ const altNavItems = [...moduleNavItems];
     </div>
   </Header>
 </Layout>
-<main class="mx-auto px-4 pt-[25%] pb-24 md:pt-[22%]">
+<main class="mx-auto px-4 pt-[10rem] pb-24 md:pt-[22%]">
   <aside class="!m-0 py-4">
     <h3>This archive currently hosts {totalProjects} student works.</h3>
   </aside>
@@ -271,8 +271,7 @@ const altNavItems = [...moduleNavItems];
                 gsap.to(target, {
                   opacity: 1,
                   y: 0,
-                  duration: 0.6,
-                  ease: "power2.out",
+                  duration: 0.3,
                   onComplete: () => {
                     target.style.willChange = "";
                   },
