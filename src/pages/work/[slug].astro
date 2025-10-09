@@ -68,6 +68,16 @@ const descriptionWordCount = descriptionParagraphs
   .join(" ")
   .split(/\s+/)
   .filter(Boolean).length;
+
+const currentProjectIndex = projectsWithMeta.findIndex(
+  (candidate) => candidate.slug === project.slug,
+);
+const nextProject =
+  currentProjectIndex >= 0 && projectsWithMeta.length > 1
+    ? projectsWithMeta[(currentProjectIndex + 1) % projectsWithMeta.length]
+    : null;
+const nextProjectTitle = nextProject ? getProjectTitle(nextProject) : null;
+const nextProjectAuthor = nextProject ? getProjectAuthor(nextProject) : null;
 ---
 
 <Layout>
@@ -90,10 +100,10 @@ const descriptionWordCount = descriptionParagraphs
       <h2 data-header-scale>by {author}</h2>
     </div>
   </Header>
-  <main class="mx-auto pt-[10rem] pb-24 lg:pt-[10%]">
+  <main class="cutoff mx-auto pt-[10rem] pb-24 lg:pt-[10%]">
     {
       primaryMediaEntry && (
-        <section class="mx-auto space-y-4 px-4">
+        <section class="mx-auto space-y-4">
           <figure class="space-y-3">
             {primaryMediaEntry.type === "video" ? (
               <video
@@ -140,7 +150,7 @@ const descriptionWordCount = descriptionParagraphs
       )
     }
 
-    <aside class="!mt-20 gap-8 py-8 lg:grid lg:grid-cols-3">
+    <aside class="!mx-0 !my-20 gap-8 py-8 lg:grid lg:grid-cols-3">
       {
         descriptionParagraphs.length > 0 && (
           <section class="col-span-2 space-y-4">
@@ -208,7 +218,7 @@ const descriptionWordCount = descriptionParagraphs
 
     {
       additionalMediaEntries.length > 0 && (
-        <section class="mx-auto space-y-6 px-4">
+        <section class="mx-auto space-y-6">
           <div class="grid gap-6">
             {additionalMediaEntries.map(
               ({
@@ -261,6 +271,25 @@ const descriptionWordCount = descriptionParagraphs
             )}
           </div>
         </section>
+      )
+    }
+
+    {
+      nextProject && nextProjectTitle && (
+        <a
+          href={`/work/${nextProject.slug}`}
+          class="!no-underline hover:opacity-40"
+          aria-label={`Go to next project: ${nextProjectTitle}`}
+        >
+          <section class="mx-auto mt-8 flex flex-col items-end gap-4 py-4 text-right">
+            <h2 class="!no-underline">Next Project</h2>
+            {nextProjectAuthor && (
+              <p class="!no-underline">
+                {nextProjectTitle} by {nextProjectAuthor}
+              </p>
+            )}
+          </section>
+        </a>
       )
     }
   </main>
