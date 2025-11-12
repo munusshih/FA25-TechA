@@ -71,7 +71,8 @@ const getExtensionFromDisposition = (disposition) => {
   try {
     filename = decodeURIComponent(filename);
   } catch (err) {
-    // ignore decode issues
+    // ignore decode issues but keep reference to err for lint
+    if (process.env.DEBUG) console.warn("decodeURIComponent failed:", err);
   }
   return extractExtensionFromFilename(filename);
 };
@@ -159,9 +160,11 @@ const detectHeicBySignature = (filePath) => {
     const buffer = Buffer.alloc(12);
     fs.readSync(fd, buffer, 0, buffer.length, 0);
     fs.closeSync(fd);
-    const brand = buffer.toString("ascii", 4, 12).replace(/\u0000+/g, "");
+  // Strip NULs from brand
+  const brand = buffer.toString("ascii", 4, 12).replace(/\0+/g, "");
     return HEIC_BRANDS.has(brand);
   } catch (err) {
+    if (process.env.DEBUG) console.warn("detectHeicBySignature failed:", err);
     return false;
   }
 };

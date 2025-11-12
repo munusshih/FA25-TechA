@@ -8,7 +8,8 @@ export const MODULE_ORDER = [
 
 export const PROJECT_TITLE_FIELD = "Your Project Name";
 export const PROJECT_FALLBACK_TITLE_FIELD = "Project Name";
-export const DESCRIPTION_FIELD = "Your Project Description (max 2000 characters)";
+export const DESCRIPTION_FIELD =
+  "Your Project Description (max 2000 characters)";
 export const DESCRIPTION_FALLBACK_FIELD = "Project Description";
 export const P5_FIELD = "p5 Editor Link ";
 export const P5_FALLBACK_FIELD = "p5 Editor Link";
@@ -65,12 +66,7 @@ export const IMAGE_EXTENSIONS = new Set([
   ".svg",
 ]);
 
-export const VIDEO_EXTENSIONS = new Set([
-  ".mp4",
-  ".mov",
-  ".m4v",
-  ".webm",
-]);
+export const VIDEO_EXTENSIONS = new Set([".mp4", ".mov", ".m4v", ".webm"]);
 
 const slugify = (value) =>
   value
@@ -120,7 +116,10 @@ export const getProjectAuthor = (project) =>
   project["Your Name (First + Last Name)"] || "Unknown";
 
 const baseSlugForProject = (project, moduleName) => {
-  const email = project["Email Address"] || project["Your Name (First + Last Name)"] || "project";
+  const email =
+    project["Email Address"] ||
+    project["Your Name (First + Last Name)"] ||
+    "project";
   const emailSlug = email.split("@")[0] || email;
   const title = getProjectTitle(project);
   const parts = [emailSlug, moduleName, title];
@@ -132,7 +131,9 @@ const latestProjectsByStudentAndModule = () => {
   rawProjects.forEach((project) => {
     const moduleName = moduleNameForProject(project);
     const email =
-      project["Email Address"] || project["Your Name (First + Last Name)"] || "unknown";
+      project["Email Address"] ||
+      project["Your Name (First + Last Name)"] ||
+      "unknown";
     const key = `${email}|${moduleName}`;
     const timestamp = parseTimestamp(project.Timestamp);
     const existing = latestByKey.get(key);
@@ -162,7 +163,9 @@ const processedProjects = (() => {
 })();
 
 export const projectsWithMeta = processedProjects;
-export const projectBySlug = new Map(processedProjects.map((project) => [project.slug, project]));
+export const projectBySlug = new Map(
+  processedProjects.map((project) => [project.slug, project]),
+);
 
 export const groupProjectsByModule = (projects = projectsWithMeta) => {
   const buckets = new Map();
@@ -175,13 +178,17 @@ export const groupProjectsByModule = (projects = projectsWithMeta) => {
 
   const orderedModules = [
     ...MODULE_ORDER,
-    ...Array.from(buckets.keys()).filter((name) => !MODULE_ORDER.includes(name)),
+    ...Array.from(buckets.keys()).filter(
+      (name) => !MODULE_ORDER.includes(name),
+    ),
   ];
 
   return orderedModules
     .map((name) => [
       name,
-      (buckets.get(name) ?? []).sort((a, b) => a.timestampValue - b.timestampValue),
+      (buckets.get(name) ?? []).sort(
+        (a, b) => a.timestampValue - b.timestampValue,
+      ),
     ])
     .filter(([, list]) => list.length > 0);
 };
@@ -312,4 +319,7 @@ export const getPrimaryMediaEntry = (project) => {
   return entries[0];
 };
 
-export const DESCRIPTION_FIELDS = [DESCRIPTION_FIELD, DESCRIPTION_FALLBACK_FIELD];
+export const DESCRIPTION_FIELDS = [
+  DESCRIPTION_FIELD,
+  DESCRIPTION_FALLBACK_FIELD,
+];
