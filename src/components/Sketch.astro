@@ -2,6 +2,7 @@
 import {
   projectsWithMeta,
   getProjectAuthor,
+  getProjectTitle,
   getPrimaryMediaEntry,
 } from "@/lib/projects.js";
 
@@ -12,6 +13,8 @@ const allProjects = projectsWithMeta
     return {
       url: primaryMedia.value,
       name: getProjectAuthor(project),
+      title: getProjectTitle(project),
+      slug: project.slug,
     };
   })
   .filter(Boolean);
@@ -20,17 +23,23 @@ const shuffledProjects = allProjects.sort(() => Math.random() - 0.5);
 
 const imageUrls = shuffledProjects.map((p) => p.url);
 const imageNames = shuffledProjects.map((p) => p.name);
+const projectTitles = shuffledProjects.map((p) => p.title);
+const projectSlugs = shuffledProjects.map((p) => p.slug);
 ---
 
 <div class="sketch-wrapper ridge-border cutoff">
   <img id="image-element" class="image fade" src="" alt="" />
 </div>
-<div id="student-name" class="student-name fade cutoff"></div>
+<div id="student-name" class="student-name fade cutoff">
+  <a id="project-link" href="#"></a>
+</div>
 
-<script define:vars={{ imageUrls, imageNames }}>
+<script define:vars={{ imageUrls, imageNames, projectTitles, projectSlugs }}>
   /* eslint-disable no-undef */
   const images = imageUrls;
   const names = imageNames;
+  const titles = projectTitles;
+  const slugs = projectSlugs;
   /* eslint-enable no-undef */
 
   function shuffleArray(array) {
@@ -49,8 +58,9 @@ const imageNames = shuffledProjects.map((p) => p.name);
   function changeContent() {
     const imgElement = document.getElementById("image-element");
     const nameElement = document.getElementById("student-name");
+    const linkElement = document.getElementById("project-link");
 
-    if (!imgElement || !nameElement) return;
+    if (!imgElement || !nameElement || !linkElement) return;
 
     imgElement.classList.add("fade-out");
     nameElement.classList.add("fade-out");
@@ -58,18 +68,41 @@ const imageNames = shuffledProjects.map((p) => p.name);
     setTimeout(() => {
       const imageIndex = shuffledIndices[currentIndex];
 
-      imgElement.src = images[imageIndex];
-      imgElement.alt = names[imageIndex];
-      nameElement.textContent = names[imageIndex];
+      // Create a new image to test if it loads
+      const testImg = new Image();
+      testImg.onload = () => {
+        // Image loaded successfully
+        imgElement.src = images[imageIndex];
+        imgElement.alt = names[imageIndex];
+        
+        linkElement.href = `/work/${slugs[imageIndex]}/`;
+        linkElement.textContent = `${titles[imageIndex]}, ${names[imageIndex]}`;
 
-      currentIndex++;
-      if (currentIndex >= shuffledIndices.length) {
-        shuffledIndices = shuffleArray(allIndices);
-        currentIndex = 0;
-      }
+        currentIndex++;
+        if (currentIndex >= shuffledIndices.length) {
+          shuffledIndices = shuffleArray(allIndices);
+          currentIndex = 0;
+        }
 
-      imgElement.classList.remove("fade-out");
-      nameElement.classList.remove("fade-out");
+        imgElement.classList.remove("fade-out");
+        nameElement.classList.remove("fade-out");
+      };
+      
+      testImg.onerror = () => {
+        // Image failed to load, skip to next one
+        currentIndex++;
+        if (currentIndex >= shuffledIndices.length) {
+          shuffledIndices = shuffleArray(allIndices);
+          currentIndex = 0;
+        }
+        
+        // Immediately try next image
+        imgElement.classList.remove("fade-out");
+        nameElement.classList.remove("fade-out");
+        changeContent();
+      };
+      
+      testImg.src = images[imageIndex];
     }, 1000);
   }
 
