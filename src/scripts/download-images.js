@@ -134,7 +134,9 @@ async function convertMovToMp4(inputPath, outputPath) {
       outputPath,
     ]);
     fs.unlinkSync(inputPath);
-    console.log(`Converted ${path.basename(inputPath)} → ${path.basename(outputPath)}`);
+    console.log(
+      `Converted ${path.basename(inputPath)} → ${path.basename(outputPath)}`,
+    );
     return outputPath;
   } catch (err) {
     console.error(`Failed to convert ${inputPath} to mp4:`, err);
@@ -144,9 +146,18 @@ async function convertMovToMp4(inputPath, outputPath) {
 
 async function convertHeicToJpg(inputPath, outputPath) {
   try {
-    await execFileAsync("sips", ["-s", "format", "jpeg", inputPath, "--out", outputPath]);
+    await execFileAsync("sips", [
+      "-s",
+      "format",
+      "jpeg",
+      inputPath,
+      "--out",
+      outputPath,
+    ]);
     fs.unlinkSync(inputPath);
-    console.log(`Converted ${path.basename(inputPath)} → ${path.basename(outputPath)}`);
+    console.log(
+      `Converted ${path.basename(inputPath)} → ${path.basename(outputPath)}`,
+    );
     return outputPath;
   } catch (err) {
     console.error(`Failed to convert ${inputPath} to jpg:`, err);
@@ -160,8 +171,8 @@ const detectHeicBySignature = (filePath) => {
     const buffer = Buffer.alloc(12);
     fs.readSync(fd, buffer, 0, buffer.length, 0);
     fs.closeSync(fd);
-  // Strip NULs from brand
-  const brand = buffer.toString("ascii", 4, 12).replace(/\0+/g, "");
+    // Strip NULs from brand
+    const brand = buffer.toString("ascii", 4, 12).replace(/\0+/g, "");
     return HEIC_BRANDS.has(brand);
   } catch (err) {
     if (process.env.DEBUG) console.warn("detectHeicBySignature failed:", err);
@@ -210,8 +221,13 @@ function findExistingAssetFile(folderPath, baseName) {
 async function processProject(project) {
   const email = sanitizeFilename(project["Email Address"] || "unknown_email");
   const projectName = sanitizeFilename(
-    project["Your Project Name"] || project["Project Name"] || "unknown_project",
+    project["Your Project Name"] ||
+      project["Project Name"] ||
+      "unknown_project",
   );
+  const author = project["Your Name (First + Last Name)"] || "Unknown";
+  console.log(`  📦 ${author} - ${projectName}`);
+  
   const folderPath = path.join(PUBLIC_IMAGES_DIR, email, projectName);
   if (!fs.existsSync(folderPath)) fs.mkdirSync(folderPath, { recursive: true });
 
@@ -225,12 +241,14 @@ async function processProject(project) {
     const url = project[key];
     if (!url) continue;
     if (typeof url === "string" && url.startsWith("/images/")) {
+      console.log(`    ✓ SKIP (already local) ${key}`);
       newProject[key] = url;
       continue;
     }
 
     const directUrl = getDirectDriveUrl(url);
     if (!directUrl) {
+      console.log(`    ✗ SKIP (invalid URL) ${key}`);
       console.warn(`Skipping non-GDrive or invalid URL for ${key}: ${url}`);
       continue;
     }
@@ -241,7 +259,9 @@ async function processProject(project) {
       const existingExt = existingFile
         ? extensionFromFileName(existingFile)
         : "";
-      const existingTargetExt = existingExt ? resolveTargetExtension(existingExt) : "";
+      const existingTargetExt = existingExt
+        ? resolveTargetExtension(existingExt)
+        : "";
 
       let headContentType = "";
       let headDisposition = "";
@@ -271,6 +291,7 @@ async function processProject(project) {
           (targetExt !== "bin" && existingFileExt === targetExt) ||
           (existingTargetExt && existingFileExt === existingTargetExt)
         ) {
+          console.log(`    ✓ SKIP (cached) ${key} → ${existingFile}`);
           newProject[key] = `/images/${email}/${projectName}/${existingFile}`;
           continue;
         }
@@ -278,17 +299,24 @@ async function processProject(project) {
         try {
           fs.unlinkSync(path.join(folderPath, existingFile));
         } catch (unlinkErr) {
-          console.warn(`Unable to remove outdated asset ${existingFile}:`, unlinkErr);
+          console.warn(
+            `Unable to remove outdated asset ${existingFile}:`,
+            unlinkErr,
+          );
         }
       }
 
       const initialFileName = `${baseName}.${normalizedExt}`;
       const initialSavePath = path.join(folderPath, initialFileName);
 
+      console.log(`    ⬇ DOWNLOADING ${key}...`);
       const downloadResult = await downloadImage(directUrl, initialSavePath);
       if (!downloadResult.success) {
+        console.log(`    ✗ DOWNLOAD FAILED ${key}`);
         continue;
       }
+      console.log(`    ✓ DOWNLOADED ${key}`);
+
 
       let effectiveExt = normalizedExt;
       if (effectiveExt === "bin") {
@@ -318,29 +346,42 @@ async function processProject(project) {
         effectiveExt = "heic";
       }
 
-      if (effectiveExt && extensionFromFileName(finalFileName) !== effectiveExt) {
-        const adjustedPath = path.join(folderPath, `${baseName}.${effectiveExt}`);
+      if (
+        effectiveExt &&
+        extensionFromFileName(finalFileName) !== effectiveExt
+      ) {
+        const adjustedPath = path.join(
+          folderPath,
+          `${baseName}.${effectiveExt}`,
+        );
         fs.renameSync(finalFilePath, adjustedPath);
         finalFilePath = adjustedPath;
         finalFileName = path.basename(finalFilePath);
       }
 
       if (shouldConvertToMp4(effectiveExt)) {
+        console.log(`    🔄 CONVERTING ${effectiveExt.toUpperCase()} → MP4...`);
         const outputPath = path.join(folderPath, `${baseName}.mp4`);
         finalFilePath = await convertMovToMp4(finalFilePath, outputPath);
         finalFileName = path.basename(finalFilePath);
         effectiveExt = extensionFromFileName(finalFileName) || effectiveExt;
+        console.log(`    ✓ CONVERTED to ${finalFileName}`);
       } else if (shouldConvertToJpg(effectiveExt)) {
+        console.log(`    🔄 CONVERTING ${effectiveExt.toUpperCase()} → JPG...`);
         const outputPath = path.join(folderPath, `${baseName}.jpg`);
         finalFilePath = await convertHeicToJpg(finalFilePath, outputPath);
         finalFileName = path.basename(finalFilePath);
         effectiveExt = extensionFromFileName(finalFileName) || effectiveExt;
+        console.log(`    ✓ CONVERTED to ${finalFileName}`);
       }
 
       const finalTargetExt = resolveTargetExtension(effectiveExt);
       targetExt = finalTargetExt === "" ? targetExt : finalTargetExt;
 
-      if (targetExt !== "bin" && extensionFromFileName(finalFileName) !== targetExt) {
+      if (
+        targetExt !== "bin" &&
+        extensionFromFileName(finalFileName) !== targetExt
+      ) {
         const adjustedPath = path.join(folderPath, `${baseName}.${targetExt}`);
         fs.renameSync(finalFilePath, adjustedPath);
         finalFilePath = adjustedPath;
@@ -358,23 +399,37 @@ async function processProject(project) {
 
 async function main() {
   console.log("Fetching projects JSON...");
-  const res = await fetch(OPEN_SHEET_URL);
-  const projects = await res.json();
+  try {
+    console.log(`URL: ${OPEN_SHEET_URL}`);
+    const res = await fetch(OPEN_SHEET_URL);
+    
+    if (!res.ok) {
+      throw new Error(`HTTP ${res.status}: ${res.statusText}`);
+    }
+    
+    console.log("Parsing JSON...");
+    const projects = await res.json();
+    console.log(`✅ Got ${projects.length} projects\n`);
 
-  const updatedProjects = new Array(projects.length);
+    const updatedProjects = new Array(projects.length);
 
-  for (let i = 0; i < projects.length; i += CONCURRENT_PROJECTS) {
-    const slice = projects.slice(i, i + CONCURRENT_PROJECTS);
-    const processed = await Promise.all(
-      slice.map((project) => processProject(project)),
-    );
-    processed.forEach((project, index) => {
-      updatedProjects[i + index] = project;
-    });
+    for (let i = 0; i < projects.length; i += CONCURRENT_PROJECTS) {
+      const slice = projects.slice(i, i + CONCURRENT_PROJECTS);
+      console.log(`Processing batch ${Math.floor(i / CONCURRENT_PROJECTS) + 1}/${Math.ceil(projects.length / CONCURRENT_PROJECTS)}...`);
+      const processed = await Promise.all(
+        slice.map((project) => processProject(project)),
+      );
+      processed.forEach((project, index) => {
+        updatedProjects[i + index] = project;
+      });
+    }
+
+    fs.writeFileSync(OUTPUT_JSON_PATH, JSON.stringify(updatedProjects, null, 2));
+    console.log(`\n✅ Saved updated JSON to ${OUTPUT_JSON_PATH}`);
+  } catch (err) {
+    console.error('❌ Error:', err.message);
+    process.exit(1);
   }
-
-  fs.writeFileSync(OUTPUT_JSON_PATH, JSON.stringify(updatedProjects, null, 2));
-  console.log(`✅ Saved updated JSON to ${OUTPUT_JSON_PATH}`);
 }
 
 main().catch(console.error);
