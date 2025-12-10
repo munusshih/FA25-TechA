@@ -68,6 +68,28 @@ export const IMAGE_EXTENSIONS = new Set([
 
 export const VIDEO_EXTENSIONS = new Set([".mp4", ".mov", ".m4v", ".webm"]);
 
+/**
+ * Get the thumbnail path for a media file
+ * Images: filename_thumb.jpg
+ * Videos: filename_thumb.gif
+ */
+export const getThumbnailPath = (mediaPath) => {
+  if (!mediaPath || typeof mediaPath !== "string") return null;
+
+  const ext = mediaPath.toLowerCase().match(/\.[^.]+$/)?.[0];
+  if (!ext) return null;
+
+  const basePath = mediaPath.substring(0, mediaPath.length - ext.length);
+
+  if (IMAGE_EXTENSIONS.has(ext)) {
+    return `${basePath}_thumb.jpg`;
+  } else if (VIDEO_EXTENSIONS.has(ext)) {
+    return `${basePath}_thumb.gif`;
+  }
+
+  return null;
+};
+
 const slugify = (value) =>
   value
     .toString()

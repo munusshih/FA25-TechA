@@ -170,8 +170,20 @@ const hasExtraSlot = Astro.slots.has("extra");
   };
 
   document.addEventListener("DOMContentLoaded", () => {
-    document
-      .querySelectorAll("[data-header-root]")
-      .forEach((header) => setupHeader(header));
+    document.querySelectorAll("[data-header-root]").forEach((header) => {
+      setupHeader(header);
+
+      // Set CSS variable for header height
+      function updateHeaderHeight() {
+        const height = header.offsetHeight;
+        document.documentElement.style.setProperty(
+          "--header-height",
+          `${height}px`,
+        );
+      }
+
+      updateHeaderHeight();
+      window.addEventListener("resize", updateHeaderHeight);
+    });
   });
 </script>

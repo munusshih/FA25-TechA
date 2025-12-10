@@ -7,6 +7,8 @@
     "lint": "eslint . --ext .astro,.js",
     "lint:fix": "eslint . --fix --ext .astro,.js",
     "pull:images": "node ./src/scripts/download-images.js",
+    "generate:thumbnails": "node ./src/scripts/generate-thumbnails.js",
+    "sync": "node ./src/scripts/sync-data.js",
     "dev": "astro dev",
     "build": "astro build",
     "preview": "astro preview",

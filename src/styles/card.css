@@ -15,6 +15,19 @@ details[open] {
   @apply h-auto w-full overflow-hidden border bg-white p-4 transition-all duration-300 lg:[&:nth-child(3n)]:border-l-0 lg:[&:nth-child(3n+2)]:border-l-0 [&:nth-child(n+2)]:border-t-0 lg:[&:nth-child(n+2)]:border-t lg:[&:nth-child(n+4)]:border-t-0;
 }
 
+/* When searching, ensure all visible cards have full borders */
+.card.search-visible {
+  border-top: 1px solid;
+  border-right: 1px solid;
+  border-bottom: 1px solid;
+  border-left: 1px solid;
+}
+
+/* When searching, ensure all visible cards have full borders */
+.card.search-visible {
+  @apply border-t border-r border-b border-l;
+}
+
 .card > h3 {
   @apply mb-4;
 }

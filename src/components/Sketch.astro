@@ -74,7 +74,7 @@ const projectSlugs = shuffledProjects.map((p) => p.slug);
         // Image loaded successfully
         imgElement.src = images[imageIndex];
         imgElement.alt = names[imageIndex];
-        
+
         linkElement.href = `/work/${slugs[imageIndex]}/`;
         linkElement.textContent = `${titles[imageIndex]}, ${names[imageIndex]}`;
 
@@ -87,7 +87,7 @@ const projectSlugs = shuffledProjects.map((p) => p.slug);
         imgElement.classList.remove("fade-out");
         nameElement.classList.remove("fade-out");
       };
-      
+
       testImg.onerror = () => {
         // Image failed to load, skip to next one
         currentIndex++;
@@ -95,13 +95,13 @@ const projectSlugs = shuffledProjects.map((p) => p.slug);
           shuffledIndices = shuffleArray(allIndices);
           currentIndex = 0;
         }
-        
+
         // Immediately try next image
         imgElement.classList.remove("fade-out");
         nameElement.classList.remove("fade-out");
         changeContent();
       };
-      
+
       testImg.src = images[imageIndex];
     }, 1000);
   }

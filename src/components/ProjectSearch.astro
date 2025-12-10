@@ -1,0 +1,178 @@
+---
+// Project search component with fuzzy search
+const { totalProjects = 0 } = Astro.props;
+---
+
+<div class="search-container w-full">
+  <h3 id="project-count">Search through {totalProjects} student works.</h3>
+  <input
+    type="text"
+    id="project-search"
+    placeholder="Search by project title, author, or description..."
+    class="heading-2 mt-4 w-full rounded-full border border-current px-4 py-8 text-base focus:ring-2 focus:ring-current focus:outline-none"
+  />
+</div>
+
+<script define:vars={{ totalProjects }}>
+  // Stricter fuzzy search implementation
+  function fuzzyMatch(query, text) {
+    const lowerQuery = query.toLowerCase();
+    const lowerText = text.toLowerCase();
+
+    // First try exact substring match
+    if (lowerText.includes(lowerQuery)) {
+      return true;
+    }
+
+    // Then try word-boundary matching - query should match at word starts
+    const words = lowerText.split(/\s+/);
+    const queryWords = lowerQuery.split(/\s+/);
+
+    // Check if all query words match the start of any text word
+    return queryWords.every((qWord) =>
+      words.some((tWord) => tWord.startsWith(qWord)),
+    );
+  }
+
+  // Build search index from cards
+  function buildSearchIndex() {
+    const projectCards = document.querySelectorAll("[data-project-card]");
+    const index = [];
+
+    projectCards.forEach((card) => {
+      const titleEl = card.querySelector("h3");
+      const authorEl = card.querySelector("p");
+      const descriptionEl = card.querySelector("[data-description]");
+      let creditsAttr = card.getAttribute("data-credits") || "";
+
+      const title = titleEl?.textContent?.trim() || "";
+      const author = authorEl?.textContent?.trim() || "";
+      const description = descriptionEl?.textContent?.trim() || "";
+
+      // Remove URLs from credits before indexing
+      creditsAttr = creditsAttr.replace(/https?:\/\/[^\s]+/g, "").trim();
+      const credits = creditsAttr;
+
+      index.push({
+        card,
+        title,
+        author,
+        description,
+        credits,
+        searchText:
+          `${title} ${author} ${description} ${credits}`.toLowerCase(),
+      });
+    });
+
+    return index;
+  }
+
+  const searchInput = document.getElementById("project-search");
+  const projectCountEl = document.getElementById("project-count");
+  let searchIndex = buildSearchIndex();
+
+  searchInput?.addEventListener("input", (e) => {
+    const query = e.target.value.toLowerCase();
+    const isSearching = query.length > 0;
+
+    let matchCount = 0;
+
+    // Get accordions dynamically in case they're added later
+    const accordions = document.querySelectorAll(".accordion");
+
+    // Open all accordions when searching
+    if (isSearching) {
+      accordions.forEach((accordion) => {
+        const button = accordion.querySelector(".accordion-button");
+        const content = accordion.querySelector(".accordion-content");
+        button?.setAttribute("aria-expanded", "true");
+        content?.setAttribute("aria-expanded", "true");
+        accordion.setAttribute("data-open", "true");
+      });
+    } else {
+      // Restore original state when search is cleared
+      accordions.forEach((accordion, index) => {
+        const isLast = index === accordions.length - 1;
+        const button = accordion.querySelector(".accordion-button");
+        const content = accordion.querySelector(".accordion-content");
+        button?.setAttribute("aria-expanded", isLast ? "true" : "false");
+        content?.setAttribute("aria-expanded", isLast ? "true" : "false");
+        accordion.setAttribute("data-open", isLast ? "true" : "false");
+      });
+    }
+
+    searchIndex.forEach(({ card, title, author, description, credits }) => {
+      // Check which field matches
+      let matchField = null;
+      if (fuzzyMatch(query, title)) {
+        matchField = "title";
+      } else if (fuzzyMatch(query, author)) {
+        matchField = "author";
+      } else if (fuzzyMatch(query, description)) {
+        matchField = "description";
+      } else if (fuzzyMatch(query, credits)) {
+        matchField = "credits";
+      }
+
+      const matches = matchField !== null || query === "";
+
+      // Create or update badge
+      let badge = card.querySelector(".match-badge");
+      if (!badge && matches && isSearching && matchField) {
+        badge = document.createElement("div");
+        badge.className = "match-badge heading-4 opacity-60 border-t mt-4 pt-2";
+        card.appendChild(badge);
+      }
+
+      if (badge) {
+        if (matchField && isSearching) {
+          badge.textContent = `"${query}" found in ${matchField}`;
+          badge.classList.remove("hidden");
+        } else {
+          badge.classList.add("hidden");
+        }
+      }
+
+      if (matches && isSearching) {
+        matchCount++;
+        card.style.display = "";
+        card.classList.add("search-visible");
+      } else if (isSearching && !matches) {
+        card.style.display = "none";
+        card.classList.remove("search-visible");
+      } else {
+        card.style.display = "";
+        card.classList.remove("search-visible");
+        if (badge) badge.classList.add("hidden");
+      }
+    });
+
+    // Update project count heading
+    if (isSearching && projectCountEl) {
+      if (matchCount === 0) {
+        projectCountEl.textContent = `No work found related to "${query}".`;
+      } else {
+        projectCountEl.textContent = `Showing ${matchCount} student work${matchCount !== 1 ? "s" : ""} related to "${query}"`;
+      }
+    } else if (projectCountEl) {
+      projectCountEl.textContent = `Search through ${totalProjects} student works.`;
+    }
+
+    // Emit custom event with match count
+    window.dispatchEvent(
+      new CustomEvent("projectSearchUpdate", {
+        detail: { matchCount, query, isSearching },
+      }),
+    );
+  });
+
+  // Rebuild index when DOM changes
+  const observer = new MutationObserver(() => {
+    searchIndex = buildSearchIndex();
+  });
+
+  observer.observe(document.body, {
+    childList: true,
+    subtree: true,
+  });
+</script>

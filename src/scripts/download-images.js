@@ -180,6 +180,63 @@ const detectHeicBySignature = (filePath) => {
   }
 };
 
+const detectHdrVideo = async (filePath) => {
+  try {
+    // Use ffprobe to detect HDR profiles (HEVC Main 10, VP9 Profile 2, etc)
+    const { stdout } = await execFileAsync("ffprobe", [
+      "-v",
+      "error",
+      "-select_streams",
+      "v:0",
+      "-show_entries",
+      "stream=profile,pix_fmt",
+      "-of",
+      "csv=p=0",
+      filePath,
+    ]);
+    const output = stdout.toLowerCase();
+    // Check for HDR-related profiles and formats
+    return (
+      output.includes("main 10") ||
+      output.includes("profile 2") ||
+      output.includes("10le") ||
+      output.includes("10be")
+    );
+  } catch (err) {
+    if (process.env.DEBUG) console.warn("detectHdrVideo failed:", err);
+    return false;
+  }
+};
+
+const convertHdrToSdr = async (inputPath, outputPath) => {
+  try {
+    // Convert HDR to SDR using ffmpeg with tone mapping
+    await execFileAsync("ffmpeg", [
+      "-i",
+      inputPath,
+      "-vf",
+      "zscale=t=linear:npl=100,format=gbrpf32le,zscale=p=bt709,tonemap=tonemap=hable:peak=100,zscale=t=bt709:m=bt709:r=tv,format=yuv420p",
+      "-c:v",
+      "libx264",
+      "-crf",
+      "23",
+      "-c:a",
+      "aac",
+      "-b:a",
+      "128k",
+      outputPath,
+    ]);
+    fs.unlinkSync(inputPath);
+    console.log(
+      `Converted HDR ${path.basename(inputPath)} → SDR ${path.basename(outputPath)}`,
+    );
+    return outputPath;
+  } catch (err) {
+    console.error(`Failed to convert ${inputPath} from HDR to SDR:`, err);
+    return inputPath;
+  }
+};
+
 async function downloadImage(url, savePath) {
   const res = await fetch(url);
   if (!res.ok) {
@@ -225,9 +282,7 @@ async function processProject(project) {
       project["Project Name"] ||
       "unknown_project",
   );
-  const author = project["Your Name (First + Last Name)"] || "Unknown";
-  console.log(`  📦 ${author} - ${projectName}`);
-  
+
   const folderPath = path.join(PUBLIC_IMAGES_DIR, email, projectName);
   if (!fs.existsSync(folderPath)) fs.mkdirSync(folderPath, { recursive: true });
 
@@ -240,16 +295,29 @@ async function processProject(project) {
   for (const key of assetKeys) {
     const url = project[key];
     if (!url) continue;
+
+    // If already a local path, skip processing entirely
     if (typeof url === "string" && url.startsWith("/images/")) {
-      console.log(`    ✓ SKIP (already local) ${key}`);
       newProject[key] = url;
       continue;
     }
 
+    // Check if file already exists and is valid before doing any network requests
+    const baseName = getAssetBaseName(key);
+    const existingFile = findExistingAssetFile(folderPath, baseName);
+    if (existingFile) {
+      const existingExt = extensionFromFileName(existingFile);
+      const existingTargetExt = resolveTargetExtension(existingExt);
+      // If we have a valid cached file, use it without further processing
+      if (existingExt && existingTargetExt) {
+        newProject[key] = `/images/${email}/${projectName}/${existingFile}`;
+        continue;
+      }
+    }
+
     const directUrl = getDirectDriveUrl(url);
     if (!directUrl) {
-      console.log(`    ✗ SKIP (invalid URL) ${key}`);
-      console.warn(`Skipping non-GDrive or invalid URL for ${key}: ${url}`);
+      console.error(`❌ Invalid URL for ${key}: ${url}`);
       continue;
     }
 
@@ -274,12 +342,12 @@ async function processProject(project) {
           headDisposition = headRes.headers.get("content-disposition") || "";
           headExtension = getFileExtension(headContentType, headDisposition);
         } else {
-          console.warn(
-            `HEAD request failed for ${directUrl}: ${headRes.status} ${headRes.statusText}`,
+          console.error(
+            `❌ HEAD request failed for ${key}: ${headRes.status} ${headRes.statusText}`,
           );
         }
       } catch (headErr) {
-        console.warn(`Unable to fetch HEAD for ${directUrl}:`, headErr);
+        console.error(`❌ Unable to fetch ${key}:`, headErr.message);
       }
 
       let normalizedExt = (headExtension || existingExt || "bin").toLowerCase();
@@ -291,7 +359,6 @@ async function processProject(project) {
           (targetExt !== "bin" && existingFileExt === targetExt) ||
           (existingTargetExt && existingFileExt === existingTargetExt)
         ) {
-          console.log(`    ✓ SKIP (cached) ${key} → ${existingFile}`);
           newProject[key] = `/images/${email}/${projectName}/${existingFile}`;
           continue;
         }
@@ -299,9 +366,9 @@ async function processProject(project) {
         try {
           fs.unlinkSync(path.join(folderPath, existingFile));
         } catch (unlinkErr) {
-          console.warn(
-            `Unable to remove outdated asset ${existingFile}:`,
-            unlinkErr,
+          console.error(
+            `❌ Unable to remove outdated asset ${existingFile}:`,
+            unlinkErr.message,
           );
         }
       }
@@ -309,14 +376,11 @@ async function processProject(project) {
       const initialFileName = `${baseName}.${normalizedExt}`;
       const initialSavePath = path.join(folderPath, initialFileName);
 
-      console.log(`    ⬇ DOWNLOADING ${key}...`);
       const downloadResult = await downloadImage(directUrl, initialSavePath);
       if (!downloadResult.success) {
-        console.log(`    ✗ DOWNLOAD FAILED ${key}`);
+        console.error(`❌ Download failed for ${key}`);
         continue;
       }
-      console.log(`    ✓ DOWNLOADED ${key}`);
-
 
       let effectiveExt = normalizedExt;
       if (effectiveExt === "bin") {
@@ -360,19 +424,26 @@ async function processProject(project) {
       }
 
       if (shouldConvertToMp4(effectiveExt)) {
-        console.log(`    🔄 CONVERTING ${effectiveExt.toUpperCase()} → MP4...`);
         const outputPath = path.join(folderPath, `${baseName}.mp4`);
         finalFilePath = await convertMovToMp4(finalFilePath, outputPath);
         finalFileName = path.basename(finalFilePath);
         effectiveExt = extensionFromFileName(finalFileName) || effectiveExt;
-        console.log(`    ✓ CONVERTED to ${finalFileName}`);
       } else if (shouldConvertToJpg(effectiveExt)) {
-        console.log(`    🔄 CONVERTING ${effectiveExt.toUpperCase()} → JPG...`);
         const outputPath = path.join(folderPath, `${baseName}.jpg`);
         finalFilePath = await convertHeicToJpg(finalFilePath, outputPath);
         finalFileName = path.basename(finalFilePath);
         effectiveExt = extensionFromFileName(finalFileName) || effectiveExt;
-        console.log(`    ✓ CONVERTED to ${finalFileName}`);
+      }
+
+      // Convert HDR videos to SDR
+      if (["mp4", "mov", "m4v", "webm"].includes(effectiveExt.toLowerCase())) {
+        const isHdr = await detectHdrVideo(finalFilePath);
+        if (isHdr) {
+          const sdrPath = path.join(folderPath, `${baseName}_sdr.mp4`);
+          finalFilePath = await convertHdrToSdr(finalFilePath, sdrPath);
+          finalFileName = path.basename(finalFilePath);
+          effectiveExt = extensionFromFileName(finalFileName) || effectiveExt;
+        }
       }
 
       const finalTargetExt = resolveTargetExtension(effectiveExt);
@@ -390,7 +461,7 @@ async function processProject(project) {
 
       newProject[key] = `/images/${email}/${projectName}/${finalFileName}`;
     } catch (err) {
-      console.error(`Error downloading ${url}:`, err);
+      console.error(`❌ Error processing ${key}:`, err.message);
     }
   }
 
@@ -398,36 +469,89 @@ async function processProject(project) {
 }
 
 async function main() {
-  console.log("Fetching projects JSON...");
   try {
-    console.log(`URL: ${OPEN_SHEET_URL}`);
     const res = await fetch(OPEN_SHEET_URL);
-    
+
     if (!res.ok) {
       throw new Error(`HTTP ${res.status}: ${res.statusText}`);
     }
-    
-    console.log("Parsing JSON...");
+
     const projects = await res.json();
-    console.log(`✅ Got ${projects.length} projects\n`);
+    const totalProjects = projects.length;
 
-    const updatedProjects = new Array(projects.length);
+    const updatedProjects = new Array(totalProjects);
+    let completedProjects = 0;
+    let lastDisplayedAuthor = "";
+    let lastDisplayedProject = "";
 
-    for (let i = 0; i < projects.length; i += CONCURRENT_PROJECTS) {
+    function createProgressBar(
+      current,
+      total,
+      author = "",
+      projectName = "",
+      width = 25,
+    ) {
+      const percentage = Math.round((current / total) * 100);
+      const filled = Math.round((width * current) / total);
+      const empty = width - filled;
+      const bar = "█".repeat(filled) + "░".repeat(empty);
+      const projectInfo =
+        author && projectName ? ` - ${author} - ${projectName}` : "";
+      return `[${bar}] ${percentage}% (${current}/${total})${projectInfo}`;
+    }
+
+    // Process projects in batches concurrently for speed
+    for (let i = 0; i < totalProjects; i += CONCURRENT_PROJECTS) {
       const slice = projects.slice(i, i + CONCURRENT_PROJECTS);
-      console.log(`Processing batch ${Math.floor(i / CONCURRENT_PROJECTS) + 1}/${Math.ceil(projects.length / CONCURRENT_PROJECTS)}...`);
+
       const processed = await Promise.all(
-        slice.map((project) => processProject(project)),
+        slice.map(async (project) => {
+          const result = await processProject(project);
+
+          const author = project["Your Name (First + Last Name)"] || "Unknown";
+          const projectName =
+            project["Your Project Name"] ||
+            project["Project Name"] ||
+            "unknown";
+
+          // Store the last author/project to display
+          lastDisplayedAuthor = author;
+          lastDisplayedProject = projectName;
+
+          return result;
+        }),
       );
+
+      // Update progress once per batch, after all projects in batch are done
+      completedProjects += slice.length;
+      const progress = createProgressBar(
+        completedProjects,
+        totalProjects,
+        lastDisplayedAuthor,
+        lastDisplayedProject,
+      );
+      process.stdout.write(`\r${progress}`);
+
       processed.forEach((project, index) => {
         updatedProjects[i + index] = project;
       });
     }
 
-    fs.writeFileSync(OUTPUT_JSON_PATH, JSON.stringify(updatedProjects, null, 2));
-    console.log(`\n✅ Saved updated JSON to ${OUTPUT_JSON_PATH}`);
+    // Final progress update
+    const finalProgress = createProgressBar(
+      totalProjects,
+      totalProjects,
+      "Done!",
+    );
+    process.stdout.write(`\r${finalProgress}\n`);
+
+    fs.writeFileSync(
+      OUTPUT_JSON_PATH,
+      JSON.stringify(updatedProjects, null, 2),
+    );
   } catch (err) {
-    console.error('❌ Error:', err.message);
+    process.stdout.write("\n");
+    console.error("❌ Error:", err.message);
     process.exit(1);
   }
 }

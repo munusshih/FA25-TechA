@@ -28,8 +28,8 @@
 }
 
 .student-name a {
-  color: inherit;
   transition: opacity 0.3s ease;
+  color: inherit;
 }
 
 .student-name a:hover {

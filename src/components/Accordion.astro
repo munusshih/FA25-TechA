@@ -1,11 +1,16 @@
 ---
-const { title = "Accordion Title", open = true } = Astro.props;
+const {
+  title = "Accordion Title",
+  open = true,
+  noCutoff = false,
+} = Astro.props;
 const isOpen =
   typeof open === "string" ? open.toLowerCase() !== "false" : Boolean(open);
 const titleId = title.toLowerCase().replace(/\s+/g, "-");
+const classes = `accordion ${noCutoff ? "" : "cutoff"}`.trim();
 ---
 
-<section id={`${titleId}`} class="accordion cutoff" data-open={isOpen}>
+<section id={`${titleId}`} class={classes} data-open={isOpen}>
   <button
     class="accordion-button"
     aria-expanded={isOpen ? "true" : "false"}
