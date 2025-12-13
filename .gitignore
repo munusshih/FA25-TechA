@@ -24,3 +24,7 @@ pnpm-debug.log*
 .idea/
 .vscode/settings.json
 Icon
+
+# end of year packaging
+end-of-year-packages/
+Icon

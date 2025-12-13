@@ -9,6 +9,7 @@
     "pull:images": "node ./src/scripts/download-images.js",
     "generate:thumbnails": "node ./src/scripts/generate-thumbnails.js",
     "sync": "node ./src/scripts/sync-data.js",
+    "end-of-year-pkg": "npm run sync && node ./src/scripts/end-of-year-package.js",
     "dev": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
