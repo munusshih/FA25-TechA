@@ -243,7 +243,7 @@ async function downloadImage(url, savePath) {
     console.error(`Failed to download ${url}: ${res.statusText}`);
     return { success: false, contentType: "", contentDisposition: "" };
   }
-  const buffer = await res.buffer();
+  const buffer = Buffer.from(await res.arrayBuffer());
   fs.writeFileSync(savePath, buffer);
   console.log(`Saved asset to ${savePath}`);
   return {

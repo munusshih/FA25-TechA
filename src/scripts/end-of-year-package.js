@@ -79,7 +79,7 @@ async function packageEndOfYear() {
   for (const project of projectsData) {
     const email = project["Email Address"];
     const name = project["Your Name (First + Last Name)"];
-    
+
     if (email && name) {
       if (!emailNameCounts.has(email)) {
         emailNameCounts.set(email, new Map());
@@ -93,14 +93,14 @@ async function packageEndOfYear() {
   for (const [email, nameCounts] of emailNameCounts.entries()) {
     let mostFrequentName = "";
     let maxCount = 0;
-    
+
     for (const [name, count] of nameCounts.entries()) {
       if (count > maxCount) {
         maxCount = count;
         mostFrequentName = name;
       }
     }
-    
+
     emailToNameMap.set(email, mostFrequentName);
   }
 
@@ -110,12 +110,19 @@ async function packageEndOfYear() {
     totalFiles: 0,
   };
 
-  function createProgressBar(current, total, studentName = "", projectTitle = "", width = 30) {
+  function createProgressBar(
+    current,
+    total,
+    studentName = "",
+    projectTitle = "",
+    width = 30,
+  ) {
     const percentage = Math.round((current / total) * 100);
     const filled = Math.round((width * current) / total);
     const empty = width - filled;
     const bar = "█".repeat(filled) + "░".repeat(empty);
-    const info = studentName && projectTitle ? ` - ${studentName} - ${projectTitle}` : "";
+    const info =
+      studentName && projectTitle ? ` - ${studentName} - ${projectTitle}` : "";
     return `[${bar}] ${percentage}% (${current}/${total})${info}`;
   }
 
@@ -133,7 +140,10 @@ async function packageEndOfYear() {
     }
 
     // Use the most frequent name for this email
-    const studentName = emailToNameMap.get(email) || project["Your Name (First + Last Name)"] || "Unknown";
+    const studentName =
+      emailToNameMap.get(email) ||
+      project["Your Name (First + Last Name)"] ||
+      "Unknown";
 
     const instructor = getInstructorFromSection(section);
     const sanitizedStudent = sanitizeFolderName(studentName);
@@ -162,7 +172,7 @@ async function packageEndOfYear() {
       if (typeof value === "string" && value.startsWith("/images/")) {
         // Extract the actual file path from public directory
         const filePath = path.join("./public", value);
-        
+
         if (fs.existsSync(filePath)) {
           const fileName = path.basename(filePath);
           const destFile = path.join(projectFolder, fileName);
@@ -191,12 +201,22 @@ ${project["Credit (List out collaborators, tutorials, libraries, references, AI 
 
     // Update progress bar
     processedCount++;
-    const progress = createProgressBar(processedCount, totalProjects, studentName, projectTitle);
+    const progress = createProgressBar(
+      processedCount,
+      totalProjects,
+      studentName,
+      projectTitle,
+    );
     process.stdout.write(`\r${progress}`);
   }
 
   // Final progress update
-  const finalProgress = createProgressBar(totalProjects, totalProjects, "Complete!", "");
+  const finalProgress = createProgressBar(
+    totalProjects,
+    totalProjects,
+    "Complete!",
+    "",
+  );
   process.stdout.write(`\r${finalProgress}\n\n`);
 
   // Print summary
