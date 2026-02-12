@@ -27,14 +27,64 @@ const classes = `accordion ${noCutoff ? "" : "cutoff"}`.trim();
 </section>
 
 <script>
+  const syncContentHeight = (content) => {
+    const isExpanded = content.getAttribute("aria-expanded") === "true";
+    content.style.maxHeight = isExpanded ? `${content.scrollHeight}px` : "0px";
+  };
+
+  const setAccordionState = (accordion, expanded) => {
+    const button = accordion.querySelector(".accordion-button");
+    const content = accordion.querySelector(".accordion-content");
+    if (!button || !content) return;
+
+    const value = String(expanded);
+    button.setAttribute("aria-expanded", value);
+    content.setAttribute("aria-expanded", value);
+    accordion.setAttribute("data-open", value);
+    syncContentHeight(content);
+  };
+
   document.querySelectorAll(".accordion").forEach((accordion) => {
     const button = accordion.querySelector(".accordion-button");
     const content = accordion.querySelector(".accordion-content");
+    if (!button || !content) return;
+
+    setAccordionState(
+      accordion,
+      button.getAttribute("aria-expanded") === "true",
+    );
 
     button.addEventListener("click", () => {
       const isExpanded = button.getAttribute("aria-expanded") === "true";
-      button.setAttribute("aria-expanded", String(!isExpanded));
-      content.setAttribute("aria-expanded", String(!isExpanded));
+      setAccordionState(accordion, !isExpanded);
+    });
+
+    const expandedObserver = new MutationObserver(() => {
+      const isExpanded = content.getAttribute("aria-expanded") === "true";
+      button.setAttribute("aria-expanded", String(isExpanded));
+      accordion.setAttribute("data-open", String(isExpanded));
+      syncContentHeight(content);
+    });
+
+    expandedObserver.observe(content, {
+      attributes: true,
+      attributeFilter: ["aria-expanded"],
+    });
+
+    if ("ResizeObserver" in window) {
+      const resizeObserver = new ResizeObserver(() => {
+        if (content.getAttribute("aria-expanded") === "true") {
+          syncContentHeight(content);
+        }
+      });
+
+      resizeObserver.observe(content);
+    }
+
+    window.addEventListener("resize", () => {
+      if (content.getAttribute("aria-expanded") === "true") {
+        syncContentHeight(content);
+      }
     });
   });
 </script>
