@@ -1,4 +1,25 @@
-import rawProjects from "../data/projects-with-local-images.json";
+import siteConfig from "../site.config.json";
+
+// Each year's submissions live in their own frozen file: src/data/<year>.json.
+// They are never overwritten, so past years stay archived automatically.
+const yearModules = import.meta.glob("../data/*.json", { eager: true });
+
+const rawProjects = Object.entries(yearModules)
+  .map(([filePath, mod]) => {
+    const match = filePath.match(/\/(\d{4})\.json$/);
+    if (!match) return [];
+    const year = Number(match[1]);
+    const list = mod?.default ?? mod ?? [];
+    return list.map((project) => ({ ...project, __year: year }));
+  })
+  .flat();
+
+export const SITE = siteConfig;
+export const CURRENT_YEAR = siteConfig.year;
+export const ARCHIVED_YEARS = [...(siteConfig.archivedYears ?? [])].sort(
+  (a, b) => b - a,
+);
+export const getProjectYear = (project) => project.__year;
 
 export const MODULE_ORDER = [
   "Project 1: Flexible Manifesto",
@@ -144,7 +165,9 @@ const baseSlugForProject = (project, moduleName) => {
     "project";
   const emailSlug = email.split("@")[0] || email;
   const title = getProjectTitle(project);
-  const parts = [emailSlug, moduleName, title];
+  // Year-prefixed so slugs are globally unique across years and a
+  // project's URL never collides with a future year's submission.
+  const parts = [project.__year, emailSlug, moduleName, title];
   return slugify(parts.filter(Boolean).join("-"));
 };
 
@@ -156,7 +179,7 @@ const latestProjectsByStudentAndModule = () => {
       project["Email Address"] ||
       project["Your Name (First + Last Name)"] ||
       "unknown";
-    const key = `${email}|${moduleName}`;
+    const key = `${project.__year}|${email}|${moduleName}`;
     const timestamp = parseTimestamp(project.Timestamp);
     const existing = latestByKey.get(key);
     if (!existing || timestamp > existing.timestamp) {
@@ -178,16 +201,25 @@ const processedProjects = (() => {
     return {
       ...project,
       moduleName,
+      year: project.__year,
       slug,
       timestampValue: parseTimestamp(project.Timestamp),
     };
   });
 })();
 
+// All years combined (used by getStaticPaths so every archived year's
+// project pages are built and stay reachable forever).
 export const projectsWithMeta = processedProjects;
 export const projectBySlug = new Map(
   processedProjects.map((project) => [project.slug, project]),
 );
+
+export const projectsForYear = (year) =>
+  processedProjects.filter((project) => project.year === year);
+
+// The live site (homepage + /work) shows only the current year.
+export const currentYearProjects = projectsForYear(CURRENT_YEAR);
 
 export const groupProjectsByModule = (projects = projectsWithMeta) => {
   const buckets = new Map();

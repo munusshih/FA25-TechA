@@ -4,12 +4,17 @@ import path from "path";
 import { execFile } from "child_process";
 import { promisify } from "util";
 
-const OPEN_SHEET_URL =
-  "https://opensheet.elk.sh/17fvrm7R-obGWYHILPcmqp4h7mW55xVmWpenjYAFzMAI/1";
+const siteConfig = JSON.parse(
+  fs.readFileSync(path.resolve("./src/site.config.json"), "utf8"),
+);
+
+const OPEN_SHEET_URL = siteConfig.sheetUrl;
+const CURRENT_YEAR = siteConfig.year;
 
 const PUBLIC_IMAGES_DIR = path.resolve("./public/images");
 const DATA_DIR = path.resolve("./src/data");
-const OUTPUT_JSON_PATH = path.join(DATA_DIR, "projects-with-local-images.json");
+// Sync writes only the current year's file; past years stay frozen.
+const OUTPUT_JSON_PATH = path.join(DATA_DIR, `${CURRENT_YEAR}.json`);
 
 const ASSET_FIELD_REGEX = /^(image|file) \d+$/i;
 const CONCURRENT_PROJECTS = 10;

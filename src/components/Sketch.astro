@@ -1,12 +1,19 @@
 ---
 import {
   projectsWithMeta,
+  currentYearProjects,
   getProjectAuthor,
   getProjectTitle,
   getPrimaryMediaEntry,
 } from "@/lib/projects.js";
 
-const allProjects = projectsWithMeta
+// Show the current year on the homepage; fall back to all years
+// during the transition before a new year has been synced.
+const sketchProjects = currentYearProjects.length
+  ? currentYearProjects
+  : projectsWithMeta;
+
+const allProjects = sketchProjects
   .map((project) => {
     const primaryMedia = getPrimaryMediaEntry(project);
     if (!primaryMedia || !primaryMedia.value) return null;

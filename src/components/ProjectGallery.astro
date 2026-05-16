@@ -1,0 +1,329 @@
+---
+import Layout from "@/layouts/Layout.astro";
+import SkipToMain from "@/components/SkipToMain.astro";
+import Header from "@/components/Header.astro";
+import Footer from "@/components/Footer.astro";
+import Accordion from "@/components/Accordion.astro";
+import ProjectSearch from "@/components/ProjectSearch.astro";
+// Stylesheet is owned by the page so archived years can freeze their
+// own CSS (the live site tweaks CSS yearly).
+
+import {
+  groupProjectsByModule,
+  getProjectTitle,
+  getProjectAuthor,
+  getPrimaryMediaEntry,
+  getThumbnailPath,
+  ARCHIVED_YEARS,
+} from "@/lib/projects.js";
+
+// `projects` is the current year's list. `year`/`season` label it.
+const { projects, season, year } = Astro.props;
+
+// Year switcher: current year (this page) + each archived year's site.
+const yearLinks = [
+  { year, href: "/work", current: true },
+  ...ARCHIVED_YEARS.map((y) => ({ year: y, href: `/${y}`, current: false })),
+];
+
+const groupedProjects = groupProjectsByModule(projects);
+const totalProjects = projects.length;
+const transparentPixel =
+  "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw==";
+
+const toSectionId = (value) =>
+  `module-${value}`
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[̀-ͯ]/g, "")
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/(^-|-$)/g, "")
+    .replace(/-{2,}/g, "-");
+
+const moduleNavItems = groupedProjects.map(([moduleName]) => ({
+  label: moduleName,
+  href: `#${toSectionId(moduleName)}`,
+}));
+---
+
+<Layout>
+  <SkipToMain />
+
+  <Header>
+    <h1 slot="title" class="heading-1" data-header-scale>
+      Technology A: <span class="text-accent">Project Archive</span>
+    </h1>
+    <div slot="nav" class="md:flex"></div>
+    <div slot="mobile-meta" class="flex flex-row gap-4">
+      <h2 data-header-scale>
+        <a href="/">Back to Homepage</a>
+      </h2>
+      <h2 data-header-scale>{year} {season}</h2>
+    </div>
+    <div slot="desktop-meta">
+      <h2 data-header-scale>
+        <a href="/">Back to Homepage</a>
+      </h2>
+      <h2 data-header-scale>{season} {year}</h2>
+    </div>
+  </Header>
+</Layout>
+<main class="cutoff mx-auto pt-[20rem] pb-24 md:pt-[22%]">
+  <div class="mb-20 flex flex-col gap-8">
+    {
+      yearLinks.length > 1 && (
+        <nav class="flex flex-wrap items-center gap-2" aria-label="Switch year">
+          <span class="heading-3">Year:</span>
+          {yearLinks.map((item) => (
+            <a
+              href={item.href}
+              class="pill-link"
+              aria-current={item.current ? "page" : undefined}
+            >
+              {item.year}
+              {item.current ? " (current)" : ""}
+            </a>
+          ))}
+        </nav>
+      )
+    }
+    <ProjectSearch totalProjects={totalProjects} />
+  </div>
+
+  <!-- {
+    moduleNavItems.length > 0 && (
+      <ul class="my-6 flex flex-wrap gap-2">
+        {moduleNavItems.map((item) => (
+          <li class="pill">
+            <a href={item.href} class="pill-link">
+              {item.label}
+            </a>
+          </li>
+        ))}
+      </ul>
+    )
+  } -->
+
+  <br />
+  {
+    groupedProjects.map(([moduleName, moduleProjects], index) => {
+      const sectionId = toSectionId(moduleName);
+      const isLast = index === groupedProjects.length - 1;
+      return (
+        <Accordion title={moduleName} open={isLast} noCutoff={true}>
+          <div
+            class="mt-6 grid lg:grid-cols-3"
+            id={sectionId}
+            aria-labelledby={`${sectionId}-title`}
+          >
+            {moduleProjects.map((project) => {
+              const title = getProjectTitle(project);
+              const author = getProjectAuthor(project);
+              const primaryMedia = getPrimaryMediaEntry(project);
+              const thumbnailPath = primaryMedia
+                ? getThumbnailPath(primaryMedia.value)
+                : null;
+              const rawCredits =
+                project[
+                  "Credit (List out collaborators, tutorials, libraries, references, AI agents used)"
+                ];
+              const credits = typeof rawCredits === "string" ? rawCredits : "";
+              return (
+                <article
+                  class="card"
+                  key={project.slug}
+                  data-project-card
+                  data-credits={credits}
+                >
+                  <a
+                    href={`/work/${project.slug}`}
+                    class="group block overflow-hidden"
+                  >
+                    {primaryMedia ? (
+                      primaryMedia.type === "video" ? (
+                        thumbnailPath ? (
+                          <img
+                            src={thumbnailPath}
+                            alt={primaryMedia.description || title}
+                            loading="lazy"
+                            decoding="async"
+                            class="aspect-video w-full object-cover"
+                            data-media-type="thumbnail"
+                          />
+                        ) : (
+                          <video
+                            data-media-src={primaryMedia.value}
+                            muted
+                            loop
+                            playsInline
+                            preload="none"
+                            class="aspect-video w-full object-cover"
+                            data-media-type="video"
+                          />
+                        )
+                      ) : (
+                        <img
+                          src={thumbnailPath || transparentPixel}
+                          data-media-src={
+                            thumbnailPath ? undefined : primaryMedia.value
+                          }
+                          alt={primaryMedia.description || title}
+                          loading="lazy"
+                          decoding="async"
+                          class="aspect-video w-full object-cover"
+                          data-media-type="image"
+                        />
+                      )
+                    ) : (
+                      <div class="flex aspect-video items-center justify-center bg-neutral-100 text-neutral-500">
+                        No media provided
+                      </div>
+                    )}
+                  </a>
+                  <div>
+                    <h3 class="mt-4 mb-2">
+                      <a
+                        class="text-base hover:underline"
+                        href={`/work/${project.slug}`}
+                      >
+                        {title}
+                      </a>
+                    </h3>
+                    <p>{author}</p>
+                  </div>
+                </article>
+              );
+            })}
+          </div>
+        </Accordion>
+      );
+    })
+  }
+</main>
+<Footer />
+
+<script>
+  const initArchiveEnhancements = () => {
+    const prefersReducedMotion = window.matchMedia(
+      "(prefers-reduced-motion: reduce)",
+    ).matches;
+
+    const lazyMediaElements = document.querySelectorAll("[data-media-src]");
+    const projectCards = document.querySelectorAll("[data-project-card]");
+
+    const loadMedia = (element) => {
+      if (element.dataset.loaded === "true") return;
+      const source = element.dataset.mediaSrc;
+      if (!source) return;
+
+      if (element.tagName === "IMG") {
+        element.src = source;
+      } else if (element.tagName === "VIDEO") {
+        element.src = source;
+        if (!element.dataset.playListenerAttached) {
+          element.addEventListener(
+            "loadeddata",
+            () => {
+              if (element.dataset.shouldPlay === "true") {
+                element.play().catch(() => {});
+              }
+            },
+            { once: true },
+          );
+          element.dataset.playListenerAttached = "true";
+        }
+        element.load();
+      }
+
+      element.dataset.loaded = "true";
+    };
+
+    const handleVideoPlayback = (element, shouldPlay) => {
+      if (element.tagName !== "VIDEO") return;
+      element.dataset.shouldPlay = shouldPlay ? "true" : "false";
+      if (prefersReducedMotion) {
+        element.pause();
+        return;
+      }
+      if (shouldPlay) {
+        element.play().catch(() => {
+          // Autoplay might be blocked; leave the video paused.
+        });
+      } else {
+        element.pause();
+      }
+    };
+
+    const hydrateMedia = () => {
+      lazyMediaElements.forEach((element) => loadMedia(element));
+    };
+
+    if ("IntersectionObserver" in window) {
+      const observer = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            const element = entry.target;
+            if (entry.isIntersecting) {
+              loadMedia(element);
+              handleVideoPlayback(element, true);
+              if (element.tagName === "IMG") {
+                observer.unobserve(element);
+              }
+            } else {
+              handleVideoPlayback(element, false);
+            }
+          });
+        },
+        { rootMargin: "200px 0px" },
+      );
+
+      lazyMediaElements.forEach((element) => {
+        observer.observe(element);
+      });
+
+      document.addEventListener(
+        "visibilitychange",
+        () => {
+          if (document.visibilityState === "hidden") {
+            lazyMediaElements.forEach((element) =>
+              handleVideoPlayback(element, false),
+            );
+          } else {
+            lazyMediaElements.forEach((element) => {
+              if (element.dataset.loaded === "true") {
+                const bounding = element.getBoundingClientRect();
+                const inView =
+                  bounding.top < window.innerHeight && bounding.bottom > 0;
+                if (inView) {
+                  handleVideoPlayback(element, true);
+                }
+              }
+            });
+          }
+        },
+        { passive: true },
+      );
+    } else {
+      hydrateMedia();
+    }
+
+    const hydrateCards = () => {
+      if (projectCards.length === 0) return;
+
+      projectCards.forEach((card) => {
+        card.style.opacity = "1";
+        card.style.transform = "none";
+      });
+    };
+
+    hydrateCards();
+  };
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", initArchiveEnhancements);
+  } else {
+    initArchiveEnhancements();
+  }
+</script>
+<script src="../scripts/glitter-cursor.js"></script>
+<script srct="../scripts/external-links.js"></script>

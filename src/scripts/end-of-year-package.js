@@ -7,7 +7,11 @@ const __dirname = path.dirname(__filename);
 
 const OUTPUT_DIR = path.resolve("./end-of-year-packages");
 const PUBLIC_IMAGES_DIR = path.resolve("./public/images");
-const DATA_FILE = path.resolve("./src/data/projects-with-local-images.json");
+const siteConfig = JSON.parse(
+  fs.readFileSync(path.resolve("./src/site.config.json"), "utf8"),
+);
+// Package the current year's data (matches what `npm run sync` wrote).
+const DATA_FILE = path.resolve(`./src/data/${siteConfig.year}.json`);
 
 function getInstructorFromSection(section) {
   if (!section) return "Other";

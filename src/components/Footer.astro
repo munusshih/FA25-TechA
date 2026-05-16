@@ -1,5 +1,22 @@
+---
+import { ARCHIVED_YEARS } from "@/lib/projects.js";
+---
+
 <footer class="cutoff py-[var(--margin)] text-pretty">
   <h2 class="heading-3 !leading-relaxed text-balance">
     &copy; {new Date().getFullYear()} Fall Technology Studio A. All rights reserved.
   </h2>
+  {
+    ARCHIVED_YEARS.length > 0 && (
+      <nav class="heading-3 !leading-relaxed" aria-label="Past year archives">
+        Archive:{" "}
+        {ARCHIVED_YEARS.map((year, index) => (
+          <>
+            {index > 0 && " · "}
+            <a href={`/${year}`}>{year}</a>
+          </>
+        ))}
+      </nav>
+    )
+  }
 </footer>
