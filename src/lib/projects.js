@@ -22,9 +22,9 @@ export const ARCHIVED_YEARS = [...(siteConfig.archivedYears ?? [])].sort(
 export const getProjectYear = (project) => project.__year;
 
 export const MODULE_ORDER = [
-  "Project 1: Flexible Manifesto",
+  "Project 1: Creative Cryptography",
   "Project 2: Data Sculpture",
-  "Project 3: Community Protocol",
+  "Project 3: Shared Signal Party",
 ];
 
 export const PROJECT_TITLE_FIELD = "Your Project Name";

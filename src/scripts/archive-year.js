@@ -32,7 +32,9 @@ const year = Number(arg("year") ?? config.year);
 const isCurrentYear = year === config.year;
 const newSheetUrl = arg("sheet");
 
-console.log(`\n📦 Archiving ${config.season ?? "Fall"} ${year} as frozen HTML...\n`);
+console.log(
+  `\n📦 Archiving ${config.season ?? "Fall"} ${year} as frozen HTML...\n`,
+);
 
 // 1. Build (the live homepage is the year being archived).
 if (has("no-build")) {
@@ -48,11 +50,10 @@ if (has("no-build")) {
     // Playwright; the pages are still written. Validate below instead.
   }
   const distIndex = path.join(ROOT, "dist/index.html");
-  if (
-    !fs.existsSync(distIndex) ||
-    fs.statSync(distIndex).mtimeMs <= before
-  ) {
-    console.error("❌ Build did not produce a fresh dist/index.html. Aborting.");
+  if (!fs.existsSync(distIndex) || fs.statSync(distIndex).mtimeMs <= before) {
+    console.error(
+      "❌ Build did not produce a fresh dist/index.html. Aborting.",
+    );
     process.exit(1);
   }
 }
@@ -87,10 +88,26 @@ html = rewrite(html).replace(
   /(<link rel="canonical" href="https?:\/\/[^"]+?)\/(")/,
   `$1/${year}/$2`,
 );
+// A frozen homepage still needs a clear route back to the live course site.
+const liveYear = isCurrentYear && !has("no-advance") ? year + 1 : config.year;
+const workArchiveItem =
+  /(<li class="pill">\s*<a class="pill-link" href="\/work">Work Archive<\/a>\s*<\/li>)/;
+if (!workArchiveItem.test(html)) {
+  console.error(
+    "❌ Could not find the Work Archive navigation item. Aborting.",
+  );
+  process.exit(1);
+}
+html = html.replace(
+  workArchiveItem,
+  `$1 <li class="pill"><a class="pill-link" href="/">Current ${liveYear}</a></li>`,
+);
 fs.writeFileSync(path.join(outDir, "index.html"), html);
 
 const size = execSync(`du -sh "${outDir}"`).toString().split("\t")[0];
-console.log(`• Froze homepage -> public/${year}/ (${size}, served at /${year})`);
+console.log(
+  `• Froze homepage -> public/${year}/ (${size}, served at /${year})`,
+);
 
 // 3. Remove stale artifacts from earlier (non-snapshot) approaches.
 for (const stale of [
@@ -120,8 +137,12 @@ console.log(`\n✅ ${year} frozen at /${year}.`);
 if (isCurrentYear && !has("no-advance")) {
   console.log(`\nNext, for ${nextConfig.year}:`);
   if (!newSheetUrl)
-    console.log(`  1. Set "sheetUrl" in src/site.config.json to the ${nextConfig.year} sheet`);
+    console.log(
+      `  1. Set "sheetUrl" in src/site.config.json to the ${nextConfig.year} sheet`,
+    );
   console.log(`  ${newSheetUrl ? 1 : 2}. npm run sync`);
-  console.log(`  ${newSheetUrl ? 2 : 3}. edit homepage/styles for ${nextConfig.year}, then npm run dev`);
+  console.log(
+    `  ${newSheetUrl ? 2 : 3}. edit homepage/styles for ${nextConfig.year}, then npm run dev`,
+  );
 }
 console.log("");

@@ -19,6 +19,7 @@ const allProjects = sketchProjects
     if (!primaryMedia || !primaryMedia.value) return null;
     return {
       url: primaryMedia.value,
+      type: primaryMedia.type === "video" ? "video" : "image",
       name: getProjectAuthor(project),
       title: getProjectTitle(project),
       slug: project.slug,
@@ -26,28 +27,50 @@ const allProjects = sketchProjects
   })
   .filter(Boolean);
 
-const shuffledProjects = allProjects.sort(() => Math.random() - 0.5);
-
-const imageUrls = shuffledProjects.map((p) => p.url);
-const imageNames = shuffledProjects.map((p) => p.name);
-const projectTitles = shuffledProjects.map((p) => p.title);
-const projectSlugs = shuffledProjects.map((p) => p.slug);
+const initialProject = allProjects[0];
 ---
 
-<div class="sketch-wrapper ridge-border cutoff">
-  <img id="image-element" class="image fade" src="" alt="" />
+<div
+  id="student-work-banner"
+  class="sketch-wrapper ridge-border cutoff"
+  aria-label="Featured student work"
+>
+  <div id="banner-media" class="sketch-media">
+    {
+      initialProject?.type === "video" ? (
+        <video
+          src={initialProject.url}
+          aria-label={`${initialProject.title} by ${initialProject.name}`}
+          autoplay
+          loop
+          muted
+          playsinline
+          preload="metadata"
+        />
+      ) : initialProject ? (
+        <img
+          src={initialProject.url}
+          alt={`${initialProject.title} by ${initialProject.name}`}
+          decoding="async"
+        />
+      ) : null
+    }
+  </div>
 </div>
-<div id="student-name" class="student-name fade cutoff">
-  <a id="project-link" href="#"></a>
+<div id="student-name" class="student-name cutoff">
+  <a
+    id="project-link"
+    href={initialProject ? `/work/${initialProject.slug}/` : "/work"}
+    >{
+      initialProject
+        ? `${initialProject.title}, ${initialProject.name}`
+        : "View student work"
+    }</a
+  >
 </div>
 
-<script define:vars={{ imageUrls, imageNames, projectTitles, projectSlugs }}>
-  /* eslint-disable no-undef */
-  const images = imageUrls;
-  const names = imageNames;
-  const titles = projectTitles;
-  const slugs = projectSlugs;
-  /* eslint-enable no-undef */
+<script define:vars={{ bannerProjects: allProjects }}>
+  const projects = bannerProjects;
 
   function shuffleArray(array) {
     const shuffled = [...array];
@@ -58,64 +81,175 @@ const projectSlugs = shuffledProjects.map((p) => p.slug);
     return shuffled;
   }
 
-  let allIndices = Array.from({ length: images.length }, (_, i) => i);
-  let shuffledIndices = shuffleArray(allIndices);
-  let currentIndex = 0;
+  function createMedia(project) {
+    return new Promise((resolve, reject) => {
+      if (!project) {
+        reject(new Error("Missing student project"));
+        return;
+      }
 
-  function changeContent() {
-    const imgElement = document.getElementById("image-element");
+      const timeout = window.setTimeout(
+        () => reject(new Error("Student media timed out")),
+        10000,
+      );
+      const loaded = (media) => {
+        window.clearTimeout(timeout);
+        resolve(media);
+      };
+      const failed = (error) => {
+        window.clearTimeout(timeout);
+        reject(error);
+      };
+
+      if (project.type === "video") {
+        const video = document.createElement("video");
+        video.muted = true;
+        video.loop = true;
+        video.autoplay = true;
+        video.playsInline = true;
+        video.preload = "auto";
+        video.setAttribute("aria-label", `${project.title} by ${project.name}`);
+        video.addEventListener("loadeddata", () => loaded(video), {
+          once: true,
+        });
+        video.addEventListener("error", failed, { once: true });
+        video.src = project.url;
+        video.load();
+        return;
+      }
+
+      const image = new Image();
+      image.decoding = "async";
+      image.alt = `${project.title} by ${project.name}`;
+      image.addEventListener(
+        "load",
+        async () => {
+          try {
+            await image.decode();
+          } catch {
+            // A loaded image is still safe to display if decode() is rejected.
+          }
+          loaded(image);
+        },
+        { once: true },
+      );
+      image.addEventListener("error", failed, { once: true });
+      image.src = project.url;
+    });
+  }
+
+  function setupBanner() {
+    const banner = document.getElementById("student-work-banner");
+    const mediaContainer = document.getElementById("banner-media");
     const nameElement = document.getElementById("student-name");
     const linkElement = document.getElementById("project-link");
 
-    if (!imgElement || !nameElement || !linkElement) return;
+    if (
+      !banner ||
+      !mediaContainer ||
+      !nameElement ||
+      !linkElement ||
+      projects.length < 2
+    ) {
+      return;
+    }
 
-    imgElement.classList.add("fade-out");
-    nameElement.classList.add("fade-out");
+    const allIndices = Array.from({ length: projects.length }, (_, i) => i);
+    let currentProjectIndex = 0;
+    let queue = shuffleArray(allIndices.filter((index) => index !== 0));
+    let timer;
+    let isLoading = false;
+    let isPaused = false;
 
-    setTimeout(() => {
-      const imageIndex = shuffledIndices[currentIndex];
+    const refillQueue = () => {
+      queue = shuffleArray(
+        allIndices.filter((index) => index !== currentProjectIndex),
+      );
+    };
 
-      // Create a new image to test if it loads
-      const testImg = new Image();
-      testImg.onload = () => {
-        // Image loaded successfully
-        imgElement.src = images[imageIndex];
-        imgElement.alt = names[imageIndex];
-
-        linkElement.href = `/work/${slugs[imageIndex]}/`;
-        linkElement.textContent = `${titles[imageIndex]}, ${names[imageIndex]}`;
-
-        currentIndex++;
-        if (currentIndex >= shuffledIndices.length) {
-          shuffledIndices = shuffleArray(allIndices);
-          currentIndex = 0;
+    const scheduleNext = (delay = 8000) => {
+      window.clearTimeout(timer);
+      timer = window.setTimeout(() => {
+        if (isPaused || document.hidden) {
+          scheduleNext(1000);
+          return;
         }
+        showNextProject();
+      }, delay);
+    };
 
-        imgElement.classList.remove("fade-out");
-        nameElement.classList.remove("fade-out");
-      };
+    const loadNextProject = async () => {
+      const attempted = new Set();
 
-      testImg.onerror = () => {
-        // Image failed to load, skip to next one
-        currentIndex++;
-        if (currentIndex >= shuffledIndices.length) {
-          shuffledIndices = shuffleArray(allIndices);
-          currentIndex = 0;
+      while (attempted.size < projects.length - 1) {
+        if (queue.length === 0) refillQueue();
+        const projectIndex = queue.shift();
+        if (projectIndex === undefined || attempted.has(projectIndex)) continue;
+        attempted.add(projectIndex);
+
+        const project = projects[projectIndex];
+        try {
+          const media = await createMedia(project);
+          return { media, project, projectIndex };
+        } catch {
+          // Skip unavailable media and keep looking for a valid project.
         }
+      }
 
-        // Immediately try next image
-        imgElement.classList.remove("fade-out");
-        nameElement.classList.remove("fade-out");
-        changeContent();
-      };
+      return null;
+    };
 
-      testImg.src = images[imageIndex];
-    }, 1000);
+    async function showNextProject() {
+      if (isLoading) return;
+      isLoading = true;
+
+      const next = await loadNextProject();
+      if (!next) {
+        isLoading = false;
+        scheduleNext();
+        return;
+      }
+
+      const outgoingVideo = mediaContainer.querySelector("video");
+      if (outgoingVideo) outgoingVideo.pause();
+
+      mediaContainer.replaceChildren(next.media);
+      linkElement.href = `/work/${next.project.slug}/`;
+      linkElement.textContent = `${next.project.title}, ${next.project.name}`;
+
+      if (next.media instanceof HTMLVideoElement) {
+        next.media.play().catch(() => {});
+      }
+
+      currentProjectIndex = next.projectIndex;
+      isLoading = false;
+      scheduleNext();
+    }
+
+    const pause = () => {
+      isPaused = true;
+    };
+    const resume = () => {
+      isPaused = false;
+      if (!isLoading) scheduleNext(1200);
+    };
+
+    [banner, nameElement].forEach((element) => {
+      element.addEventListener("pointerenter", pause);
+      element.addEventListener("pointerleave", resume);
+    });
+    nameElement.addEventListener("focusin", pause);
+    nameElement.addEventListener("focusout", resume);
+    document.addEventListener("visibilitychange", () => {
+      if (!document.hidden && !isLoading) scheduleNext(1200);
+    });
+
+    scheduleNext();
   }
 
-  // Load first image immediately
-  window.addEventListener("DOMContentLoaded", changeContent);
-
-  // Change every 4 seconds
-  setInterval(changeContent, 8000);
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", setupBanner, { once: true });
+  } else {
+    setupBanner();
+  }
 </script>
