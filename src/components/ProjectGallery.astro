@@ -14,17 +14,13 @@ import {
   getProjectAuthor,
   getPrimaryMediaEntry,
   getThumbnailPath,
-  ARCHIVED_YEARS,
+  CURRENT_YEAR,
 } from "@/lib/projects.js";
 
 // `projects` is the current year's list. `year`/`season` label it.
 const { projects, season, year } = Astro.props;
 
-// Year switcher: current year (this page) + each archived year's site.
-const yearLinks = [
-  { year, href: "/work", current: true },
-  ...ARCHIVED_YEARS.map((y) => ({ year: y, href: `/${y}`, current: false })),
-];
+const homepageHref = year === CURRENT_YEAR ? "/" : `/${year}/`;
 
 const groupedProjects = groupProjectsByModule(projects);
 const totalProjects = projects.length;
@@ -39,14 +35,9 @@ const toSectionId = (value) =>
     .replace(/[^a-z0-9]+/g, "-")
     .replace(/(^-|-$)/g, "")
     .replace(/-{2,}/g, "-");
-
-const moduleNavItems = groupedProjects.map(([moduleName]) => ({
-  label: moduleName,
-  href: `#${toSectionId(moduleName)}`,
-}));
 ---
 
-<Layout>
+<Layout selectedYear={year} yearContext="work">
   <SkipToMain />
 
   <Header>
@@ -56,13 +47,13 @@ const moduleNavItems = groupedProjects.map(([moduleName]) => ({
     <div slot="nav" class="md:flex"></div>
     <div slot="mobile-meta" class="flex flex-row gap-4">
       <h2 data-header-scale>
-        <a href="/">Back to Homepage</a>
+        <a href={homepageHref}>Back to Homepage</a>
       </h2>
       <h2 data-header-scale>{year} {season}</h2>
     </div>
     <div slot="desktop-meta">
       <h2 data-header-scale>
-        <a href="/">Back to Homepage</a>
+        <a href={homepageHref}>Back to Homepage</a>
       </h2>
       <h2 data-header-scale>{season} {year}</h2>
     </div>
@@ -70,39 +61,8 @@ const moduleNavItems = groupedProjects.map(([moduleName]) => ({
 </Layout>
 <main class="cutoff mx-auto pt-[20rem] pb-24 md:pt-[22%]">
   <div class="mb-20 flex flex-col gap-8">
-    {
-      yearLinks.length > 1 && (
-        <nav class="flex flex-wrap items-center gap-2" aria-label="Switch year">
-          <span class="heading-3">Year:</span>
-          {yearLinks.map((item) => (
-            <a
-              href={item.href}
-              class="pill-link"
-              aria-current={item.current ? "page" : undefined}
-            >
-              {item.year}
-              {item.current ? " (current)" : ""}
-            </a>
-          ))}
-        </nav>
-      )
-    }
     <ProjectSearch totalProjects={totalProjects} />
   </div>
-
-  <!-- {
-    moduleNavItems.length > 0 && (
-      <ul class="my-6 flex flex-wrap gap-2">
-        {moduleNavItems.map((item) => (
-          <li class="pill">
-            <a href={item.href} class="pill-link">
-              {item.label}
-            </a>
-          </li>
-        ))}
-      </ul>
-    )
-  } -->
 
   <br />
   {

@@ -14,11 +14,12 @@
  *   3. Removes any stale src/pages/<year>.astro + src/styles/archive/<year>/
  *      from earlier approaches.
  *   4. Adds <year> to archivedYears and (unless --no-advance) bumps
- *      `year` in site.config.json. Footer + /work switcher update auto.
+ *      `year` in site.config.json, then refreshes every frozen switcher.
  */
 import fs from "fs";
 import path from "path";
 import { execSync } from "child_process";
+import { syncFrozenYearSwitchers } from "./year-switcher-snapshots.js";
 
 const ROOT = process.cwd();
 const CONFIG_PATH = path.join(ROOT, "src/site.config.json");
@@ -88,20 +89,6 @@ html = rewrite(html).replace(
   /(<link rel="canonical" href="https?:\/\/[^"]+?)\/(")/,
   `$1/${year}/$2`,
 );
-// A frozen homepage still needs a clear route back to the live course site.
-const liveYear = isCurrentYear && !has("no-advance") ? year + 1 : config.year;
-const workArchiveItem =
-  /(<li class="pill">\s*<a class="pill-link" href="\/work">Work Archive<\/a>\s*<\/li>)/;
-if (!workArchiveItem.test(html)) {
-  console.error(
-    "❌ Could not find the Work Archive navigation item. Aborting.",
-  );
-  process.exit(1);
-}
-html = html.replace(
-  workArchiveItem,
-  `$1 <li class="pill"><a class="pill-link" href="/">Current ${liveYear}</a></li>`,
-);
 fs.writeFileSync(path.join(outDir, "index.html"), html);
 
 const size = execSync(`du -sh "${outDir}"`).toString().split("\t")[0];
@@ -131,6 +118,15 @@ fs.writeFileSync(CONFIG_PATH, JSON.stringify(nextConfig, null, 2) + "\n");
 console.log(
   `• site.config.json: archivedYears=[${archivedYears.join(", ")}]` +
     (nextConfig.year !== config.year ? `, year=${nextConfig.year}` : ""),
+);
+
+const updatedSnapshots = syncFrozenYearSwitchers({
+  root: ROOT,
+  currentYear: nextConfig.year,
+  archivedYears,
+});
+console.log(
+  `• Refreshed year switchers: ${updatedSnapshots.join(", ") || "none"}`,
 );
 
 console.log(`\n✅ ${year} frozen at /${year}.`);

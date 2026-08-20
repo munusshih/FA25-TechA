@@ -1,6 +1,9 @@
 ---
 import { SEO } from "astro-seo";
 import Analytics from "@vercel/analytics/astro";
+import YearSwitcher from "../components/YearSwitcher.astro";
+
+const { selectedYear, yearContext = "site" } = Astro.props;
 ---
 
 <!doctype html>
@@ -20,9 +23,20 @@ import Analytics from "@vercel/analytics/astro";
       rel="stylesheet"
     />
     <link rel="icon" href="./favicon.svg" />
+    <link
+      rel="stylesheet"
+      href="/year-switcher.css"
+      data-year-switcher-asset="styles"
+    />
+    <script
+      is:inline
+      src="/year-switcher.js"
+      defer
+      data-year-switcher-asset="script"></script>
     <title>Technology A — Pratt Grad ComD</title>
   </head>
   <body>
     <slot />
+    <YearSwitcher selectedYear={selectedYear} context={yearContext} />
   </body><Analytics />
 </html>

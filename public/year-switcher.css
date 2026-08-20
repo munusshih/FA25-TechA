@@ -1,0 +1,67 @@
+.year-switcher {
+  position: fixed;
+  right: max(var(--margin, 1rem), env(safe-area-inset-right));
+  bottom: max(var(--margin, 1rem), env(safe-area-inset-bottom));
+  z-index: 60;
+  box-sizing: border-box;
+  border: 1px solid #222;
+  background: #efefef;
+  padding: 0;
+  color: #111;
+  font-size: 1rem;
+  line-height: 1;
+  font-family: "Boldonse", system-ui;
+}
+
+.year-switcher__control {
+  display: block;
+  position: relative;
+}
+
+.year-switcher__label {
+  position: absolute;
+  clip-path: inset(50%);
+  margin: -1px;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.year-switcher__control::after {
+  position: absolute;
+  top: 50%;
+  right: 0.8rem;
+  transform: translateY(-35%);
+  border-top: 0.55rem solid currentColor;
+  border-right: 0.35rem solid transparent;
+  border-left: 0.35rem solid transparent;
+  width: 0;
+  height: 0;
+  pointer-events: none;
+  content: "";
+}
+
+.year-switcher__select {
+  appearance: none;
+  cursor: pointer;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  padding: 0.7rem 2.5rem 0.7rem 0.8rem;
+  min-height: 3rem;
+  color: inherit;
+  font: inherit;
+  -webkit-appearance: none;
+}
+
+.year-switcher__select:focus-visible {
+  outline: 2px solid currentColor;
+  outline-offset: 2px;
+}
+
+@media print {
+  .year-switcher {
+    display: none;
+  }
+}

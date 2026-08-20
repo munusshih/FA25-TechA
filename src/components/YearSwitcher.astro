@@ -1,0 +1,31 @@
+---
+import siteConfig from "../site.config.json";
+import { getYearOptions } from "../lib/year-navigation.js";
+
+const currentYear = siteConfig.year;
+const archivedYears = siteConfig.archivedYears ?? [];
+const { selectedYear = currentYear, context = "site" } = Astro.props;
+const selectId = `year-switcher-${context}-${selectedYear}`;
+const options = getYearOptions({ currentYear, archivedYears, context });
+---
+
+<div class="year-switcher" data-year-switcher>
+  <label class="year-switcher__control">
+    <span class="year-switcher__label">Select year</span>
+    <select
+      class="year-switcher__select"
+      id={selectId}
+      name="year"
+      aria-label="Switch course year"
+      data-year-switcher-select
+    >
+      {
+        options.map(({ year, href, label }) => (
+          <option value={href} selected={year === selectedYear}>
+            {label}
+          </option>
+        ))
+      }
+    </select>
+  </label>
+</div>

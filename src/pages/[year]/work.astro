@@ -1,0 +1,20 @@
+---
+import ProjectGallery from "@/components/ProjectGallery.astro";
+import "@/styles/global.css";
+import { ARCHIVED_YEARS, projectsForYear, SITE } from "@/lib/projects.js";
+
+export function getStaticPaths() {
+  return ARCHIVED_YEARS.map((year) => ({
+    params: { year: String(year) },
+    props: { year },
+  }));
+}
+
+const { year } = Astro.props;
+---
+
+<ProjectGallery
+  projects={projectsForYear(year)}
+  season={SITE.season}
+  year={year}
+/>

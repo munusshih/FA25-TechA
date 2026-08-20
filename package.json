@@ -9,10 +9,12 @@
     "pull:images": "node ./src/scripts/download-images.js",
     "generate:thumbnails": "node ./src/scripts/generate-thumbnails.js",
     "sync": "node ./src/scripts/sync-data.js",
+    "sync:year-switchers": "node ./src/scripts/year-switcher-snapshots.js",
+    "verify:year-navigation": "node ./src/scripts/verify-year-navigation.js",
     "archive-year": "node ./src/scripts/archive-year.js",
     "end-of-year-pkg": "npm run sync && node ./src/scripts/end-of-year-package.js",
     "dev": "astro dev",
-    "build": "astro build",
+    "build": "astro build && npm run verify:year-navigation",
     "preview": "astro preview",
     "astro": "astro"
   },
