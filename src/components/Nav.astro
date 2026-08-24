@@ -3,7 +3,9 @@
   <button
     id="menu-toggle"
     class="menu-toggle-button"
-    aria-label="Toggle Menu"
+    type="button"
+    aria-label="Open menu"
+    aria-controls="menu"
     aria-expanded="false"
   >
     <h3>Menu</h3>
@@ -12,7 +14,9 @@
   <!-- Menu Items -->
   <ul id="menu" class="menu-list md:block" tabindex="-1">
     <li class="menu-toggle-button">
-      <button id="menu-close" aria-label="Close Menu"> <h3>Close</h3></button>
+      <button id="menu-close" type="button" aria-label="Close menu">
+        <h3>Close</h3>
+      </button>
     </li>
     <!-- <li class="pill">
       <a class="pill-link" href="#course-description">Course Description</a>
@@ -49,6 +53,7 @@
   function openMenu() {
     menu.classList.add("open");
     toggleBtn.setAttribute("aria-expanded", "true");
+    closeBtn.focus({ preventScroll: true });
   }
 
   function closeMenu() {
@@ -64,7 +69,17 @@
     }
   });
 
-  closeBtn.addEventListener("click", closeMenu);
+  closeBtn.addEventListener("click", () => {
+    closeMenu();
+    toggleBtn.focus();
+  });
+
+  document.addEventListener("keydown", (event) => {
+    if (event.key === "Escape" && menu.classList.contains("open")) {
+      closeMenu();
+      toggleBtn.focus();
+    }
+  });
 
   // Close when clicking outside
   document.addEventListener("click", (e) => {

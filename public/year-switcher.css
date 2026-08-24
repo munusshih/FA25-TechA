@@ -3,6 +3,9 @@
   right: max(var(--margin, 1rem), env(safe-area-inset-right));
   bottom: max(var(--margin, 1rem), env(safe-area-inset-bottom));
   z-index: 60;
+  transition:
+    opacity 180ms ease,
+    visibility 180ms ease;
   box-sizing: border-box;
   border: 1px solid #222;
   background: #efefef;
@@ -11,6 +14,12 @@
   font-size: 1rem;
   line-height: 1;
   font-family: "Boldonse", system-ui;
+}
+
+html:has(.menu-list.open) .year-switcher {
+  visibility: hidden;
+  opacity: 0;
+  pointer-events: none;
 }
 
 .year-switcher__control {

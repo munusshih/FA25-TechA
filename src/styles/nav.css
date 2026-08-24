@@ -12,7 +12,7 @@
   background-image: linear-gradient(to top, transparent);
   width: auto;
   height: auto;
-  @apply p-0 md:mt-4;
+  @apply p-0 lg:mt-4;
 }
 /* Toggle button */
 
@@ -44,8 +44,9 @@
   height: auto;
   font-weight: bold;
   font-size: 1rem;
+  line-height: 1;
 
-  @apply block w-max rounded-full border px-2 py-2 lg:hidden;
+  @apply w-max rounded-full border px-3 py-2 lg:hidden;
 }
 
 /* Large screen override */
@@ -97,28 +98,43 @@ header {
     url("data:image/svg+xml,%3Csvg viewBox='0 0 8000 8000' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
 }
 
-@media (max-width: 1024px) {
+@media (max-width: 1023px) {
   #menu {
     display: flex;
     position: fixed;
-    top: 0;
-    left: 0;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    gap: 1rem;
+    gap: clamp(0.75rem, 2.5vh, 1.25rem);
     transform: translateX(100%);
+    visibility: hidden;
     z-index: 50;
-    transition: transform 0.5s ease-in-out;
+    transition:
+      transform 0.45s ease-in-out,
+      visibility 0s linear 0.45s;
+    margin: 0;
+    inset: 0;
     border-radius: 0;
     background: black;
-    padding: 1rem;
-    width: 100%;
+    padding: max(1rem, env(safe-area-inset-top))
+      max(1rem, env(safe-area-inset-right))
+      max(1rem, env(safe-area-inset-bottom))
+      max(1rem, env(safe-area-inset-left));
+    width: 100vw;
     height: 100dvh;
+    overscroll-behavior: contain;
   }
 
   #menu.open {
     transform: translateX(0%);
+    visibility: visible;
+    transition-delay: 0s;
+  }
+
+  #menu > .menu-toggle-button {
+    position: absolute;
+    top: max(1rem, env(safe-area-inset-top));
+    right: max(1rem, env(safe-area-inset-right));
   }
 
   #menu .menu-toggle-button,
@@ -130,11 +146,18 @@ header {
   }
 
   .pill {
-    font-size: 3rem;
+    width: min(100%, 32rem);
+    font-size: clamp(2.25rem, 10vw, 3rem);
+    line-height: 1.05;
   }
 
   #menu:not(.open) {
     pointer-events: none;
+  }
+
+  html:has(#menu.open),
+  html:has(#menu.open) body {
+    overflow: hidden;
   }
 }
 
