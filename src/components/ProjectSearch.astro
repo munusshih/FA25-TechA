@@ -14,6 +14,7 @@ const { totalProjects = 0 } = Astro.props;
 </div>
 
 <script define:vars={{ totalProjects }}>
+  /* global totalProjects */
   // Stricter fuzzy search implementation
   function fuzzyMatch(query, text) {
     const lowerQuery = query.toLowerCase();

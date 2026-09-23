@@ -3,6 +3,7 @@ import fs from "fs";
 import path from "path";
 import { execFile } from "child_process";
 import { promisify } from "util";
+import { fetchOpenSheetRows } from "./opensheet.js";
 
 const siteConfig = JSON.parse(
   fs.readFileSync(path.resolve("./src/site.config.json"), "utf8"),
@@ -151,14 +152,22 @@ async function convertMovToMp4(inputPath, outputPath) {
 
 async function convertHeicToJpg(inputPath, outputPath) {
   try {
-    await execFileAsync("sips", [
-      "-s",
-      "format",
-      "jpeg",
-      inputPath,
-      "--out",
-      outputPath,
-    ]);
+    if (process.platform === "darwin") {
+      await execFileAsync("sips", [
+        "-s",
+        "format",
+        "jpeg",
+        inputPath,
+        "--out",
+        outputPath,
+      ]);
+    } else {
+      try {
+        await execFileAsync("magick", [inputPath, outputPath]);
+      } catch {
+        await execFileAsync("convert", [inputPath, outputPath]);
+      }
+    }
     fs.unlinkSync(inputPath);
     console.log(
       `Converted ${path.basename(inputPath)} → ${path.basename(outputPath)}`,
@@ -259,9 +268,11 @@ async function downloadImage(url, savePath) {
 }
 
 function extractDriveFileId(url) {
-  const regex = /id=([^&]+)/;
-  const match = url.match(regex);
-  return match ? match[1] : null;
+  if (typeof url !== "string") return null;
+  const queryMatch = url.match(/[?&]id=([^&]+)/);
+  if (queryMatch) return queryMatch[1];
+  const pathMatch = url.match(/\/file\/d\/([^/]+)/);
+  return pathMatch ? pathMatch[1] : null;
 }
 
 function getDirectDriveUrl(url) {
@@ -451,7 +462,9 @@ async function processProject(project) {
         }
       }
 
-      const finalTargetExt = resolveTargetExtension(effectiveExt);
+      const finalTargetExt =
+        extensionFromFileName(finalFileName) ||
+        resolveTargetExtension(effectiveExt);
       targetExt = finalTargetExt === "" ? targetExt : finalTargetExt;
 
       if (
@@ -475,14 +488,16 @@ async function processProject(project) {
 
 async function main() {
   try {
-    const res = await fetch(OPEN_SHEET_URL);
-
-    if (!res.ok) {
-      throw new Error(`HTTP ${res.status}: ${res.statusText}`);
-    }
-
-    const projects = await res.json();
+    const projects = await fetchOpenSheetRows(fetch, OPEN_SHEET_URL);
     const totalProjects = projects.length;
+
+    if (totalProjects === 0) {
+      fs.writeFileSync(OUTPUT_JSON_PATH, "[]\n");
+      console.log(
+        "No project submissions found; wrote an empty current-year data file.",
+      );
+      return;
+    }
 
     const updatedProjects = new Array(totalProjects);
     let completedProjects = 0;

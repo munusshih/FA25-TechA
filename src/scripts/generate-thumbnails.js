@@ -19,20 +19,36 @@ const VIDEO_EXTENSIONS = new Set([".mp4", ".mov", ".m4v", ".webm"]);
  */
 async function generateImageThumbnail(inputPath, outputPath) {
   try {
-    // Use sips on macOS for better quality and speed
-    await execFileAsync("sips", [
-      "-Z",
-      THUMBNAIL_WIDTH.toString(),
-      "--setProperty",
-      "format",
-      "jpeg",
-      "--setProperty",
-      "formatOptions",
-      JPEG_QUALITY.toString(),
-      inputPath,
-      "--out",
-      outputPath,
-    ]);
+    if (process.platform === "darwin") {
+      await execFileAsync("sips", [
+        "-Z",
+        THUMBNAIL_WIDTH.toString(),
+        "--setProperty",
+        "format",
+        "jpeg",
+        "--setProperty",
+        "formatOptions",
+        JPEG_QUALITY.toString(),
+        inputPath,
+        "--out",
+        outputPath,
+      ]);
+    } else {
+      const args = [
+        inputPath,
+        "-auto-orient",
+        "-resize",
+        `${THUMBNAIL_WIDTH}x>`,
+        "-quality",
+        JPEG_QUALITY.toString(),
+        outputPath,
+      ];
+      try {
+        await execFileAsync("magick", args);
+      } catch {
+        await execFileAsync("convert", args);
+      }
+    }
     return true;
   } catch (err) {
     console.warn(

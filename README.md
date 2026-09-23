@@ -1,5 +1,18 @@
 # Astro Starter Kit: Basics
 
+## Project submissions
+
+The current project archive at `/work/` is sourced from the Google Form and
+response sheet configured in `src/site.config.json`. `npm run sync` pulls
+the current sheet, downloads uploaded media into `public/images`, generates
+thumbnails, and writes only the current year's records to
+`src/data/<year>.json`; archived years remain frozen.
+
+`.github/workflows/midnight-project-refresh.yml` runs this sync at 12:00 AM
+America/New_York every day, validates the static build, and commits changed
+submission data and media. The resulting push triggers the site's normal Vercel
+deployment.
+
 ```sh
 npm create astro@latest -- --template basics
 ```
