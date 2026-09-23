@@ -1,1 +1,27 @@
-[]
+[
+  {
+    "Timestamp": "9/22/2026 16:48:12",
+    "Email Address": "apelleti@pratt.edu",
+    "Your Name (First + Last Name)": "Ashlyn Pelletier",
+    "What is your section?": "02 Munus Shih",
+    "Which Module is this?": "Project 1: Creative Cryptography",
+    "Your Project Name": "Modular Mobile",
+    "Your Project Description (max 2000 characters)": "The absense of appreciation for our own viscera could be the cause of \natrocities around the world, but how do we stop looking at ourselves, \nour own flesh and blood with such distaste? I believe if we had a\n true kinship with our internals, we would be a more responsible society. \nThis mobile explores the concept of the visceral in the anthropocene, \nintertwined with the earth, and all of its inhabitants.   \n\nMade up of bioplastics made from agar and bacteria, \nfound objects, metals, and clay, the mobile itself acts as a \nscreen to expose visuals of the earth through a damaged lens. ",
+    "Is there a web or code component to your project?": "No",
+    "Link 1 Title": "",
+    "Link 1 URL": "",
+    "Link 2 Title": "",
+    "Link 2 URL": "",
+    "Link 3 Title": "",
+    "Link 3 URL": "",
+    "File 1": "/images/apelleti_pratt_edu/modular_mobile/file_1.bin",
+    "File 1 description": "Poster",
+    "File 2": "/images/apelleti_pratt_edu/modular_mobile/file_2.bin",
+    "File 2 description": "Structure",
+    "File 3": "/images/apelleti_pratt_edu/modular_mobile/file_3.bin",
+    "File 3 description": "Image of structure",
+    "Credit (List out collaborators, tutorials, libraries, references, AI agents used)": "Inspiration from Molly A Greene's work",
+    "I certify that this submission is my own work and adheres to the course's academic integrity and open source policy.": "Yes",
+    "Anyone's work inspired you at the open classroom?": "-"
+  }
+]
