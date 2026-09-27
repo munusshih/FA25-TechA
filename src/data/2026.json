@@ -48,5 +48,30 @@
     "Credit (List out collaborators, tutorials, libraries, references, AI agents used)": "Claude ",
     "I certify that this submission is my own work and adheres to the course's academic integrity and open source policy.": "Yes",
     "Anyone's work inspired you at the open classroom?": "annalise edwards maps were really interesting to look at"
+  },
+  {
+    "Timestamp": "9/26/2026 17:06:59",
+    "Email Address": "kchen343@pratt.edu",
+    "Your Name (First + Last Name)": "Kexin Chen",
+    "What is your section?": "02 Munus Shih",
+    "Which Module is this?": "Project 1: Creative Cryptography",
+    "Your Project Name": "Butterfly Dance",
+    "Your Project Description (max 2000 characters)": "Butterfly Dance explores how personal birthday information can be encrypted through cryptography and then transformed into visual work through visual rules and generative code. I really like butterflies, so I chose the butterfly as the main visual element. I divided the butterfly into five variables: upper wings, lower wings, body, antennae, and color, and used numerical codes to control these different visual features. The project began with a “birthday cryptography” system: each person’s birthday is converted into a set of numbers, and these numbers determine the different forms of the butterfly. As a result, each person can enter their birthday and generate a butterfly of their own.",
+    "Is there a web or code component to your project?": "Yes",
+    "Link 1 Title": "Birthday Butterfly Generator",
+    "Link 1 URL": "https://editor.p5js.org/kexinddddd/sketches/jylGLTlZ_",
+    "Link 2 Title": "Infinite Butterfly Growth",
+    "Link 2 URL": "https://editor.p5js.org/kexinddddd/sketches/kMxIuvO98",
+    "Link 3 Title": "",
+    "Link 3 URL": "",
+    "File 1": "/images/kchen343_pratt_edu/butterfly_dance/file_1.bin",
+    "File 1 description": "This video shows a butterfly generator in motion. The program randomizes the antennae, upper wings, lower wings, and color, creating a different butterfly each time within the same visual system.",
+    "File 2": "/images/kchen343_pratt_edu/butterfly_dance/file_2.bin",
+    "File 2 description": "This poster combines p5.js and Illustrator. I used p5.js to generate different butterfly forms, then added gradients, textures, patterns, and colors in Illustrator. The project explores how code controls form while Illustrator develops visual style and personality.",
+    "File 3": "/images/kchen343_pratt_edu/butterfly_dance/file_3.bin",
+    "File 3 description": "I used if and else if statements to change the appearance of a single variable. Different value ranges produce different upper-wing shapes, allowing one variable to control multiple visual outcomes.",
+    "Credit (List out collaborators, tutorials, libraries, references, AI agents used)": "youtube，p5js reference，class slides，Pinterest",
+    "I certify that this submission is my own work and adheres to the course's academic integrity and open source policy.": "Yes",
+    "Anyone's work inspired you at the open classroom?": "Yes. I got a lot of new inspiration from my classmates’ work during the open class. One student explored different vase forms, which I found visually very interesting. Another student visualized the different ingredients they used when making chai, which also left a strong impression on me. Some students used circles of different sizes to represent words of different lengths in a text, while others experimented with turning audio into visual images. These projects showed me that the same kind of information can be transformed and expressed through very different visual systems, and they gave me many new ideas."
   }
 ]
