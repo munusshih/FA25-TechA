@@ -282,6 +282,21 @@ const extractExtension = (value) => {
   return match ? `.${match[1]}` : "";
 };
 
+export const getDriveFileId = (value) => {
+  if (typeof value !== "string") return null;
+  const queryMatch = value.match(/[?&]id=([^&]+)/);
+  if (queryMatch) return queryMatch[1];
+  const pathMatch = value.match(/\/file\/d\/([^/]+)/);
+  return pathMatch ? pathMatch[1] : null;
+};
+
+export const getDriveThumbnailUrl = (value, size = "w1600") => {
+  const fileId = getDriveFileId(value);
+  return fileId
+    ? `https://drive.google.com/thumbnail?id=${encodeURIComponent(fileId)}&sz=${encodeURIComponent(size)}`
+    : null;
+};
+
 export const getAssetType = (value) => {
   if (typeof value !== "string") return "external";
   const trimmed = value.trim();
@@ -290,6 +305,7 @@ export const getAssetType = (value) => {
   if (IMAGE_EXTENSIONS.has(extension)) return "image";
   if (VIDEO_EXTENSIONS.has(extension)) return "video";
   if (trimmed.startsWith("/images/")) return "local";
+  if (getDriveFileId(trimmed)) return "drive";
   return "external";
 };
 

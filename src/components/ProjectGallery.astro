@@ -13,6 +13,7 @@ import {
   getProjectTitle,
   getProjectAuthor,
   getPrimaryMediaEntry,
+  getDriveThumbnailUrl,
   getThumbnailPath,
   CURRENT_YEAR,
   SITE,
@@ -97,6 +98,10 @@ const toSectionId = (value) =>
               const thumbnailPath = primaryMedia
                 ? getThumbnailPath(primaryMedia.value)
                 : null;
+              const driveThumbnail =
+                primaryMedia?.type === "drive"
+                  ? getDriveThumbnailUrl(primaryMedia.value)
+                  : null;
               const rawCredits =
                 project[
                   "Credit (List out collaborators, tutorials, libraries, references, AI agents used)"
@@ -135,7 +140,17 @@ const toSectionId = (value) =>
                             data-media-type="video"
                           />
                         )
-                      ) : (
+                      ) : primaryMedia.type === "drive" && driveThumbnail ? (
+                        <img
+                          src={driveThumbnail}
+                          alt={primaryMedia.description || title}
+                          loading="lazy"
+                          decoding="async"
+                          class="aspect-video w-full object-cover"
+                          data-media-type="drive-thumbnail"
+                        />
+                      ) : primaryMedia.type === "image" ||
+                        primaryMedia.type === "local" ? (
                         <img
                           src={thumbnailPath || transparentPixel}
                           data-media-src={
@@ -147,6 +162,10 @@ const toSectionId = (value) =>
                           class="aspect-video w-full object-cover"
                           data-media-type="image"
                         />
+                      ) : (
+                        <div class="flex aspect-video items-center justify-center bg-neutral-100 text-neutral-500">
+                          Media link available
+                        </div>
                       )
                     ) : (
                       <div class="flex aspect-video items-center justify-center bg-neutral-100 text-neutral-500">

@@ -18,6 +18,7 @@ import {
   P5_FALLBACK_FIELD,
   DESCRIPTION_FIELD,
   DESCRIPTION_FALLBACK_FIELD,
+  getDriveThumbnailUrl,
 } from "@/lib/projects.js";
 
 export function getStaticPaths() {
@@ -129,6 +130,18 @@ const nextProjectAuthor = nextProject ? getProjectAuthor(nextProject) : null;
                 preload="metadata"
                 class="w-full"
               />
+            ) : primaryMediaEntry.type === "drive" ? (
+              <a
+                href={primaryMediaEntry.value}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <img
+                  src={getDriveThumbnailUrl(primaryMediaEntry.value)}
+                  alt={primaryMediaEntry.description || primaryMediaEntry.label}
+                  class="w-full"
+                />
+              </a>
             ) : primaryMediaEntry.type === "image" ||
               primaryMediaEntry.type === "local" ? (
               <img
@@ -253,6 +266,14 @@ const nextProjectAuthor = nextProject ? getProjectAuthor(nextProject) : null;
                       preload="metadata"
                       class="w-full rounded border border-neutral-200"
                     />
+                  ) : type === "drive" ? (
+                    <a href={value} target="_blank" rel="noopener noreferrer">
+                      <img
+                        src={getDriveThumbnailUrl(value)}
+                        alt={fileDescription || label}
+                        class="w-full rounded border border-neutral-200"
+                      />
+                    </a>
                   ) : type === "image" || type === "local" ? (
                     <img
                       src={value}

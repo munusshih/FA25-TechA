@@ -5,6 +5,7 @@ import {
   getProjectAuthor,
   getProjectTitle,
   getPrimaryMediaEntry,
+  getDriveThumbnailUrl,
 } from "@/lib/projects.js";
 
 // Show the current year on the homepage; fall back to all years
@@ -16,9 +17,17 @@ const sketchProjects = currentYearProjects.length
 const allProjects = sketchProjects
   .map((project) => {
     const primaryMedia = getPrimaryMediaEntry(project);
-    if (!primaryMedia || !primaryMedia.value) return null;
+    if (
+      !primaryMedia ||
+      !primaryMedia.value ||
+      !["image", "video", "local", "drive"].includes(primaryMedia.type)
+    )
+      return null;
     return {
-      url: primaryMedia.value,
+      url:
+        primaryMedia.type === "drive"
+          ? getDriveThumbnailUrl(primaryMedia.value)
+          : primaryMedia.value,
       type: primaryMedia.type === "video" ? "video" : "image",
       name: getProjectAuthor(project),
       title: getProjectTitle(project),

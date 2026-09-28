@@ -115,6 +115,58 @@ const resolveTargetExtension = (extension) => {
   return lower;
 };
 
+function detectExtensionFromBuffer(buffer) {
+  const head = buffer.subarray(0, 128);
+  if (head[0] === 0xff && head[1] === 0xd8) return "jpg";
+  if (
+    head
+      .subarray(0, 8)
+      .equals(Buffer.from([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a]))
+  )
+    return "png";
+  if (head.subarray(0, 3).toString("ascii") === "GIF") return "gif";
+  if (
+    head.subarray(0, 4).toString("ascii") === "RIFF" &&
+    head.subarray(8, 12).toString("ascii") === "WEBP"
+  )
+    return "webp";
+  if (head.subarray(0, 4).toString("ascii") === "%PDF") return "pdf";
+  if (head[0] === 0x50 && head[1] === 0x4b) return "zip";
+
+  const text = head.toString("utf8").trimStart().toLowerCase();
+  if (text.startsWith("<!doctype html") || text.startsWith("<html"))
+    return "html";
+  if (
+    text.startsWith("<svg") ||
+    (text.startsWith("<?xml") && text.includes("<svg"))
+  )
+    return "svg";
+
+  if (head.subarray(4, 8).toString("ascii") === "ftyp") {
+    const brand = head.subarray(8, 12).toString("ascii").toLowerCase();
+    if (
+      ["heic", "heix", "hevc", "heim", "heis", "mif1", "msf1"].includes(brand)
+    )
+      return "heic";
+    if (brand.trim() === "qt") return "mov";
+    return "mp4";
+  }
+
+  return "";
+}
+
+function detectExtensionFromFile(filePath) {
+  try {
+    const fd = fs.openSync(filePath, "r");
+    const buffer = Buffer.alloc(128);
+    const length = fs.readSync(fd, buffer, 0, buffer.length, 0);
+    fs.closeSync(fd);
+    return detectExtensionFromBuffer(buffer.subarray(0, length));
+  } catch {
+    return "";
+  }
+}
+
 async function convertMovToMp4(inputPath, outputPath) {
   try {
     await execFileAsync("ffmpeg", [
@@ -252,19 +304,46 @@ const convertHdrToSdr = async (inputPath, outputPath) => {
 };
 
 async function downloadImage(url, savePath) {
-  const res = await fetch(url);
-  if (!res.ok) {
-    console.error(`Failed to download ${url}: ${res.statusText}`);
-    return { success: false, contentType: "", contentDisposition: "" };
+  const maxAttempts = 3;
+
+  for (let attempt = 1; attempt <= maxAttempts; attempt += 1) {
+    try {
+      const res = await fetch(url);
+      if (!res.ok) {
+        throw new Error(`${res.status} ${res.statusText}`);
+      }
+
+      const buffer = Buffer.from(await res.arrayBuffer());
+      const contentType = res.headers.get("content-type") || "";
+      const detectedExtension = detectExtensionFromBuffer(buffer);
+      const isHtml =
+        detectedExtension === "html" || contentType.includes("text/html");
+
+      if (!isHtml) {
+        fs.writeFileSync(savePath, buffer);
+        console.log(`Saved asset to ${savePath}`);
+        return {
+          success: true,
+          contentType,
+          contentDisposition: res.headers.get("content-disposition") || "",
+          detectedExtension,
+        };
+      }
+
+      if (attempt === maxAttempts) {
+        throw new Error("Drive returned an HTML sign-in page");
+      }
+    } catch (err) {
+      if (attempt === maxAttempts) {
+        console.error(`Failed to download ${url}: ${err.message}`);
+        break;
+      }
+    }
+
+    await new Promise((resolve) => setTimeout(resolve, 750 * attempt));
   }
-  const buffer = Buffer.from(await res.arrayBuffer());
-  fs.writeFileSync(savePath, buffer);
-  console.log(`Saved asset to ${savePath}`);
-  return {
-    success: true,
-    contentType: res.headers.get("content-type") || "",
-    contentDisposition: res.headers.get("content-disposition") || "",
-  };
+
+  return { success: false, contentType: "", contentDisposition: "" };
 }
 
 function extractDriveFileId(url) {
@@ -278,7 +357,7 @@ function extractDriveFileId(url) {
 function getDirectDriveUrl(url) {
   const fileId = extractDriveFileId(url);
   if (!fileId) return null;
-  return `https://drive.google.com/uc?export=download&id=${fileId}`;
+  return `https://drive.usercontent.google.com/download?id=${fileId}&export=download&confirm=t`;
 }
 
 function getAssetBaseName(key) {
@@ -289,6 +368,41 @@ function findExistingAssetFile(folderPath, baseName) {
   if (!fs.existsSync(folderPath)) return null;
   const files = fs.readdirSync(folderPath);
   return files.find((file) => file.startsWith(`${baseName}.`)) || null;
+}
+
+async function normalizeExistingAsset(folderPath, baseName, existingFile) {
+  let filePath = path.join(folderPath, existingFile);
+  let extension = extensionFromFileName(existingFile);
+  const detectedExtension = detectExtensionFromFile(filePath);
+
+  if (detectedExtension === "html") {
+    fs.unlinkSync(filePath);
+    return null;
+  }
+
+  if (detectedExtension && detectedExtension !== extension) {
+    const correctedPath = path.join(
+      folderPath,
+      `${baseName}.${detectedExtension}`,
+    );
+    fs.renameSync(filePath, correctedPath);
+    filePath = correctedPath;
+    extension = detectedExtension;
+  }
+
+  if (shouldConvertToMp4(extension)) {
+    filePath = await convertMovToMp4(
+      filePath,
+      path.join(folderPath, `${baseName}.mp4`),
+    );
+  } else if (shouldConvertToJpg(extension) || detectHeicBySignature(filePath)) {
+    filePath = await convertHeicToJpg(
+      filePath,
+      path.join(folderPath, `${baseName}.jpg`),
+    );
+  }
+
+  return path.basename(filePath);
 }
 
 async function processProject(project) {
@@ -322,22 +436,26 @@ async function processProject(project) {
     const baseName = getAssetBaseName(key);
     const existingFile = findExistingAssetFile(folderPath, baseName);
     if (existingFile) {
-      const existingExt = extensionFromFileName(existingFile);
-      const existingTargetExt = resolveTargetExtension(existingExt);
-      // If we have a valid cached file, use it without further processing
-      if (existingExt && existingTargetExt) {
-        newProject[key] = `/images/${email}/${projectName}/${existingFile}`;
+      const normalizedFile = await normalizeExistingAsset(
+        folderPath,
+        baseName,
+        existingFile,
+      );
+      if (normalizedFile) {
+        newProject[key] = `/images/${email}/${projectName}/${normalizedFile}`;
         continue;
       }
     }
 
-    const directUrl = getDirectDriveUrl(url);
-    if (!directUrl) {
+    const fileId = extractDriveFileId(url);
+    const publicUrl = getDirectDriveUrl(url);
+    if (!fileId || !publicUrl) {
       console.error(`❌ Invalid URL for ${key}: ${url}`);
       continue;
     }
 
     try {
+      const directUrl = publicUrl;
       const baseName = getAssetBaseName(key);
       const existingFile = findExistingAssetFile(folderPath, baseName);
       const existingExt = existingFile
@@ -352,7 +470,9 @@ async function processProject(project) {
       let headExtension = "";
 
       try {
-        const headRes = await fetch(directUrl, { method: "HEAD" });
+        const headRes = await fetch(directUrl, {
+          method: "HEAD",
+        });
         if (headRes.ok) {
           headContentType = headRes.headers.get("content-type") || "";
           headDisposition = headRes.headers.get("content-disposition") || "";
@@ -398,7 +518,7 @@ async function processProject(project) {
         continue;
       }
 
-      let effectiveExt = normalizedExt;
+      let effectiveExt = downloadResult.detectedExtension || normalizedExt;
       if (effectiveExt === "bin") {
         const derivedExt = getFileExtension(
           downloadResult.contentType,

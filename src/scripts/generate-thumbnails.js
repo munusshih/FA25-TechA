@@ -139,7 +139,7 @@ async function processDirectory(dirPath, stats = null) {
     }
 
     // Update progress if stats provided
-    if (stats) {
+    if (stats?.total > 0) {
       const total = stats.skipped + stats.created + stats.failed;
       const percentage = Math.round((total / stats.total) * 100);
       const filled = Math.round((25 * total) / stats.total);
