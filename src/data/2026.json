@@ -73,5 +73,30 @@
     "Credit (List out collaborators, tutorials, libraries, references, AI agents used)": "youtube，p5js reference，class slides，Pinterest",
     "I certify that this submission is my own work and adheres to the course's academic integrity and open source policy.": "Yes",
     "Anyone's work inspired you at the open classroom?": "Yes. I got a lot of new inspiration from my classmates’ work during the open class. One student explored different vase forms, which I found visually very interesting. Another student visualized the different ingredients they used when making chai, which also left a strong impression on me. Some students used circles of different sizes to represent words of different lengths in a text, while others experimented with turning audio into visual images. These projects showed me that the same kind of information can be transformed and expressed through very different visual systems, and they gave me many new ideas."
+  },
+  {
+    "Timestamp": "9/27/2026 11:13:37",
+    "Email Address": "pbogdan@pratt.edu",
+    "Your Name (First + Last Name)": "Patricia Bogdan",
+    "What is your section?": "02 Munus Shih",
+    "Which Module is this?": "Project 1: Creative Cryptography",
+    "Your Project Name": "Between Us",
+    "Your Project Description (max 2000 characters)": "Between Us is a visual system for translating social interactions into visual systems. The project began by asking whether something as subjective as communication could be reduced to a set of rules. I identified four variables within an interaction: understanding, engagement, avoidance, and success, and used them to control the direction, distance, movement, and eventual meeting point of lines traveling between two individuals.\n\nEarly experiments isolated these interactions one at a time. Two circles represented two people, while animated lines moved toward one another. Depending on the conditions assigned to the interaction, the lines could meet, overlap, pass one another, or move in different directions. Randomness was built into the system so that similar conditions could produce related, but never identical, outcomes.\n\nAs the project developed, I became more interested in what happened when these individual exchanges accumulated in a specific place over a set period of time, as a way to archive a social gathering. The final iteration records multiple interactions occurring within the same space and period of time. Each colored circle represents an individual, with the number of lines emerging from it determined by how many interactions that person had. Some become highly connected, while others remain more isolated. Each trajectory retains the variables of the original system, while the dotted lines were added to represent the \"missed opportunity\" of an interaction -- how much understanding was lost, how much avoidance can redirect one's path, and the visual space that's left as a result.\n\nRather than trying to objectively measure human communication, the system uses code to reduce highly complex and subjective human patterns into simplified forms. ",
+    "Is there a web or code component to your project?": "Yes",
+    "Link 1 Title": "Between Us",
+    "Link 1 URL": "https://editor.p5js.org/patzzb/sketches/WkclKs_Fy",
+    "Link 2 Title": "",
+    "Link 2 URL": "",
+    "Link 3 Title": "",
+    "Link 3 URL": "",
+    "File 1": "/images/pbogdan_pratt_edu/between_us/file_1.bin",
+    "File 1 description": "Between Us is a documentation of social interactions that took place at 224 Greene Ave. on September 18th, 2026, between 7:15 and 9:09 pm. ",
+    "File 2": "/images/pbogdan_pratt_edu/between_us/file_2.bin",
+    "File 2 description": "Between Us is a documentation of social interactions that took place at 224 Greene Ave. on September 18th, 2026, between 7:15 and 9:09 pm. ",
+    "File 3": "/images/pbogdan_pratt_edu/between_us/file_3.bin",
+    "File 3 description": "Between Us is a documentation of social interactions that took place at 224 Greene Ave. on September 18th, 2026, between 7:15 and 9:09 pm. ",
+    "Credit (List out collaborators, tutorials, libraries, references, AI agents used)": "I used Claude to help me organize my code, and teach me new functions that allowed the lines to travel toward one another. I  also learned how to use lerp() and constrain() to better control movement in p5.js. lerp() finds a point between two values based on a given amount. I used it to make lines gradually travel from one person toward another instead of appearing all at once. I also learned about constrain() to keep a changing value within a specific range.",
+    "I certify that this submission is my own work and adheres to the course's academic integrity and open source policy.": "Yes",
+    "Anyone's work inspired you at the open classroom?": "Yes! I loved Hannah Pope's interactive game. "
   }
 ]
