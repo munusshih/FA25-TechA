@@ -273,5 +273,30 @@
     "Credit (List out collaborators, tutorials, libraries, references, AI agents used)": "Libraries & Tools: p5.js, p5.svgkit.js, VS Code\nReferences: Richard Serra (Verb List), Karl Gerstner (Designing Programmes)\nAI Agents: OpenCode / Gemini (for code scaffolding, SVG viewer pipeline, and layout debugging)",
     "I certify that this submission is my own work and adheres to the course's academic integrity and open source policy.": "Yes",
     "Anyone's work inspired you at the open classroom?": "no"
+  },
+  {
+    "Timestamp": "9/30/2026 12:21:58",
+    "Email Address": "yjian117@pratt.edu",
+    "Your Name (First + Last Name)": "YITONG JIANG",
+    "What is your section?": "04 Matt Martin",
+    "Which Module is this?": "Project 1: Creative Cryptography",
+    "Your Project Name": "For a lifetime of lives",
+    "Your Project Description (max 2000 characters)": "For someone like me who constantly moves to new cities, a suitcase always holds profound significance. It is the only companion I have besides my family, and it heralds every new beginning.Everyone has their own box; what is inside yours?",
+    "Is there a web or code component to your project?": "Yes",
+    "Link 1 Title": "https://foralifetimeoflives.netlify.app",
+    "Link 1 URL": "https://foralifetimeoflives.netlify.app",
+    "Link 2 Title": "",
+    "Link 2 URL": "",
+    "Link 3 Title": "",
+    "Link 3 URL": "",
+    "File 1": "/images/yjian117_pratt_edu/for_a_lifetime_of_lives/file_1.mp4",
+    "File 1 description": "A video demonstrating how to use the webpage",
+    "File 2": "/images/yjian117_pratt_edu/for_a_lifetime_of_lives/file_2.png",
+    "File 2 description": "Final Result: Poster",
+    "File 3": "/images/yjian117_pratt_edu/for_a_lifetime_of_lives/file_3.png",
+    "File 3 description": "Final Result: Poster",
+    "Credit (List out collaborators, tutorials, libraries, references, AI agents used)": "Matt's tutorial;opencode",
+    "I certify that this submission is my own work and adheres to the course's academic integrity and open source policy.": "Yes",
+    "Anyone's work inspired you at the open classroom?": "I don't think so, because everyone has such different ideas and approaches to work. Fortunately, though, Martin always takes the time to communicate with us individually and record tutorial videos for us."
   }
 ]
