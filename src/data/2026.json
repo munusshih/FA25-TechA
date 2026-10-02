@@ -298,5 +298,30 @@
     "Credit (List out collaborators, tutorials, libraries, references, AI agents used)": "Matt's tutorial;opencode",
     "I certify that this submission is my own work and adheres to the course's academic integrity and open source policy.": "Yes",
     "Anyone's work inspired you at the open classroom?": "I don't think so, because everyone has such different ideas and approaches to work. Fortunately, though, Martin always takes the time to communicate with us individually and record tutorial videos for us."
+  },
+  {
+    "Timestamp": "10/1/2026 15:21:18",
+    "Email Address": "hpope2@pratt.edu",
+    "Your Name (First + Last Name)": "Hannah Pope",
+    "What is your section?": "01 Anna Fangan Xu",
+    "Which Module is this?": "Project 1: Creative Cryptography",
+    "Your Project Name": "PLOT TWIST: A Competitive Storytelling Game",
+    "Your Project Description (max 2000 characters)": "PLOT TWIST is a competitive storytelling game where two writers create different stories from the same seven prompts. The game uses seven variable categories: genre, protagonist, desire, conflict, setting, relationship, and twist, each with multiple possible values. Each round, a Director selects three prompts, and the two Writers each select two prompts from the remaining categories. Together, these seven prompts form one shared setup. Both Writers then have three minutes to use the same setup to create a title and one-sentence description for an original television show.\n\nThe Writers pitch their stories to the Director, who chooses the winning interpretation. The winner earns one point, the Director role rotates, and the next round begins. The first player to reach five points wins. Through playtesting, the system produced five rounds, ten different television shows, and five winning outcomes, demonstrating how the same set of prompts can lead to very different stories depending on how each player interprets and combines them.",
+    "Is there a web or code component to your project?": "No",
+    "Link 1 Title": "",
+    "Link 1 URL": "",
+    "Link 2 Title": "",
+    "Link 2 URL": "",
+    "Link 3 Title": "",
+    "Link 3 URL": "",
+    "File 1": "/images/hpope2_pratt_edu/plot_twist__a_competitive_storytelling_game/file_1.jpg",
+    "File 1 description": "Final project documentation for PLOT TWIST, a competitive storytelling game.",
+    "File 2": "/images/hpope2_pratt_edu/plot_twist__a_competitive_storytelling_game/file_2.jpg",
+    "File 2 description": "Example round showing two different stories generated from the same setup.",
+    "File 3": "/images/hpope2_pratt_edu/plot_twist__a_competitive_storytelling_game/file_3.jpg",
+    "File 3 description": "Overview of the rules, variables, and constraints that make up the PLOT TWIST system.",
+    "Credit (List out collaborators, tutorials, libraries, references, AI agents used)": "Hannah Pope - Concept, design, development, and production\nChatGPT - AI-assisted writing support",
+    "I certify that this submission is my own work and adheres to the course's academic integrity and open source policy.": "Yes",
+    "Anyone's work inspired you at the open classroom?": "Vivianne Hoang’s Visual Kiln Matrix and Lamees Kazi’s Trajva to Chai inspired me. "
   }
 ]
