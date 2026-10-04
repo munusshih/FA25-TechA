@@ -323,5 +323,30 @@
     "Credit (List out collaborators, tutorials, libraries, references, AI agents used)": "Hannah Pope - Concept, design, development, and production\nChatGPT - AI-assisted writing support",
     "I certify that this submission is my own work and adheres to the course's academic integrity and open source policy.": "Yes",
     "Anyone's work inspired you at the open classroom?": "Vivianne Hoang’s Visual Kiln Matrix and Lamees Kazi’s Trajva to Chai inspired me. "
+  },
+  {
+    "Timestamp": "10/4/2026 3:26:15",
+    "Email Address": "jyux38@pratt.edu",
+    "Your Name (First + Last Name)": "Jiahao Yu",
+    "What is your section?": "04 Matt Martin",
+    "Which Module is this?": "Project 1: Creative Cryptography",
+    "Your Project Name": "BECOMING A MICROSCOPE TO CREATE NEW SECRETS",
+    "Your Project Description (max 2000 characters)": "BECOMING A MICROSCOPE TO CREATE NEW SECRETS\n\nThis project begins with an everyday object: my phone. I chose five words—anxious, communicative, connective, dependent, and navigable—to explore how it shapes my daily life. A phone helps me communicate, maintain relationships, and find my way, but it can also create anxiety and dependence. I wanted to translate these overlapping feelings into a visual language.\n\nOver five weeks, I developed symbols through drawing, digital translation, sequencing, elimination, and chance. Each stage changed how I understood the original forms. Instead of illustrating a phone directly, I explored how shapes could suggest its emotional and social roles. Using four actions drawn from Richard Serra’s Verb List—tightening, joining, layering, and mapping—I transformed five selected forms into twenty graphic experiments.\n\nThe title describes a way of looking closely. “Becoming a microscope” means paying attention to relationships and details that I usually overlook. “Creating new secrets” means allowing familiar ideas to become unfamiliar symbols, open to different interpretations.\n\nBuilt with HTML, CSS, and p5.js, the website documents the process in the order it developed. It brings the experiments together so viewers can follow how a word becomes a shape and how that shape changes through a set of rules. The project explores how observation and repeated transformation can turn an ordinary object into a personal visual system.",
+    "Is there a web or code component to your project?": "Yes",
+    "Link 1 Title": "BECOMING A MICROSCOPE TO CREATE NEW SECRETS",
+    "Link 1 URL": "http://127.0.0.1:5501/index.html",
+    "Link 2 Title": "",
+    "Link 2 URL": "",
+    "Link 3 Title": "",
+    "Link 3 URL": "",
+    "File 1": "/images/jyux38_pratt_edu/becoming_a_microscope_to_create_new_secrets/file_1.jpg",
+    "File 1 description": "Final Poster Display",
+    "File 2": "/images/jyux38_pratt_edu/becoming_a_microscope_to_create_new_secrets/file_2.jpg",
+    "File 2 description": "Display board showing the process of selecting five keywords and symbols.",
+    "File 3": "/images/jyux38_pratt_edu/becoming_a_microscope_to_create_new_secrets/file_3.jpg",
+    "File 3 description": "The process of creating the final poster was showcased.",
+    "Credit (List out collaborators, tutorials, libraries, references, AI agents used)": "Design and original artwork: Jiahao Yu.\n\nLibraries: p5.js and MattObject’s p5.svgkit.\n\nTypeface: Encode Sans Semi Expanded, via Google Fonts.\n\nReferences and tutorials: Richard Serra’s Verb List (1967–1968), Technology A assignment materials, and the class tutorial “making-a-page-with-opencode.mov.”\n\nAI assistance: OpenCode assisted with developing the SVG transformations, writing and revising the documentation website code, drafting project descriptions, and preparing submission images, and also used for local code editing.\n\nThe phone selection, five keywords, original drawings, and final design selections are mine.",
+    "I certify that this submission is my own work and adheres to the course's academic integrity and open source policy.": "Yes",
+    "Anyone's work inspired you at the open classroom?": "Chu-Hsuan Fan"
   }
 ]
