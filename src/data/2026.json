@@ -523,5 +523,30 @@
     "Credit (List out collaborators, tutorials, libraries, references, AI agents used)": "Gemini",
     "I certify that this submission is my own work and adheres to the course's academic integrity and open source policy.": "Yes",
     "Anyone's work inspired you at the open classroom?": "The big nature"
+  },
+  {
+    "Timestamp": "10/12/2026 10:16:55",
+    "Email Address": "csux6@pratt.edu",
+    "Your Name (First + Last Name)": "Miffy Su",
+    "What is your section?": "04 Matt Martin",
+    "Which Module is this?": "Project 1: Creative Cryptography",
+    "Your Project Name": "Tennis Racket",
+    "Your Project Description (max 2000 characters)": "When I first got this assignment, none of it made sense. How can a Sharpie convey the meaning of spoken words with just a few scribbles? The answer I think might be that we do it anyway, that we forge an implied meaning, that symbols already represent meaning. This project has me imagining a world where every person had their own character system to represent written words. When it comes to cryptography, the system is only secure if the symbols can not be easily parsed or deciphered. A system that is created by one person, for one person to use is the most secure. It keeps the personal truly personal if it is employed as a cryptographic vessel. But I feared the repetition was going to drive me crazy. But at the end, I was mellowed out and felt I made something new, that didn't exist before.",
+    "Is there a web or code component to your project?": "Yes",
+    "Link 1 Title": "Project 1_Tennis Racket",
+    "Link 1 URL": "https://miffysu.github.io/Object_tennis-racket/",
+    "Link 2 Title": "",
+    "Link 2 URL": "",
+    "Link 3 Title": "",
+    "Link 3 URL": "",
+    "File 1": "/images/csux6_pratt_edu/tennis_racket/file_1.jpg",
+    "File 1 description": "The selected combinations were developed and enlarged into the final poster compositions.",
+    "File 2": "/images/csux6_pratt_edu/tennis_racket/file_2.jpg",
+    "File 2 description": "Early visual explorations of lines, shapes, patterns, and repeated forms.",
+    "File 3": "/images/csux6_pratt_edu/tennis_racket/file_3.jpg",
+    "File 3 description": "Rearranging and combining selected visual elements to explore new relationships and compositions.",
+    "Credit (List out collaborators, tutorials, libraries, references, AI agents used)": "Adobe Illustrator, p5.js, OpenCode",
+    "I certify that this submission is my own work and adheres to the course's academic integrity and open source policy.": "Yes",
+    "Anyone's work inspired you at the open classroom?": "no"
   }
 ]
