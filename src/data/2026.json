@@ -673,5 +673,30 @@
     "Credit (List out collaborators, tutorials, libraries, references, AI agents used)": "Data: Fungi of NYC, NYMS on iNaturalist. Photos: iNaturalist observers under CC0, CC BY, CC BY NC and CC BY SA licenses / Claude, Opencode",
     "I certify that this submission is my own work and adheres to the course's academic integrity and open source policy.": "Yes",
     "Anyone's work inspired you at the open classroom?": "can't remember name.."
+  },
+  {
+    "Timestamp": "11/11/2026 15:50:36",
+    "Email Address": "jyux38@pratt.edu",
+    "Your Name (First + Last Name)": "Jiahao Yu",
+    "What is your section?": "04 Matt Martin",
+    "Which Module is this?": "Project 2: Data Sculpture",
+    "Your Project Name": "Don't-scare-the-squirrels",
+    "Your Project Description (max 2000 characters)": "In October 2018, about 300 volunteers walked Central Park one hectare at a time and wrote down every squirrel they saw. The Squirrel Census published this on NYC Open Data: 3,023 sightings, each with a place, a fur color, what the squirrel was doing, and what it did when a person came close. I chose this data because it is about the small neighbors we share the city with, and because normal people made it. This also makes it contested. One sighting is not one squirrel (the team estimated about 2,373 squirrels). Fur color and behavior are a few seconds of one person's judgment. And for 13% of the sightings, the position is in the square next to the one the volunteer wrote down.\n\nMy question is simple: what does a squirrel do when you walk by?\n\nThe digital piece is a scrolling website made with p5.js. The park map changes step by step: the dots by date, by fur color, then one squirrel's record up close. At the end you walk into the park yourself. Every squirrel reacts only the way its record says. 678 run away from you, 178 come closer, 1,454 don't care, and the 780 with nothing written do nothing. So the interaction is the data. The last part shows the notes the volunteers wrote next to the checkboxes. 64 of them are tagged \"accidental poems\".\n\nThe physical piece is nine cards called \"Nine Encounters\". Each card is one real record, one for each mix of fur color (gray, black, cinnamon) and reaction (approaches, runs from, indifferent). Only these two things change. The map on the left shows the place, and the text on the right shows the record. Yellow means it came closer and pink means it ran away, like on the website. I printed the cards, cut them out and scanned them. On paper the colors are different: the green becomes more yellow, and the pink is not fluorescent anymore. I see this as part of the work. The record moves from a volunteer's sheet to a screen, and then back to paper.",
+    "Is there a web or code component to your project?": "Yes",
+    "Link 1 Title": "Don't-scare-the-squirrels-overview",
+    "Link 1 URL": "https://silver-torte-94b773.netlify.app",
+    "Link 2 Title": "Don't-scare-the-squirrels-interactive",
+    "Link 2 URL": "https://extraordinary-marshmallow-f3e788.netlify.app/",
+    "Link 3 Title": "",
+    "Link 3 URL": "",
+    "File 1": "/images/jyux38_pratt_edu/don_t_scare_the_squirrels/file_1.jpg",
+    "File 1 description": "I printed the nine cards, cut them out and scanned them. Rows are fur color (gray, black, cinnamon) and columns are the reaction to people (approaches, runs from, indifferent). Each card is one real sighting from the 2018 Squirrel Census. Each card is 7.5 x 3 inch.",
+    "File 2": "/images/jyux38_pratt_edu/don_t_scare_the_squirrels/file_2.mp4",
+    "File 2 description": "Screen recording of the website. When I walk close, the squirrels marked three different types of reactions to people，and it was accompanied by the sound of a squirrel that I mimicked. Clicking on the grassy area will display records from volunteers. Every reaction comes from the record.",
+    "File 3": "/images/jyux38_pratt_edu/don_t_scare_the_squirrels/file_3.jpg",
+    "File 3 description": "The same card on screen and on paper. Top: the digital file. Bottom: the printed card, scanned. On paper the green becomes more yellow and the pink is not fluorescent anymore. I see this change as part of the work.",
+    "Credit (List out collaborators, tutorials, libraries, references, AI agents used)": "Data: 2018 Central Park Squirrel Census by The Squirrel Census, NYC Open Data (vfnx-vebw, gfqj-f768, ej9h-v6g2, qad5-y26n); NYC Planimetric Database: Hydrography (pjs3-c3z5); Parks Properties (enfh-gkve). Squirrel estimate and volunteer count: Smithsonian, Mental Floss.\nLibraries and tools: p5.js, Web Audio API, VS Code + Live Server, Netlify.\nFonts: Fraunces and IBM Plex Mono (SIL Open Font License 1.1).\nReferences: The Pudding's scrollytelling pieces (structure), Risograph printing (visual style).\nAI agents: Opencode helped check the Open Data API, and write the first versions of website code.\nI chose the topic, the direction and the design, and I checked the results.\nCollaborators: none.",
+    "I certify that this submission is my own work and adheres to the course's academic integrity and open source policy.": "Yes",
+    "Anyone's work inspired you at the open classroom?": "Xuanjia Rao，I appreciate her use of person-tracking technology; it makes me think about the various possibilities for interactive projects."
   }
 ]
