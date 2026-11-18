@@ -698,5 +698,30 @@
     "Credit (List out collaborators, tutorials, libraries, references, AI agents used)": "Data: 2018 Central Park Squirrel Census by The Squirrel Census, NYC Open Data (vfnx-vebw, gfqj-f768, ej9h-v6g2, qad5-y26n); NYC Planimetric Database: Hydrography (pjs3-c3z5); Parks Properties (enfh-gkve). Squirrel estimate and volunteer count: Smithsonian, Mental Floss.\nLibraries and tools: p5.js, Web Audio API, VS Code + Live Server, Netlify.\nFonts: Fraunces and IBM Plex Mono (SIL Open Font License 1.1).\nReferences: The Pudding's scrollytelling pieces (structure), Risograph printing (visual style).\nAI agents: Opencode helped check the Open Data API, and write the first versions of website code.\nI chose the topic, the direction and the design, and I checked the results.\nCollaborators: none.",
     "I certify that this submission is my own work and adheres to the course's academic integrity and open source policy.": "Yes",
     "Anyone's work inspired you at the open classroom?": "Xuanjia Rao，I appreciate her use of person-tracking technology; it makes me think about the various possibilities for interactive projects."
+  },
+  {
+    "Timestamp": "11/17/2026 14:57:06",
+    "Email Address": "mbair123@pratt.edu",
+    "Your Name (First + Last Name)": "McCauley Bair",
+    "What is your section?": "02 Munus Shih",
+    "Which Module is this?": "Project 1: Creative Cryptography",
+    "Your Project Name": "small poems, strange portraits",
+    "Your Project Description (max 2000 characters)": "In small poems, strange portraits, every three-line poem can be read twice: first as language, then as a portrait. When someone writes a haiku, the system finds key words in it and translates them into ASCII portraits made only of keyboard marks. A cat becomes slashes and carets, rain becomes falling pipes and periods, and a heart becomes a dotted outline. The haiku form works as the code: three lines, a fixed structure, and a vocabulary of words linked to images. Every poem runs through the same rules, so each entry is different but they all clearly belong to one system. I built it in Replit as a living anthology. Anyone can scan the code and add their own three lines.",
+    "Is there a web or code component to your project?": "Yes",
+    "Link 1 Title": "small poems, strange portraits site",
+    "Link 1 URL": "https://typographic-haiku-anthology.replit.app",
+    "Link 2 Title": "original p5.js tests",
+    "Link 2 URL": "https://editor.p5js.org/mcc_bb/full/uwmwC_ofy",
+    "Link 3 Title": "",
+    "Link 3 URL": "",
+    "File 1": "/images/mbair123_pratt_edu/small_poems__strange_portraits/file_1.png",
+    "File 1 description": "poster",
+    "File 2": "/images/mbair123_pratt_edu/small_poems__strange_portraits/file_2.png",
+    "File 2 description": "word / image key",
+    "File 3": "/images/mbair123_pratt_edu/small_poems__strange_portraits/file_3.png",
+    "File 3 description": "initial p5.js process",
+    "Credit (List out collaborators, tutorials, libraries, references, AI agents used)": "replit, p5.js",
+    "I certify that this submission is my own work and adheres to the course's academic integrity and open source policy.": "Yes",
+    "Anyone's work inspired you at the open classroom?": "ashlyn pelletier"
   }
 ]
